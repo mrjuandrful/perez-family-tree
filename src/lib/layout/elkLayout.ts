@@ -6,10 +6,12 @@ export const PERSON_HEIGHT = 80;
 const H_GAP = 50;    // horizontal gap between sibling subtrees
 const ROW_HEIGHT = 220; // vertical distance between generation rows (node height + spacing)
 const COUPLE_GAP = 50; // horizontal gap between the two partner cards (must fit heart)
+const JUNCTION_Y_OFFSET = 40; // how far below the couple row the junction dot sits
 
 // Families with a heart connector node
 const HEART_FAMILIES = new Set(['F001', 'F003', 'F004']);
 const HEART_SIZE = 28;
+const JUNCTION_SIZE = 8;
 
 export interface LayoutResult {
   nodes: Node[];
@@ -178,6 +180,7 @@ export async function computeLayout(
 
   const positions = new Map<string, { x: number; y: number }>();
   const heartPositions = new Map<string, { x: number; y: number }>();
+  const junctionPositions = new Map<string, { x: number; y: number }>();
   const placedFamilies = new Set<string>();
 
   // placeFamily: places a couple centered at centerX, then fans children below.
@@ -222,6 +225,12 @@ export async function computeLayout(
       .filter((id) => allPersonIds.includes(id));
 
     if (visibleChildren.length === 0) return;
+
+    // Junction node: centered below the couple midpoint
+    junctionPositions.set(fam.id, {
+      x: centerX - JUNCTION_SIZE / 2,
+      y: coupleY + PERSON_HEIGHT + JUNCTION_Y_OFFSET - JUNCTION_SIZE / 2,
+    });
 
     // Subtree width for each child slot
     const childSubtreeWidths = visibleChildren.map((childId) => {
@@ -315,6 +324,19 @@ export async function computeLayout(
     });
   }
 
+  // Junction nodes (one per family with children)
+  for (const [famId, pos] of junctionPositions) {
+    rfNodes.push({
+      id: `jxn-${famId}`,
+      type: 'junctionNode',
+      position: pos,
+      data: {},
+      style: { width: JUNCTION_SIZE, height: JUNCTION_SIZE },
+      selectable: false,
+      draggable: false,
+    });
+  }
+
   // ── React Flow edges ───────────────────────────────────────────────────────
   const rfEdges: Edge[] = [];
   const edgeStyle = { stroke: '#6366f1', strokeWidth: 2 };
@@ -327,9 +349,10 @@ export async function computeLayout(
     const [p1, p2] = vp;
     const hasP1 = !!p1;
     const hasP2 = !!p2;
-    const style = fam.dissolved ? dissolvedEdgeStyle : edgeStyle;
+    const coupleStyle = fam.dissolved ? dissolvedEdgeStyle : edgeStyle;
+    const hasJunction = junctionPositions.has(fam.id);
 
-    // Couple connector: bottom of each partner card → shared midpoint node, then to children
+    // ── Couple connector (horizontal, between partners) ──────────────────────
     if (hasP1 && hasP2) {
       if (HEART_FAMILIES.has(fam.id)) {
         rfEdges.push({
@@ -337,7 +360,7 @@ export async function computeLayout(
           source: `person-${p1.personId}`,
           target: `heart-${fam.id}`,
           type: 'straight',
-          style,
+          style: coupleStyle,
           sourceHandle: 'right',
           targetHandle: 'left',
         });
@@ -346,7 +369,7 @@ export async function computeLayout(
           source: `heart-${fam.id}`,
           target: `person-${p2.personId}`,
           type: 'straight',
-          style,
+          style: coupleStyle,
           sourceHandle: 'right',
           targetHandle: 'left',
         });
@@ -356,31 +379,51 @@ export async function computeLayout(
           source: `person-${p1.personId}`,
           target: `person-${p2.personId}`,
           type: 'straight',
-          style,
+          style: coupleStyle,
           sourceHandle: 'right',
           targetHandle: 'left',
         });
       }
     }
 
-    // Parent → child: from bottom of p1 (or p2) to top of each child
-    const parentNodeId = hasP1
-      ? `person-${p1.personId}`
-      : hasP2
-      ? `person-${p2.personId}`
-      : null;
+    if (!hasJunction || vc.length === 0) continue;
 
-    if (parentNodeId) {
-      for (const child of vc) {
-        rfEdges.push({
-          id: `parent-child-${fam.id}-${child.personId}`,
-          source: parentNodeId,
-          target: `person-${child.personId}`,
-          type: 'smoothstep',
-          style: edgeStyle,
-          sourceHandle: 'bottom',
-        });
-      }
+    const jxnId = `jxn-${fam.id}`;
+
+    // ── Parent bottoms → junction ────────────────────────────────────────────
+    if (hasP1) {
+      rfEdges.push({
+        id: `p1-jxn-${fam.id}`,
+        source: `person-${p1.personId}`,
+        target: jxnId,
+        type: 'straight',
+        style: edgeStyle,
+        sourceHandle: 'bottom',
+        targetHandle: 'top',
+      });
+    }
+    if (hasP2) {
+      rfEdges.push({
+        id: `p2-jxn-${fam.id}`,
+        source: `person-${p2.personId}`,
+        target: jxnId,
+        type: 'straight',
+        style: edgeStyle,
+        sourceHandle: 'bottom',
+        targetHandle: 'top',
+      });
+    }
+
+    // ── Junction → each child top ────────────────────────────────────────────
+    for (const child of vc) {
+      rfEdges.push({
+        id: `jxn-child-${fam.id}-${child.personId}`,
+        source: jxnId,
+        target: `person-${child.personId}`,
+        type: 'smoothstep',
+        style: edgeStyle,
+        sourceHandle: 'bottom',
+      });
     }
   }
 

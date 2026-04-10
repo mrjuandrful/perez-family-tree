@@ -388,13 +388,78 @@ export async function computeLayout(
 
   }
 
-  // Place solo roots and any remaining unplaced
-  let fallbackCursor = 0;
+  // ── Place any still-unplaced persons near their siblings ────────────────────
+  // Group unplaced persons by generation, insert them near their siblings
   for (const id of allPersonIds) {
-    if (!positions.has(id)) {
-      positions.set(id, { x: fallbackCursor, y: 0 });
-      fallbackCursor += PERSON_WIDTH + H_GAP;
+    if (positions.has(id)) continue;
+    const g = genMap.get(id) ?? 0;
+    const y = g * ROW_HEIGHT;
+
+    // Find siblings (others in same family's children list)
+    let insertX = 0;
+    for (const fam of Object.values(families)) {
+      const siblingIds = fam.children.map((c) => c.personId).filter((sid) => allPersonIds.includes(sid));
+      if (!siblingIds.includes(id)) continue;
+      // Find the rightmost placed sibling
+      const placedSibXs = siblingIds
+        .filter((sid) => sid !== id && positions.has(sid))
+        .map((sid) => positions.get(sid)!.x);
+      if (placedSibXs.length > 0) {
+        insertX = Math.max(...placedSibXs) + PERSON_WIDTH + H_GAP;
+        break;
+      }
     }
+    positions.set(id, { x: insertX, y });
+  }
+
+  // ── Overlap resolver: enforce minimum spacing per generation row ───────────
+  // Group persons by generation, sort by birth year then current X, push apart
+  const MIN_CARD_GAP = H_GAP;
+  const genGroups = new Map<number, string[]>();
+  for (const id of allPersonIds) {
+    const g = genMap.get(id) ?? 0;
+    if (!genGroups.has(g)) genGroups.set(g, []);
+    genGroups.get(g)!.push(id);
+  }
+
+  for (const [, ids] of genGroups) {
+    // Sort by birth year first, then current X as tiebreaker
+    ids.sort((a, b) => {
+      const ba = persons[a]?.birth?.date?.year ?? 9999;
+      const bb = persons[b]?.birth?.date?.year ?? 9999;
+      if (ba !== bb) return ba - bb;
+      return (positions.get(a)?.x ?? 0) - (positions.get(b)?.x ?? 0);
+    });
+
+    // Re-assign X positions preserving relative order but enforcing minimum gap.
+    // Collect (id, x) pairs sorted by current X, then sweep left-to-right.
+    const byX = [...ids].sort((a, b) => (positions.get(a)?.x ?? 0) - (positions.get(b)?.x ?? 0));
+
+    for (let i = 1; i < byX.length; i++) {
+      const prev = byX[i - 1];
+      const curr = byX[i];
+      const prevRight = (positions.get(prev)?.x ?? 0) + PERSON_WIDTH;
+      const currLeft = positions.get(curr)?.x ?? 0;
+      if (currLeft < prevRight + MIN_CARD_GAP) {
+        const newX = prevRight + MIN_CARD_GAP;
+        const pos = positions.get(curr)!;
+        positions.set(curr, { x: newX, y: pos.y });
+      }
+    }
+  }
+
+  // ── Shift heart nodes to follow their couple's midpoint ───────────────────
+  // Recompute heart positions after overlap resolution
+  for (const fam of Object.values(families)) {
+    if (fam.dissolved) continue;
+    const vp = fam.partners.filter((p) => allPersonIds.includes(p.personId));
+    if (vp.length < 2) continue;
+    const p1pos = positions.get(vp[0].personId);
+    const p2pos = positions.get(vp[1].personId);
+    if (!p1pos || !p2pos) continue;
+    const midX = (p1pos.x + PERSON_WIDTH + p2pos.x) / 2;
+    const y = p1pos.y + PERSON_HEIGHT / 2 - HEART_SIZE / 2;
+    heartPositions.set(fam.id, { x: midX - HEART_SIZE / 2, y });
   }
 
   // ── Center the entire layout around x=0 ───────────────────────────────────

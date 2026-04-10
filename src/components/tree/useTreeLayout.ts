@@ -24,23 +24,13 @@ export function useTreeLayout() {
 
       const allPersonIds = Object.keys(data.persons);
 
-      // Surname filter (also checks maiden name / nickname)
-      // Strategy: find all people who match the surname, then include:
-      //   - their spouse and children (nuclear family)
-      //   - their parents (one generation up, to show where they came from)
-      // But do NOT recursively pull in the parents' other children or extended family.
+      // Family line filter — surnameFilter holds tag values like "zitt-line"
+      // Seed: anyone tagged with one of the selected lines.
+      // Expand: include their spouses and children so nuclear families stay intact.
       if (surnameFilter.length > 0) {
         const matchesFilter = (id: string) => {
           const p = data.persons[id];
-          const namesToCheck = [
-            p.names.surname.en,
-            p.names.surname.es,
-            p.names.nickname?.en ?? '',
-            p.names.nickname?.es ?? '',
-          ].map((n) => n.toLowerCase());
-          return surnameFilter.some((s) =>
-            namesToCheck.some((n) => n.includes(s.toLowerCase()))
-          );
+          return (p.tags ?? []).some((tag) => surnameFilter.includes(tag));
         };
 
         const seedIds = new Set(allPersonIds.filter(matchesFilter));
@@ -49,19 +39,17 @@ export function useTreeLayout() {
         for (const fam of Object.values(data.families)) {
           const partnerIds = fam.partners.map((p) => p.personId);
           const childIds = fam.children.map((c) => c.personId);
-          const allFamIds = [...partnerIds, ...childIds];
 
-          const hasMatch = allFamIds.some((id) => seedIds.has(id));
-          if (!hasMatch) continue;
-
-          // Always include all partners of a matched family
-          partnerIds.forEach((id) => expanded.add(id));
-
-          // Include children only if at least one partner matches (not just a child)
           const partnerMatch = partnerIds.some((id) => seedIds.has(id));
-          if (partnerMatch) {
-            childIds.forEach((id) => expanded.add(id));
-          }
+          const childMatch = childIds.some((id) => seedIds.has(id));
+          if (!partnerMatch && !childMatch) continue;
+
+          // Include all partners of any matched family
+          partnerIds.forEach((id) => expanded.add(id));
+          // Include children if a partner is a seed (show their kids)
+          if (partnerMatch) childIds.forEach((id) => expanded.add(id));
+          // Include parents if a child is a seed (show where they came from)
+          if (childMatch) partnerIds.forEach((id) => expanded.add(id));
         }
 
         visiblePersonIds = expanded;

@@ -2,6 +2,11 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useUIStore, useFamilyTreeStore } from '../../store';
 
+// Convert a tag like "zitt-line" → "Zitt"
+function tagLabel(tag: string): string {
+  return tag.replace(/-line$/, '').replace(/^\w/, (c) => c.toUpperCase());
+}
+
 export default function FilterPanel() {
   const { t } = useTranslation();
   const generationFilter = useUIStore((s) => s.generationFilter);
@@ -10,19 +15,21 @@ export default function FilterPanel() {
   const setSurnameFilter = useUIStore((s) => s.setSurnameFilter);
   const persons = useFamilyTreeStore((s) => s.data.persons);
 
-  const surnames = useMemo(() => {
+  const familyLines = useMemo(() => {
     const set = new Set<string>();
     for (const p of Object.values(persons)) {
-      if (p.names.surname.en) set.add(p.names.surname.en);
+      for (const tag of (p.tags ?? [])) {
+        if (tag.endsWith('-line')) set.add(tag);
+      }
     }
     return Array.from(set).sort();
   }, [persons]);
 
-  function toggleSurname(surname: string) {
-    if (surnameFilter.includes(surname)) {
-      setSurnameFilter(surnameFilter.filter((s) => s !== surname));
+  function toggleLine(tag: string) {
+    if (surnameFilter.includes(tag)) {
+      setSurnameFilter(surnameFilter.filter((s) => s !== tag));
     } else {
-      setSurnameFilter([...surnameFilter, surname]);
+      setSurnameFilter([...surnameFilter, tag]);
     }
   }
 
@@ -43,22 +50,22 @@ export default function FilterPanel() {
         </select>
       </div>
 
-      {/* Surname filter */}
-      {surnames.length > 1 && (
+      {/* Family line filter */}
+      {familyLines.length > 1 && (
         <div className="flex items-center gap-1.5">
-          <span className="text-xs text-gray-500 font-medium">{t('filter_surname')}:</span>
+          <span className="text-xs text-gray-500 font-medium">Family line:</span>
           <div className="flex gap-1">
-            {surnames.map((surname) => (
+            {familyLines.map((tag) => (
               <button
-                key={surname}
-                onClick={() => toggleSurname(surname)}
+                key={tag}
+                onClick={() => toggleLine(tag)}
                 className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${
-                  surnameFilter.includes(surname)
+                  surnameFilter.includes(tag)
                     ? 'bg-indigo-500 text-white border-indigo-500'
                     : 'bg-white text-gray-600 border-gray-200 hover:border-indigo-300'
                 }`}
               >
-                {surname}
+                {tagLabel(tag)}
               </button>
             ))}
           </div>

@@ -255,17 +255,20 @@ export async function computeLayout(
       const childGen = genMap.get(childId) ?? (partnerGen + 1);
       const childY = childGen * ROW_HEIGHT;
 
-      // Recurse into child's own families first — they will set the child's position as a partner
-      const childFams = Object.values(families).filter(
+      // Recurse into child's own families — they will set the child's position as a partner
+      const unplacedChildFams = Object.values(families).filter(
         (f) => f.partners.some((p) => p.personId === childId) && !placedFamilies.has(f.id)
       );
 
-      if (childFams.length > 0) {
-        for (const cf of childFams) {
+      if (unplacedChildFams.length > 0) {
+        for (const cf of unplacedChildFams) {
           placeFamily(cf, childCenter);
         }
-      } else {
-        // Child has no family — place them as a solo person in their slot
+      }
+
+      // If child still has no position (all their families were already placed, or no families),
+      // place them as a solo node centered in their slot
+      if (!positions.has(childId)) {
         positions.set(childId, { x: childCenter - PERSON_WIDTH / 2, y: childY });
       }
 
@@ -396,7 +399,7 @@ export async function computeLayout(
         id: `p1-jxn-${fam.id}`,
         source: `person-${p1.personId}`,
         target: jxnId,
-        type: 'straight',
+        type: 'roundedStep',
         style: edgeStyle,
         sourceHandle: 'bottom',
         targetHandle: 'top',
@@ -407,7 +410,7 @@ export async function computeLayout(
         id: `p2-jxn-${fam.id}`,
         source: `person-${p2.personId}`,
         target: jxnId,
-        type: 'straight',
+        type: 'roundedStep',
         style: edgeStyle,
         sourceHandle: 'bottom',
         targetHandle: 'top',
@@ -420,9 +423,10 @@ export async function computeLayout(
         id: `jxn-child-${fam.id}-${child.personId}`,
         source: jxnId,
         target: `person-${child.personId}`,
-        type: 'smoothstep',
+        type: 'roundedStep',
         style: edgeStyle,
         sourceHandle: 'bottom',
+        targetHandle: 'top',
       });
     }
   }

@@ -7,6 +7,7 @@ import {
   useNodesState,
   useEdgesState,
   type NodeTypes,
+  type EdgeTypes,
   type NodeMouseHandler,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
@@ -14,6 +15,7 @@ import '@xyflow/react/dist/style.css';
 import PersonNode from './PersonNode';
 import HeartNode from './HeartNode';
 import JunctionNode from './JunctionNode';
+import RoundedStepEdge from './RoundedStepEdge';
 import TreeControls from './TreeControls';
 import { useTreeLayout } from './useTreeLayout';
 import { useUIStore } from '../../store';
@@ -22,6 +24,10 @@ const nodeTypes: NodeTypes = {
   personNode: PersonNode,
   heartNode: HeartNode,
   junctionNode: JunctionNode,
+};
+
+const edgeTypes: EdgeTypes = {
+  roundedStep: RoundedStepEdge,
 };
 
 function TreeCanvasInner() {
@@ -66,6 +72,7 @@ function TreeCanvasInner() {
         onEdgesChange={onEdgesChange}
         onNodeClick={handleNodeClick}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
         fitView
         fitViewOptions={{ padding: 0.1 }}
         minZoom={0.1}

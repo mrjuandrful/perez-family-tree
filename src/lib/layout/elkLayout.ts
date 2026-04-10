@@ -1,11 +1,11 @@
 import type { Node, Edge } from '@xyflow/react';
 import type { FamilyTreeData, Family } from '../../types';
 
-export const PERSON_WIDTH = 180;
-export const PERSON_HEIGHT = 96;
+export const PERSON_WIDTH = 200;
+export const PERSON_HEIGHT = 100;
 const H_GAP = 60;    // horizontal gap between sibling subtrees
-const ROW_HEIGHT = 240; // vertical distance between generation rows (node height + spacing)
-const COUPLE_GAP = 50; // horizontal gap between the two partner cards (must fit heart)
+const ROW_HEIGHT = 260; // vertical distance between generation rows
+const COUPLE_GAP = 54; // horizontal gap between the two partner cards (must fit heart)
 const BAND_WIDTH = 8000; // wide enough to always fill the viewport
 const BAND_HEIGHT = ROW_HEIGHT; // each band fills its full row slot
 
@@ -150,16 +150,21 @@ export async function computeLayout(
   // Assign generation depth
   const genMap = assignGenerations(allPersonIds, families);
 
-  // Find root families (all partners are generation 0 and in allPersonIds)
+  // Find root families AFTER generation assignment.
+  // A root family is one where all visible partners are at generation 0.
+  // (Partners bumped to gen > 0 by alignment are NOT roots.)
   const childIds = new Set(
     Object.values(families).flatMap((f) => f.children.map((c) => c.personId))
       .filter((id) => allPersonIds.includes(id))
   );
-  const rootPersonIds = new Set(allPersonIds.filter((id) => !childIds.has(id)));
-
-  const rootFamilies = Object.values(families).filter((f) =>
-    f.partners.every((p) => !allPersonIds.includes(p.personId) || rootPersonIds.has(p.personId))
+  const rootPersonIds = new Set(
+    allPersonIds.filter((id) => !childIds.has(id) && (genMap.get(id) ?? 0) === 0)
   );
+
+  const rootFamilies = Object.values(families).filter((f) => {
+    const visiblePartners = f.partners.filter((p) => allPersonIds.includes(p.personId));
+    return visiblePartners.length > 0 && visiblePartners.every((p) => rootPersonIds.has(p.personId));
+  });
 
   // Subtree width cache
   const widthCache = new Map<string, number>();
@@ -352,6 +357,18 @@ export async function computeLayout(
       positions.set(id, { x: fallbackCursor, y: 0 });
       fallbackCursor += PERSON_WIDTH + H_GAP;
     }
+  }
+
+  // ── Center the entire layout around x=0 ───────────────────────────────────
+  const allX = Array.from(positions.values()).map((p) => p.x);
+  const minX = Math.min(...allX);
+  const maxX = Math.max(...allX) + PERSON_WIDTH;
+  const offsetX = -(minX + maxX) / 2;
+  for (const [id, pos] of positions) {
+    positions.set(id, { x: pos.x + offsetX, y: pos.y });
+  }
+  for (const [famId, pos] of heartPositions) {
+    heartPositions.set(famId, { x: pos.x + offsetX, y: pos.y });
   }
 
   // ── Generation band nodes (rendered behind everything) ────────────────────

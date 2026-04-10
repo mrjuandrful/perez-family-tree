@@ -40,7 +40,6 @@ function PersonNode({ data, selected }: PersonNodeProps) {
     ? (useFamilyTreeStore.getState().data.media[person.profilePhotoId]?.path ?? null)
     : null;
 
-  // Card height grows with content — remove fixed height so text fits
   return (
     <div
       className={`
@@ -50,33 +49,35 @@ function PersonNode({ data, selected }: PersonNodeProps) {
           ? 'border-indigo-500 shadow-indigo-100 dark:shadow-indigo-900 shadow-md ring-2 ring-indigo-200 dark:ring-indigo-700'
           : 'border-gray-200 dark:border-slate-600 hover:border-gray-300 dark:hover:border-slate-500 hover:shadow'}
       `}
-      style={{ width: 180, minHeight: 96 }}
+      style={{ width: 200, minHeight: 100 }}
     >
-      {/* Living/deceased indicator dot — top right corner */}
+      {/* Living/deceased indicator dot */}
       <span
         className={`absolute top-2 right-2 w-2 h-2 rounded-full ${
           person.living !== false ? 'bg-green-400' : 'bg-gray-400 dark:bg-slate-500'
         }`}
         title={person.living !== false ? 'Living' : 'Deceased'}
       />
+
       <Handle type="target" position={Position.Top} className="!bg-gray-300 dark:!bg-slate-500 !border-gray-400" />
       <Handle type="source" id="right" position={Position.Right} style={{ opacity: 0 }} />
       <Handle type="target" id="left" position={Position.Left} style={{ opacity: 0 }} />
 
-      <div className="flex-shrink-0 w-10 h-10 rounded-full overflow-hidden bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center">
+      {/* Photo placeholder — square, ready for real photos */}
+      <div className="flex-shrink-0 w-10 h-12 rounded-md overflow-hidden bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center border border-indigo-100 dark:border-indigo-800">
         {photoPath ? (
           <img src={photoPath} alt={fullName} className="w-full h-full object-cover" />
         ) : (
-          <span className="text-indigo-400 dark:text-indigo-300 text-lg font-semibold">
+          <span className="text-indigo-400 dark:text-indigo-300 text-base font-semibold">
             {t(person.names.given).charAt(0)}
           </span>
         )}
       </div>
 
-      <div className="flex-1 min-w-0">
-        <p className="text-xs font-semibold text-gray-900 dark:text-slate-100 truncate leading-tight">{fullName}</p>
+      <div className="flex-1 min-w-0 pr-3">
+        <p className="text-xs font-semibold text-gray-900 dark:text-slate-100 leading-tight break-words">{fullName}</p>
         {maidenName && (
-          <p className="text-xs text-gray-400 dark:text-slate-500 leading-tight truncate">née {maidenName}</p>
+          <p className="text-xs text-gray-400 dark:text-slate-500 leading-tight">née {maidenName}</p>
         )}
         {birthDate && (
           <p className="text-xs text-gray-400 dark:text-slate-400 leading-tight">

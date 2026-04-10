@@ -2,7 +2,7 @@ import { memo } from 'react';
 import type { EdgeProps } from '@xyflow/react';
 
 const PW = 180;
-const PH = 80;
+const PH = 96;
 const R = 8;
 const PARENT_BAR_DROP = 30;
 const CHILD_BAR_OFFSET = 40;

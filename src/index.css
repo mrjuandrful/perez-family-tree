@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@variant dark (&:where(.dark, .dark *));
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -9,6 +11,11 @@ body {
   font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
   background: #f9fafb;
   color: #111827;
+}
+
+.dark body {
+  background: #0f172a;
+  color: #f1f5f9;
 }
 
 #root {

@@ -55,8 +55,8 @@ function TreeCanvasInner() {
 
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-gray-50">
-        <div className="text-gray-400 text-sm">Building family tree...</div>
+      <div className="flex-1 flex items-center justify-center bg-gray-50 dark:bg-slate-950">
+        <div className="text-gray-400 dark:text-slate-500 text-sm">Building family tree...</div>
       </div>
     );
   }
@@ -75,9 +75,9 @@ function TreeCanvasInner() {
         fitViewOptions={{ padding: 0.1 }}
         minZoom={0.1}
         maxZoom={2}
-        className="bg-gray-50"
+        className="bg-gray-50 dark:bg-slate-950"
       >
-        <Background color="#e5e7eb" gap={20} />
+        <Background color="#e5e7eb" gap={20} className="dark:[&>*]:stroke-slate-800" />
         <MiniMap
           nodeColor={(n) => n.type === 'familyNode' ? '#818cf8' : '#6366f1'}
           className="!bg-white !border-gray-200"

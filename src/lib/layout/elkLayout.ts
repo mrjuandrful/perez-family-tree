@@ -2,7 +2,7 @@ import type { Node, Edge } from '@xyflow/react';
 import type { FamilyTreeData, Family } from '../../types';
 
 export const PERSON_WIDTH = 180;
-export const PERSON_HEIGHT = 80;
+export const PERSON_HEIGHT = 96;
 const H_GAP = 50;    // horizontal gap between sibling subtrees
 const ROW_HEIGHT = 220; // vertical distance between generation rows (node height + spacing)
 const COUPLE_GAP = 50; // horizontal gap between the two partner cards (must fit heart)

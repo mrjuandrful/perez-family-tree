@@ -657,9 +657,8 @@ export async function computeLayout(
     famRouteX.set(fam.id, routeX);
   }
 
-  // ── Step 2: extract segments ──────────────────────────────────────────────
+  // ── Step 2: extract un-nudged segments (used only for nudge detection) ──────
   type Seg = import('./connectorGeometry').Segment;
-  const allSegments: Seg[] = [];
   const famSegments = new Map<string, Seg[]>();
 
   for (const fam of Object.values(families)) {
@@ -673,7 +672,6 @@ export async function computeLayout(
     if (childPositions.length === 0) continue;
     const segs = extractSegments(p1Pos, p2Pos, childPositions, fam.id, famRouteX.get(fam.id));
     famSegments.set(fam.id, segs);
-    allSegments.push(...segs);
   }
 
   // ── Step 2b: detect co-linear overlapping segments, assign per-axis nudges ─
@@ -682,7 +680,7 @@ export async function computeLayout(
   //   hNudge: Y shift applied to ALL horizontal segments of this family
   // Strategy: group segments by line key (v:X or h:Y). Within each group,
   // find overlapping segment pairs. Assign slots 0,1,2,... and nudge = slot*STEP - center.
-  const LANE_STEP = 5;
+  const LANE_STEP = 10;
 
   // segNudge: famId → { vNudge, hNudge }
   const famVNudge = new Map<string, number>(); // X shift for vertical segments
@@ -772,13 +770,34 @@ export async function computeLayout(
   assignNudges(vLineGroups, famVNudge);
   assignNudges(hLineGroups, famHNudge);
 
-  // ── Step 3: compute crossings ─────────────────────────────────────────────
-  const famCrossings = new Map<string, import('./connectorGeometry').Crossing[]>();
+  // ── Step 3: re-extract nudged segments, then compute crossings from them ────
+  // Nudges shift vertical X coords by vNudge and horizontal Y coords by hNudge.
+  // We must compute crossings from the *nudged* positions so cx/cy values match
+  // what the renderer actually draws.
+  function applyNudge(segs: Seg[], vNudge: number, hNudge: number): Seg[] {
+    return segs.map((s) => {
+      const isV = Math.abs(s.x1 - s.x2) < 0.5;
+      if (isV) return { ...s, x1: s.x1 + vNudge, x2: s.x2 + vNudge };
+      else     return { ...s, y1: s.y1 + hNudge, y2: s.y2 + hNudge };
+    });
+  }
+
+  const allNudgedSegments: Seg[] = [];
+  const famNudgedSegments = new Map<string, Seg[]>();
   for (const [famId, segs] of famSegments) {
+    const vN = famVNudge.get(famId) ?? 0;
+    const hN = famHNudge.get(famId) ?? 0;
+    const nudged = applyNudge(segs, vN, hN);
+    famNudgedSegments.set(famId, nudged);
+    allNudgedSegments.push(...nudged);
+  }
+
+  const famCrossings = new Map<string, import('./connectorGeometry').Crossing[]>();
+  for (const [famId, segs] of famNudgedSegments) {
     const seen = new Set<string>();
     const crossings: import('./connectorGeometry').Crossing[] = [];
     for (const seg of segs) {
-      for (const other of allSegments) {
+      for (const other of allNudgedSegments) {
         if (other.famId === famId) continue;
         const pt = intersectSegments(seg, other);
         if (pt) {

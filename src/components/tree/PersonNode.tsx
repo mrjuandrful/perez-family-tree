@@ -44,7 +44,7 @@ function PersonNode({ data, selected }: PersonNodeProps) {
   return (
     <div
       className={`
-        flex items-center gap-2 rounded-xl border bg-white dark:bg-slate-800 px-3 py-2 shadow-sm
+        relative flex items-center gap-2 rounded-xl border bg-white dark:bg-slate-800 px-3 py-2 shadow-sm
         transition-all cursor-pointer select-none
         ${selected
           ? 'border-indigo-500 shadow-indigo-100 dark:shadow-indigo-900 shadow-md ring-2 ring-indigo-200 dark:ring-indigo-700'
@@ -52,6 +52,13 @@ function PersonNode({ data, selected }: PersonNodeProps) {
       `}
       style={{ width: 180, minHeight: 96 }}
     >
+      {/* Living/deceased indicator dot — top right corner */}
+      <span
+        className={`absolute top-2 right-2 w-2 h-2 rounded-full ${
+          person.living !== false ? 'bg-green-400' : 'bg-gray-400 dark:bg-slate-500'
+        }`}
+        title={person.living !== false ? 'Living' : 'Deceased'}
+      />
       <Handle type="target" position={Position.Top} className="!bg-gray-300 dark:!bg-slate-500 !border-gray-400" />
       <Handle type="source" id="right" position={Position.Right} style={{ opacity: 0 }} />
       <Handle type="target" id="left" position={Position.Left} style={{ opacity: 0 }} />

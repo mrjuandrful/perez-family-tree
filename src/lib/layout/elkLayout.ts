@@ -681,12 +681,16 @@ export async function computeLayout(
   // ── Step 3: compute crossings from correct segments ───────────────────────
   const famCrossings = new Map<string, import('./connectorGeometry').Crossing[]>();
   for (const [famId, segs] of famSegments) {
+    const seen = new Set<string>();
     const crossings: import('./connectorGeometry').Crossing[] = [];
     for (const seg of segs) {
       for (const other of allSegments) {
         if (other.famId === famId) continue;
         const pt = intersectSegments(seg, other);
-        if (pt) crossings.push({ cx: pt.x, cy: pt.y });
+        if (pt) {
+          const key = `${Math.round(pt.x)},${Math.round(pt.y)}`;
+          if (!seen.has(key)) { seen.add(key); crossings.push({ cx: pt.x, cy: pt.y }); }
+        }
       }
     }
     famCrossings.set(famId, crossings);

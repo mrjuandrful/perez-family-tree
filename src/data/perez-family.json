@@ -231,6 +231,47 @@
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-10T00:00:00.000Z"
     },
+    "P020": {
+      "id": "P020",
+      "names": {
+        "given": { "en": "Antonio", "es": "Antonio" },
+        "surname": { "en": "Martinez", "es": "Martinez" }
+      },
+      "gender": "male",
+      "living": true,
+      "mediaIds": [],
+      "tags": ["martinez-line"],
+      "createdAt": "2026-04-10T00:00:00.000Z",
+      "updatedAt": "2026-04-10T00:00:00.000Z"
+    },
+    "P021": {
+      "id": "P021",
+      "names": {
+        "given": { "en": "Antonio", "es": "Antonio" },
+        "surname": { "en": "Martinez", "es": "Martinez" },
+        "suffix": "Jr."
+      },
+      "gender": "male",
+      "living": true,
+      "mediaIds": [],
+      "tags": ["martinez-line"],
+      "createdAt": "2026-04-10T00:00:00.000Z",
+      "updatedAt": "2026-04-10T00:00:00.000Z"
+    },
+    "P022": {
+      "id": "P022",
+      "names": {
+        "given": { "en": "Ana Margarita", "es": "Ana Margarita" },
+        "surname": { "en": "Ramirez", "es": "Ramirez" },
+        "nickname": { "en": "Martinez", "es": "Martinez" }
+      },
+      "gender": "female",
+      "living": true,
+      "mediaIds": [],
+      "tags": ["martinez-line"],
+      "createdAt": "2026-04-10T00:00:00.000Z",
+      "updatedAt": "2026-04-10T00:00:00.000Z"
+    },
     "P018": {
       "id": "P018",
       "names": {
@@ -313,6 +354,20 @@
       ],
       "children": [
         { "personId": "P009", "relationship": "biological" }
+      ],
+      "createdAt": "2026-04-10T00:00:00.000Z",
+      "updatedAt": "2026-04-10T00:00:00.000Z"
+    },
+    "F005": {
+      "id": "F005",
+      "type": "marriage",
+      "partners": [
+        { "personId": "P020", "role": "partner1" },
+        { "personId": "P014", "role": "partner2" }
+      ],
+      "children": [
+        { "personId": "P021", "relationship": "biological" },
+        { "personId": "P022", "relationship": "biological" }
       ],
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-10T00:00:00.000Z"

@@ -55,11 +55,11 @@ function segPath(
     const cx = x1 + (x2 - x1) * t;
     const cy = y1 + (y2 - y1) * t;
     if (isV) {
-      // vertical crossed by horizontal — hump right
+      // vertical segment bridges over horizontal — hump to the right
       d += ` L ${cx} ${cy - HUMP_R} A ${HUMP_R} ${HUMP_R} 0 0 1 ${cx} ${cy + HUMP_R}`;
     } else {
-      // horizontal crossed by vertical — hump up
-      d += ` L ${cx - HUMP_R} ${cy} A ${HUMP_R} ${HUMP_R} 0 0 0 ${cx + HUMP_R} ${cy}`;
+      // horizontal segment: pass straight through (only vertical draws the hump)
+      d += ` L ${cx} ${cy}`;
     }
   }
   d += ` L ${x2} ${y2}`;

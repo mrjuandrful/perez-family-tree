@@ -7,8 +7,6 @@ const H_GAP = 50;    // horizontal gap between sibling subtrees
 const ROW_HEIGHT = 220; // vertical distance between generation rows (node height + spacing)
 const COUPLE_GAP = 50; // horizontal gap between the two partner cards (must fit heart)
 
-// Families with a heart connector node
-const HEART_FAMILIES = new Set(['F001', 'F003', 'F004']);
 const HEART_SIZE = 28;
 
 export interface LayoutResult {
@@ -196,7 +194,7 @@ export async function computeLayout(
       positions.set(p1.personId, { x: leftX, y: coupleY });
       positions.set(p2.personId, { x: rightX, y: coupleY });
 
-      if (HEART_FAMILIES.has(fam.id)) {
+      if (!fam.dissolved) {
         heartPositions.set(fam.id, {
           x: centerX - HEART_SIZE / 2,
           y: coupleY + PERSON_HEIGHT / 2 - HEART_SIZE / 2,
@@ -331,7 +329,7 @@ export async function computeLayout(
     if (hasP1 && hasP2) {
       positions.set(p1.personId, { x: centerX - PERSON_WIDTH - COUPLE_GAP / 2, y: coupleY });
       positions.set(p2.personId, { x: centerX + COUPLE_GAP / 2, y: coupleY });
-      if (HEART_FAMILIES.has(fam.id)) {
+      if (!fam.dissolved) {
         heartPositions.set(fam.id, {
           x: centerX - HEART_SIZE / 2,
           y: coupleY + PERSON_HEIGHT / 2 - HEART_SIZE / 2,
@@ -395,7 +393,7 @@ export async function computeLayout(
 
     // ── Couple connector (horizontal line between partners, with optional heart) ──
     if (hasP1 && hasP2) {
-      if (HEART_FAMILIES.has(fam.id)) {
+      if (!fam.dissolved) {
         rfEdges.push({
           id: `couple-a-${fam.id}`,
           source: `person-${p1.personId}`,

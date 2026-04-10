@@ -24,9 +24,11 @@ export function useTreeLayout() {
 
       const allPersonIds = Object.keys(data.persons);
 
-      // Surname filter (also checks maiden name stored in nickname)
-      // Seed set: anyone whose surname or maiden name matches
-      // Then expand: include all partners and children of matched families
+      // Surname filter (also checks maiden name / nickname)
+      // Strategy: find all people who match the surname, then include:
+      //   - their spouse and children (nuclear family)
+      //   - their parents (one generation up, to show where they came from)
+      // But do NOT recursively pull in the parents' other children or extended family.
       if (surnameFilter.length > 0) {
         const matchesFilter = (id: string) => {
           const p = data.persons[id];
@@ -44,14 +46,21 @@ export function useTreeLayout() {
         const seedIds = new Set(allPersonIds.filter(matchesFilter));
         const expanded = new Set(seedIds);
 
-        // Include partners and children of any family that has a matched member
         for (const fam of Object.values(data.families)) {
-          const familyPersonIds = [
-            ...fam.partners.map((p) => p.personId),
-            ...fam.children.map((c) => c.personId),
-          ];
-          if (familyPersonIds.some((id) => seedIds.has(id))) {
-            familyPersonIds.forEach((id) => expanded.add(id));
+          const partnerIds = fam.partners.map((p) => p.personId);
+          const childIds = fam.children.map((c) => c.personId);
+          const allFamIds = [...partnerIds, ...childIds];
+
+          const hasMatch = allFamIds.some((id) => seedIds.has(id));
+          if (!hasMatch) continue;
+
+          // Always include all partners of a matched family
+          partnerIds.forEach((id) => expanded.add(id));
+
+          // Include children only if at least one partner matches (not just a child)
+          const partnerMatch = partnerIds.some((id) => seedIds.has(id));
+          if (partnerMatch) {
+            childIds.forEach((id) => expanded.add(id));
           }
         }
 

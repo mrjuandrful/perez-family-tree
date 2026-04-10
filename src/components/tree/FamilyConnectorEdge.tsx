@@ -1,10 +1,11 @@
 import { memo } from 'react';
 import type { EdgeProps } from '@xyflow/react';
 
-const PW = 180; // PERSON_WIDTH
-const PH = 80;  // PERSON_HEIGHT
-const R = 10;   // corner radius
-const CHILD_BAR_OFFSET = 40; // px above children row where horizontal bar sits
+const PW = 180;
+const PH = 80;
+const R = 8;               // corner radius
+const PARENT_BAR_DROP = 30; // how far below parents the horizontal joining bar sits
+const CHILD_BAR_OFFSET = 40; // how far above children row the child bar sits
 
 interface Pos { x: number; y: number; }
 
@@ -14,72 +15,65 @@ interface FamilyConnectorData {
   children: Pos[];
 }
 
-// Rounded corner: going down then turning horizontal
-// from (x, fromY) → down to (x, turnY-R) → curve → (x±R, turnY) → horizontal to (toX, turnY)
-function downThenHoriz(x: number, fromY: number, turnY: number, toX: number): string {
-  const goRight = toX >= x;
-  const rx = goRight ? R : -R;
-  return `M ${x} ${fromY} V ${turnY - R} Q ${x} ${turnY} ${x + rx} ${turnY} H ${toX}`;
-}
-
-// Rounded corner: going horizontal then turning down
-// from (fromX, y) → horizontal to (turnX±R, y) → curve → (turnX, y+R) → down to (turnX, toY)
-function horizThenDown(fromX: number, y: number, turnX: number, toY: number): string {
-  const goLeft = fromX < turnX;
-  const rx = goLeft ? R : -R;
-  return `M ${fromX} ${y} H ${turnX - rx} Q ${turnX} ${y} ${turnX} ${y + R} V ${toY}`;
-}
-
 function buildPath(p1: Pos | null, p2: Pos | null, children: Pos[]): string {
   if (children.length === 0) return '';
 
   const childBarY = children[0].y - CHILD_BAR_OFFSET;
-  const childCenters = children.map((c) => c.x + PW / 2);
-  const leftChildX = Math.min(...childCenters);
-  const rightChildX = Math.max(...childCenters);
+  const childCenters = children.map((c) => c.x + PW / 2).sort((a, b) => a - b);
+  const leftChildX = childCenters[0];
+  const rightChildX = childCenters[childCenters.length - 1];
 
-  const segments: string[] = [];
+  const parts: string[] = [];
 
   if (p1 && p2) {
-    const p1bx = p1.x + PW / 2;
-    const p1by = p1.y + PH;
-    const p2bx = p2.x + PW / 2;
+    const p1cx = p1.x + PW / 2; // bottom-center of parent 1
+    const p2cx = p2.x + PW / 2; // bottom-center of parent 2
+    const pBy  = p1.y + PH;     // bottom Y of parents (same row)
+    const barY = pBy + PARENT_BAR_DROP; // Y of horizontal joining bar
+    const midX = (p1cx + p2cx) / 2;
 
-    // Left parent: down then turn right to midpoint
-    segments.push(downThenHoriz(p1bx, p1by, childBarY, (p1bx + p2bx) / 2));
-    // Right parent: down then turn left to midpoint
-    segments.push(downThenHoriz(p2bx, p1by, childBarY, (p1bx + p2bx) / 2));
+    // Left parent: straight down, rounded corner right, horizontal to midX
+    parts.push(
+      `M ${p1cx} ${pBy}` +
+      ` V ${barY - R}` +
+      ` Q ${p1cx} ${barY} ${p1cx + R} ${barY}` +
+      ` H ${midX}`
+    );
+
+    // Right parent: straight down, rounded corner left, horizontal to midX
+    parts.push(
+      `M ${p2cx} ${pBy}` +
+      ` V ${barY - R}` +
+      ` Q ${p2cx} ${barY} ${p2cx - R} ${barY}` +
+      ` H ${midX}`
+    );
+
+    // Vertical stem from midpoint of parent bar down to child bar
+    parts.push(`M ${midX} ${barY} V ${childBarY}`);
+
   } else {
-    // Single parent: straight vertical stem down to bar
+    // Single parent — straight vertical stem
     const px = (p1 ?? p2)!;
     const pbx = px.x + PW / 2;
     const pby = px.y + PH;
-    segments.push(`M ${pbx} ${pby} V ${childBarY}`);
+    parts.push(`M ${pbx} ${pby} V ${childBarY}`);
   }
 
-  // Horizontal child bar spanning leftmost to rightmost child center
+  // Horizontal child bar
   if (leftChildX < rightChildX) {
-    segments.push(`M ${leftChildX} ${childBarY} H ${rightChildX}`);
+    parts.push(`M ${leftChildX} ${childBarY} H ${rightChildX}`);
   }
 
-  // Drop from bar to each child top
+  // Vertical drops from child bar to each child top
   for (const cx of childCenters) {
     const childTopY = children[0].y;
-    if (childCenters.length === 1) {
-      // Single child: straight vertical drop
-      segments.push(`M ${cx} ${childBarY} V ${childTopY}`);
-    } else {
-      // Multiple children: horizontal from bar midpoint to child, then drop down
-      const barMidX = (leftChildX + rightChildX) / 2;
-      if (Math.abs(cx - barMidX) < 1) {
-        segments.push(`M ${cx} ${childBarY} V ${childTopY}`);
-      } else {
-        segments.push(horizThenDown(barMidX, childBarY, cx, childTopY));
-      }
-    }
+    parts.push(
+      `M ${cx} ${childBarY}` +
+      ` V ${childTopY}`
+    );
   }
 
-  return segments.join(' ');
+  return parts.join(' ');
 }
 
 function FamilyConnectorEdge({ data }: EdgeProps) {

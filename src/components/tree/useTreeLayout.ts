@@ -24,17 +24,38 @@ export function useTreeLayout() {
 
       const allPersonIds = Object.keys(data.persons);
 
-      // Surname filter
+      // Surname filter (also checks maiden name stored in nickname)
+      // Seed set: anyone whose surname or maiden name matches
+      // Then expand: include all partners and children of matched families
       if (surnameFilter.length > 0) {
-        const filtered = allPersonIds.filter((id) => {
+        const matchesFilter = (id: string) => {
           const p = data.persons[id];
-          const surnameEn = p.names.surname.en.toLowerCase();
-          const surnameEs = p.names.surname.es.toLowerCase();
-          return surnameFilter.some(
-            (s) => surnameEn.includes(s.toLowerCase()) || surnameEs.includes(s.toLowerCase())
+          const namesToCheck = [
+            p.names.surname.en,
+            p.names.surname.es,
+            p.names.nickname?.en ?? '',
+            p.names.nickname?.es ?? '',
+          ].map((n) => n.toLowerCase());
+          return surnameFilter.some((s) =>
+            namesToCheck.some((n) => n.includes(s.toLowerCase()))
           );
-        });
-        visiblePersonIds = new Set(filtered);
+        };
+
+        const seedIds = new Set(allPersonIds.filter(matchesFilter));
+        const expanded = new Set(seedIds);
+
+        // Include partners and children of any family that has a matched member
+        for (const fam of Object.values(data.families)) {
+          const familyPersonIds = [
+            ...fam.partners.map((p) => p.personId),
+            ...fam.children.map((c) => c.personId),
+          ];
+          if (familyPersonIds.some((id) => seedIds.has(id))) {
+            familyPersonIds.forEach((id) => expanded.add(id));
+          }
+        }
+
+        visiblePersonIds = expanded;
       }
 
       // Generation filter (BFS from focus person)

@@ -389,18 +389,15 @@ export async function computeLayout(
   }
 
   // ── Place any still-unplaced persons near their siblings ────────────────────
-  // Group unplaced persons by generation, insert them near their siblings
   for (const id of allPersonIds) {
     if (positions.has(id)) continue;
     const g = genMap.get(id) ?? 0;
     const y = g * ROW_HEIGHT;
 
-    // Find siblings (others in same family's children list)
     let insertX = 0;
     for (const fam of Object.values(families)) {
       const siblingIds = fam.children.map((c) => c.personId).filter((sid) => allPersonIds.includes(sid));
       if (!siblingIds.includes(id)) continue;
-      // Find the rightmost placed sibling
       const placedSibXs = siblingIds
         .filter((sid) => sid !== id && positions.has(sid))
         .map((sid) => positions.get(sid)!.x);
@@ -412,44 +409,82 @@ export async function computeLayout(
     positions.set(id, { x: insertX, y });
   }
 
-  // ── Overlap resolver: enforce minimum spacing per generation row ───────────
-  // Group persons by generation, sort by birth year then current X, push apart
-  const MIN_CARD_GAP = H_GAP;
-  const genGroups = new Map<number, string[]>();
-  for (const id of allPersonIds) {
-    const g = genMap.get(id) ?? 0;
-    if (!genGroups.has(g)) genGroups.set(g, []);
-    genGroups.get(g)!.push(id);
+  // ── Overlap resolver: treat coupled partners as a unit ───────────────────
+  // Build a map from personId -> set of personIds they are coupled with on same row
+  const coupleOf = new Map<string, string[]>(); // personId -> [partner, ...]
+  for (const fam of Object.values(families)) {
+    const vp = fam.partners.filter((p) => allPersonIds.includes(p.personId));
+    if (vp.length < 2) continue;
+    const [pa, pb] = vp;
+    const paPos = positions.get(pa.personId);
+    const pbPos = positions.get(pb.personId);
+    if (!paPos || !pbPos) continue;
+    // Only couple them if on same generation row
+    if (Math.abs(paPos.y - pbPos.y) < 5) {
+      if (!coupleOf.has(pa.personId)) coupleOf.set(pa.personId, []);
+      if (!coupleOf.has(pb.personId)) coupleOf.set(pb.personId, []);
+      coupleOf.get(pa.personId)!.push(pb.personId);
+      coupleOf.get(pb.personId)!.push(pa.personId);
+    }
   }
 
-  for (const [, ids] of genGroups) {
-    // Sort by birth year first, then current X as tiebreaker
-    ids.sort((a, b) => {
-      const ba = persons[a]?.birth?.date?.year ?? 9999;
-      const bb = persons[b]?.birth?.date?.year ?? 9999;
-      if (ba !== bb) return ba - bb;
-      return (positions.get(a)?.x ?? 0) - (positions.get(b)?.x ?? 0);
-    });
+  // Build "slots": each slot is a group of persons that must move together (a couple).
+  // A person not in any couple is its own slot.
+  const visited = new Set<string>();
+  // slot = { ids: string[], leftX: number, rightX: number }
+  type Slot = { ids: string[]; leftX: number; rightX: number; y: number };
+  const slotsByGen = new Map<number, Slot[]>();
 
-    // Re-assign X positions preserving relative order but enforcing minimum gap.
-    // Collect (id, x) pairs sorted by current X, then sweep left-to-right.
-    const byX = [...ids].sort((a, b) => (positions.get(a)?.x ?? 0) - (positions.get(b)?.x ?? 0));
+  for (const id of allPersonIds) {
+    if (visited.has(id)) continue;
+    const pos = positions.get(id);
+    if (!pos) continue;
+    const g = genMap.get(id) ?? 0;
 
-    for (let i = 1; i < byX.length; i++) {
-      const prev = byX[i - 1];
-      const curr = byX[i];
-      const prevRight = (positions.get(prev)?.x ?? 0) + PERSON_WIDTH;
-      const currLeft = positions.get(curr)?.x ?? 0;
-      if (currLeft < prevRight + MIN_CARD_GAP) {
-        const newX = prevRight + MIN_CARD_GAP;
-        const pos = positions.get(curr)!;
-        positions.set(curr, { x: newX, y: pos.y });
+    // BFS: gather all persons coupled (transitively) with this person on same row
+    const unit: string[] = [];
+    const q = [id];
+    while (q.length > 0) {
+      const cur = q.shift()!;
+      if (visited.has(cur)) continue;
+      visited.add(cur);
+      unit.push(cur);
+      for (const partner of (coupleOf.get(cur) ?? [])) {
+        if (!visited.has(partner)) q.push(partner);
+      }
+    }
+
+    const xs = unit.map((uid) => positions.get(uid)!.x);
+    const leftX = Math.min(...xs);
+    const rightX = Math.max(...xs) + PERSON_WIDTH;
+
+    if (!slotsByGen.has(g)) slotsByGen.set(g, []);
+    slotsByGen.get(g)!.push({ ids: unit, leftX, rightX, y: pos.y });
+  }
+
+  // For each generation, sort slots by leftX and push apart any that overlap
+  const MIN_CARD_GAP = H_GAP;
+  for (const [, slots] of slotsByGen) {
+    slots.sort((a, b) => a.leftX - b.leftX);
+
+    for (let i = 1; i < slots.length; i++) {
+      const prev = slots[i - 1];
+      const curr = slots[i];
+      const needed = prev.rightX + MIN_CARD_GAP;
+      if (curr.leftX < needed) {
+        const shift = needed - curr.leftX;
+        // Move all persons in this slot right by shift
+        for (const uid of curr.ids) {
+          const p = positions.get(uid)!;
+          positions.set(uid, { x: p.x + shift, y: p.y });
+        }
+        curr.leftX += shift;
+        curr.rightX += shift;
       }
     }
   }
 
-  // ── Shift heart nodes to follow their couple's midpoint ───────────────────
-  // Recompute heart positions after overlap resolution
+  // ── Recompute heart positions after overlap resolution ────────────────────
   for (const fam of Object.values(families)) {
     if (fam.dissolved) continue;
     const vp = fam.partners.filter((p) => allPersonIds.includes(p.personId));

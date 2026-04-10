@@ -9,7 +9,6 @@ const FAMILY_TABS = [
   { label: 'Perez', surnames: ['Perez'] },
   { label: 'Zitt', surnames: ['Zitt'] },
   { label: 'Santana', surnames: ['Santana'] },
-  { label: 'Martinez', surnames: ['Martinez'] },
   { label: 'Safanova', surnames: ['Safanova'] },
 ];
 

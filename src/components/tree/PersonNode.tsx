@@ -35,6 +35,8 @@ function PersonNode({ data, selected }: PersonNodeProps) {
       style={{ width: 180, height: 80 }}
     >
       <Handle type="target" position={Position.Top} className="!bg-gray-300 !border-gray-400" />
+      <Handle type="source" id="right" position={Position.Right} className="!bg-gray-300 !border-gray-400" />
+      <Handle type="target" id="left" position={Position.Left} className="!bg-gray-300 !border-gray-400" />
 
       <div className="flex-shrink-0 w-10 h-10 rounded-full overflow-hidden bg-indigo-50 flex items-center justify-center">
         {photoPath ? (
@@ -56,7 +58,7 @@ function PersonNode({ data, selected }: PersonNodeProps) {
         )}
       </div>
 
-      <Handle type="source" position={Position.Bottom} className="!bg-gray-300 !border-gray-400" />
+      <Handle type="source" position={Position.Bottom} id="bottom" className="!bg-gray-300 !border-gray-400" />
     </div>
   );
 }

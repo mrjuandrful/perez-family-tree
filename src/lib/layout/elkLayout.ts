@@ -473,6 +473,17 @@ export async function computeLayout(
     });
   }
 
+  // ── Compute per-generation bounding boxes for routeX calculation ──────────
+  const genMinX = new Map<number, number>();
+  const genMaxX = new Map<number, number>();
+  for (const id of allPersonIds) {
+    const pos = positions.get(id);
+    if (!pos) continue;
+    const g = genMap.get(id) ?? 0;
+    genMinX.set(g, Math.min(genMinX.get(g) ?? Infinity, pos.x));
+    genMaxX.set(g, Math.max(genMaxX.get(g) ?? -Infinity, pos.x + PERSON_WIDTH));
+  }
+
   // ── Per-family colors ─────────────────────────────────────────────────────
   const FAMILY_COLORS = [
     '#6366f1', // indigo
@@ -503,7 +514,9 @@ export async function computeLayout(
     const childPositions = vc.map((c) => positions.get(c.personId)).filter(Boolean) as { x: number; y: number }[];
     if (childPositions.length === 0) continue;
 
-    const segs = extractSegments(p1Pos, p2Pos, childPositions, fam.id);
+    // routeX for crossing detection is computed later; use undefined here
+    // (crossings are recalculated after routeX is known per-family)
+    const segs = extractSegments(p1Pos, p2Pos, childPositions, fam.id, undefined);
     famSegments.set(fam.id, segs);
     allSegments.push(...segs);
   }
@@ -582,6 +595,42 @@ export async function computeLayout(
     const childPositions = vc.map((c) => positions.get(c.personId)).filter(Boolean) as { x: number; y: number }[];
     if (childPositions.length === 0) continue;
 
+    // Compute routeX: if the stem X falls inside an occupied region on an
+    // intermediate row, route the connector to the right of all cards.
+    let routeX: number | undefined;
+    {
+      const partnerGen = hasP1 ? (genMap.get(p1.personId) ?? 0) : (genMap.get(p2!.personId) ?? 0);
+      const childGen = genMap.get(vc[0].personId) ?? partnerGen + 1;
+      const stemX = p1Pos && p2Pos
+        ? (p1Pos.x + PERSON_WIDTH / 2 + p2Pos.x + PERSON_WIDTH / 2) / 2
+        : ((p1Pos ?? p2Pos)!.x + PERSON_WIDTH / 2);
+      const childCenters = childPositions.map((c) => c.x + PERSON_WIDTH / 2);
+      const midChildX = (Math.min(...childCenters) + Math.max(...childCenters)) / 2;
+
+      // Check all rows strictly between partnerGen and childGen
+      let needsRoute = false;
+      for (let g = partnerGen + 1; g < childGen; g++) {
+        const minX = genMinX.get(g);
+        const maxX = genMaxX.get(g);
+        if (minX === undefined || maxX === undefined) continue;
+        // Does the stem vertical or the Z horizontal cross through this row's cards?
+        const checkX = Math.abs(stemX - midChildX) > 2 ? stemX : stemX;
+        if (checkX > minX - 20 && checkX < maxX + 20) {
+          needsRoute = true;
+          break;
+        }
+      }
+
+      if (needsRoute) {
+        // Route to the right of all cards across all intermediate rows
+        let maxRight = -Infinity;
+        for (let g = partnerGen; g <= childGen; g++) {
+          maxRight = Math.max(maxRight, genMaxX.get(g) ?? -Infinity);
+        }
+        routeX = maxRight + 60;
+      }
+    }
+
     const sourceId = hasP1 ? `person-${p1.personId}` : `person-${p2!.personId}`;
     const targetId = `person-${vc[0].personId}`;
 
@@ -596,6 +645,7 @@ export async function computeLayout(
         children: childPositions,
         color,
         crossings: famCrossings.get(fam.id) ?? [],
+        routeX,
       },
       style: { pointerEvents: 'none' },
       zIndex: 5,

@@ -6,7 +6,7 @@ import {
 } from '../../lib/layout/connectorGeometry';
 
 const R = 8;
-const HUMP_R = 7;
+const HUMP_R = 6;
 
 export interface FamilyConnectorData {
   p1: Pos | null;
@@ -14,6 +14,7 @@ export interface FamilyConnectorData {
   children: Pos[];
   color: string;
   crossings: Crossing[];
+  routeX?: number;
 }
 
 function crossingsOnSeg(
@@ -24,37 +25,40 @@ function crossingsOnSeg(
   return crossings
     .filter((c) => {
       if (isV) {
-        if (Math.abs(c.cx - sx1) > 1) return false;
+        if (Math.abs(c.cx - sx1) > 2) return false;
         const lo = Math.min(sy1, sy2), hi = Math.max(sy1, sy2);
-        return c.cy > lo + 1 && c.cy < hi - 1;
+        return c.cy > lo + HUMP_R + 2 && c.cy < hi - HUMP_R - 2;
       } else {
-        if (Math.abs(c.cy - sy1) > 1) return false;
+        if (Math.abs(c.cy - sy1) > 2) return false;
         const lo = Math.min(sx1, sx2), hi = Math.max(sx1, sx2);
-        return c.cx > lo + 1 && c.cx < hi - 1;
+        return c.cx > lo + HUMP_R + 2 && c.cx < hi - HUMP_R - 2;
       }
     })
     .map((c) => ({
       t: isV ? (c.cy - sy1) / (sy2 - sy1) : (c.cx - sx1) / (sx2 - sx1),
-    }));
+    }))
+    .sort((a, b) => a.t - b.t);
 }
 
+// Build a segment path from (x1,y1) to (x2,y2) with humps at crossings.
+// Returns everything AFTER the initial M command (caller adds M).
 function segPath(
   x1: number, y1: number, x2: number, y2: number,
   crossings: Crossing[]
 ): string {
   const isV = Math.abs(x1 - x2) < 0.5;
-  const hits = crossingsOnSeg(x1, y1, x2, y2, crossings).sort((a, b) => a.t - b.t);
-  if (hits.length === 0) return `L ${x2} ${y2}`;
+  const hits = crossingsOnSeg(x1, y1, x2, y2, crossings);
+  if (hits.length === 0) return ` L ${x2} ${y2}`;
 
   let d = '';
   for (const { t } of hits) {
     const cx = x1 + (x2 - x1) * t;
     const cy = y1 + (y2 - y1) * t;
     if (isV) {
-      // vertical seg crossed by horizontal — hump right
+      // vertical crossed by horizontal — hump right
       d += ` L ${cx} ${cy - HUMP_R} A ${HUMP_R} ${HUMP_R} 0 0 1 ${cx} ${cy + HUMP_R}`;
     } else {
-      // horizontal seg crossed by vertical — hump up
+      // horizontal crossed by vertical — hump up
       d += ` L ${cx - HUMP_R} ${cy} A ${HUMP_R} ${HUMP_R} 0 0 0 ${cx + HUMP_R} ${cy}`;
     }
   }
@@ -62,13 +66,18 @@ function segPath(
   return d;
 }
 
-function buildPath(p1: Pos | null, p2: Pos | null, children: Pos[], crossings: Crossing[]): string {
+
+function buildPath(
+  p1: Pos | null, p2: Pos | null, children: Pos[],
+  crossings: Crossing[], routeX: number | undefined
+): string {
   if (children.length === 0) return '';
 
   const childBarY = children[0].y - CHILD_BAR_OFFSET;
   const childCenters = children.map((c) => c.x + CONN_PW / 2).sort((a, b) => a - b);
   const leftChildX = childCenters[0];
   const rightChildX = childCenters[childCenters.length - 1];
+  const midChildX = (leftChildX + rightChildX) / 2;
 
   const parts: string[] = [];
 
@@ -77,19 +86,40 @@ function buildPath(p1: Pos | null, p2: Pos | null, children: Pos[], crossings: C
     const p2cx = p2.x + CONN_PW / 2;
     const pBy = p1.y + CONN_PH;
     const barY = pBy + PARENT_BAR_DROP;
-    let stemX = (p1cx + p2cx) / 2;
+    const stemX = (p1cx + p2cx) / 2;
 
-    // Left parent drop + corner + bar to stem
-    parts.push(`M ${p1cx} ${pBy}` + segPath(p1cx, pBy, p1cx, barY - R, crossings));
-    parts.push(`Q ${p1cx} ${barY} ${p1cx + R} ${barY}` + segPath(p1cx + R, barY, stemX, barY, crossings));
+    // Left parent: drop to bar, round corner right
+    parts.push(
+      `M ${p1cx} ${pBy}` + segPath(p1cx, pBy, p1cx, barY - R, crossings) +
+      ` Q ${p1cx} ${barY} ${p1cx + R} ${barY}` +
+      segPath(p1cx + R, barY, stemX, barY, crossings)
+    );
+    // Right parent: drop to bar, round corner left
+    parts.push(
+      `M ${p2cx} ${pBy}` + segPath(p2cx, pBy, p2cx, barY - R, crossings) +
+      ` Q ${p2cx} ${barY} ${p2cx - R} ${barY}` +
+      segPath(p2cx - R, barY, stemX, barY, crossings)
+    );
 
-    // Right parent drop + corner + bar to stem
-    parts.push(`M ${p2cx} ${pBy}` + segPath(p2cx, pBy, p2cx, barY - R, crossings));
-    parts.push(`Q ${p2cx} ${barY} ${p2cx - R} ${barY}` + segPath(p2cx - R, barY, stemX, barY, crossings));
-
-    const midChildX = (leftChildX + rightChildX) / 2;
-    if (Math.abs(stemX - midChildX) > 2) {
-      const midY = (barY + childBarY) / 2;
+    if (routeX !== undefined) {
+      // Outer routing: down from stem, jog to routeX, down, jog to midChildX
+      const jog1Y = pBy + Math.round((childBarY - pBy) * 0.3);
+      const jog2Y = childBarY - 20;
+      const goRight = routeX > stemX;
+      parts.push(
+        `M ${stemX} ${barY}` +
+        segPath(stemX, barY, stemX, jog1Y - R, crossings) +
+        ` Q ${stemX} ${jog1Y} ${stemX + (goRight ? R : -R)} ${jog1Y}` +
+        segPath(stemX + (goRight ? R : -R), jog1Y, routeX + (goRight ? -R : R), jog1Y, crossings) +
+        ` Q ${routeX} ${jog1Y} ${routeX} ${jog1Y + R}` +
+        segPath(routeX, jog1Y + R, routeX, jog2Y - R, crossings) +
+        ` Q ${routeX} ${jog2Y} ${routeX + (goRight ? -R : R)} ${jog2Y}` +
+        segPath(routeX + (goRight ? -R : R), jog2Y, midChildX + (goRight ? R : -R), jog2Y, crossings) +
+        ` Q ${midChildX} ${jog2Y} ${midChildX} ${jog2Y + R}` +
+        segPath(midChildX, jog2Y + R, midChildX, childBarY, crossings)
+      );
+    } else if (Math.abs(stemX - midChildX) > 2) {
+      const midY = pBy + CONN_PH + (childBarY - pBy - CONN_PH) * 0.5;
       const goRight = midChildX > stemX;
       parts.push(
         `M ${stemX} ${barY}` +
@@ -99,7 +129,6 @@ function buildPath(p1: Pos | null, p2: Pos | null, children: Pos[], crossings: C
         ` Q ${midChildX} ${midY} ${midChildX} ${midY + R}` +
         segPath(midChildX, midY + R, midChildX, childBarY, crossings)
       );
-      stemX = midChildX;
     } else {
       parts.push(`M ${stemX} ${barY}` + segPath(stemX, barY, stemX, childBarY, crossings));
     }
@@ -107,23 +136,36 @@ function buildPath(p1: Pos | null, p2: Pos | null, children: Pos[], crossings: C
     const px = (p1 ?? p2)!;
     const pbx = px.x + CONN_PW / 2;
     const pby = px.y + CONN_PH;
-    let stemX = pbx;
-    const midChildX = (leftChildX + rightChildX) / 2;
 
-    if (Math.abs(stemX - midChildX) > 2) {
-      const midY = (pby + childBarY) / 2;
-      const goRight = midChildX > stemX;
+    if (routeX !== undefined) {
+      const jog1Y = pby + Math.round((childBarY - pby) * 0.3);
+      const jog2Y = childBarY - 20;
+      const goRight = routeX > pbx;
       parts.push(
-        `M ${stemX} ${pby}` +
-        segPath(stemX, pby, stemX, midY - R, crossings) +
-        ` Q ${stemX} ${midY} ${stemX + (goRight ? R : -R)} ${midY}` +
-        segPath(stemX + (goRight ? R : -R), midY, midChildX + (goRight ? -R : R), midY, crossings) +
+        `M ${pbx} ${pby}` +
+        segPath(pbx, pby, pbx, jog1Y - R, crossings) +
+        ` Q ${pbx} ${jog1Y} ${pbx + (goRight ? R : -R)} ${jog1Y}` +
+        segPath(pbx + (goRight ? R : -R), jog1Y, routeX + (goRight ? -R : R), jog1Y, crossings) +
+        ` Q ${routeX} ${jog1Y} ${routeX} ${jog1Y + R}` +
+        segPath(routeX, jog1Y + R, routeX, jog2Y - R, crossings) +
+        ` Q ${routeX} ${jog2Y} ${routeX + (goRight ? -R : R)} ${jog2Y}` +
+        segPath(routeX + (goRight ? -R : R), jog2Y, midChildX + (goRight ? R : -R), jog2Y, crossings) +
+        ` Q ${midChildX} ${jog2Y} ${midChildX} ${jog2Y + R}` +
+        segPath(midChildX, jog2Y + R, midChildX, childBarY, crossings)
+      );
+    } else if (Math.abs(pbx - midChildX) > 2) {
+      const midY = pby + (childBarY - pby) * 0.5;
+      const goRight = midChildX > pbx;
+      parts.push(
+        `M ${pbx} ${pby}` +
+        segPath(pbx, pby, pbx, midY - R, crossings) +
+        ` Q ${pbx} ${midY} ${pbx + (goRight ? R : -R)} ${midY}` +
+        segPath(pbx + (goRight ? R : -R), midY, midChildX + (goRight ? -R : R), midY, crossings) +
         ` Q ${midChildX} ${midY} ${midChildX} ${midY + R}` +
         segPath(midChildX, midY + R, midChildX, childBarY, crossings)
       );
-      stemX = midChildX;
     } else {
-      parts.push(`M ${stemX} ${pby}` + segPath(stemX, pby, stemX, childBarY, crossings));
+      parts.push(`M ${pbx} ${pby}` + segPath(pbx, pby, pbx, childBarY, crossings));
     }
   }
 
@@ -146,9 +188,9 @@ function buildPath(p1: Pos | null, p2: Pos | null, children: Pos[], crossings: C
 }
 
 function FamilyConnectorEdge({ data }: EdgeProps) {
-  const { p1, p2, children, color, crossings = [] } = (data as unknown) as FamilyConnectorData;
+  const { p1, p2, children, color, crossings = [], routeX } = (data as unknown) as FamilyConnectorData;
   if (!children || children.length === 0) return null;
-  const d = buildPath(p1 ?? null, p2 ?? null, children, crossings);
+  const d = buildPath(p1 ?? null, p2 ?? null, children, crossings, routeX);
   if (!d) return null;
   return (
     <path

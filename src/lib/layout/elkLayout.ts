@@ -4,66 +4,135 @@ import type { FamilyTreeData, Family } from '../../types';
 export const PERSON_WIDTH = 180;
 export const PERSON_HEIGHT = 80;
 const H_GAP = 50;    // horizontal gap between sibling subtrees
-const V_GAP = 100;   // vertical gap between generations
-const COUPLE_GAP = 40; // gap between the two partner cards
-const HEART_SIZE = 28; // heart node width/height
+const ROW_HEIGHT = 220; // vertical distance between generation rows (node height + spacing)
+const COUPLE_GAP = 40; // horizontal gap between the two partner cards
 
-// Heart node IDs for married couples
-const HEART_FAMILIES = new Set(['F001', 'F003', 'F004']); // Juan+Melissa, Gonzalo+Osiris, Evaristo+Zoila
+// Families with a heart connector node
+const HEART_FAMILIES = new Set(['F001', 'F003', 'F004']);
+const HEART_SIZE = 24;
 
 export interface LayoutResult {
   nodes: Node[];
   edges: Edge[];
 }
 
-// ─── helpers ────────────────────────────────────────────────────────────────
+// ─── Step 1: assign generation depth to every person ────────────────────────
+// Generation 0 = root ancestors (no visible parents).
+// We do a top-down BFS through family→children edges.
 
-function familiesWhereParent(personId: string, families: FamilyTreeData['families']): Family[] {
-  return Object.values(families).filter((f) =>
-    f.partners.some((p) => p.personId === personId)
+function assignGenerations(
+  allPersonIds: string[],
+  families: FamilyTreeData['families']
+): Map<string, number> {
+  const gen = new Map<string, number>();
+  const allIds = new Set(allPersonIds);
+
+  // childIds: persons who appear as children in any visible family
+  const childIds = new Set(
+    Object.values(families).flatMap((f) => f.children.map((c) => c.personId))
+      .filter((id) => allIds.has(id))
   );
+
+  // Roots: visible persons not listed as children in any visible family
+  const roots = allPersonIds.filter((id) => !childIds.has(id));
+  roots.forEach((id) => gen.set(id, 0));
+
+  // BFS: process from the set of persons with a known generation,
+  // propagating downward through children. Re-queue if a generation is raised.
+  const queue = [...roots];
+  const inQueue = new Set(roots);
+
+  while (queue.length > 0) {
+    const personId = queue.shift()!;
+    inQueue.delete(personId);
+    const personGen = gen.get(personId) ?? 0;
+
+    for (const fam of Object.values(families)) {
+      if (!fam.partners.some((p) => p.personId === personId)) continue;
+
+      // Align all partners to the max generation among known partners in this family
+      let maxPartnerGen = personGen;
+      for (const p of fam.partners) {
+        if (allIds.has(p.personId)) {
+          maxPartnerGen = Math.max(maxPartnerGen, gen.get(p.personId) ?? 0);
+        }
+      }
+      // Update partners that are below the max
+      for (const p of fam.partners) {
+        if (!allIds.has(p.personId)) continue;
+        const existing = gen.get(p.personId) ?? 0;
+        if (existing < maxPartnerGen) {
+          gen.set(p.personId, maxPartnerGen);
+          if (!inQueue.has(p.personId)) { queue.push(p.personId); inQueue.add(p.personId); }
+        }
+      }
+
+      // Children get maxPartnerGen + 1
+      const childGen = maxPartnerGen + 1;
+      for (const c of fam.children) {
+        if (!allIds.has(c.personId)) continue;
+        const existing = gen.get(c.personId) ?? -1;
+        if (existing < childGen) {
+          gen.set(c.personId, childGen);
+          if (!inQueue.has(c.personId)) { queue.push(c.personId); inQueue.add(c.personId); }
+        }
+      }
+    }
+  }
+
+  // Any unassigned person gets generation 0
+  for (const id of allPersonIds) {
+    if (!gen.has(id)) gen.set(id, 0);
+  }
+
+  return gen;
 }
 
-// ─── subtree width calculation ───────────────────────────────────────────────
-// Returns the width of the subtree rooted at a FAMILY (couple + all descendants).
-// For a solo person with no family, returns PERSON_WIDTH.
+// ─── Step 2: compute subtree width for each family ──────────────────────────
+// Width of a family = max(coupleWidth, sum of children subtree widths + gaps)
 
 function familySubtreeWidth(
   famId: string,
   families: FamilyTreeData['families'],
-  visitedFams = new Set<string>()
+  allPersonIds: string[],
+  cache: Map<string, number> = new Map(),
+  visiting: Set<string> = new Set()
 ): number {
-  if (visitedFams.has(famId)) return PERSON_WIDTH * 2 + COUPLE_GAP;
-  visitedFams.add(famId);
+  if (cache.has(famId)) return cache.get(famId)!;
+  if (visiting.has(famId)) return PERSON_WIDTH * 2 + COUPLE_GAP;
+  visiting.add(famId);
 
   const fam = families[famId];
   if (!fam) return PERSON_WIDTH;
 
   const coupleWidth = PERSON_WIDTH * 2 + COUPLE_GAP;
+  const visibleChildren = fam.children.map((c) => c.personId).filter((id) => allPersonIds.includes(id));
 
-  if (fam.children.length === 0) return coupleWidth;
+  if (visibleChildren.length === 0) {
+    cache.set(famId, coupleWidth);
+    return coupleWidth;
+  }
 
-  // For each child, compute the max subtree width (child's own families)
   let totalChildWidth = 0;
-  for (let i = 0; i < fam.children.length; i++) {
-    const childId = fam.children[i].personId;
-    const childFams = familiesWhereParent(childId, families).filter(
-      (cf) => !visitedFams.has(cf.id)
+  for (let i = 0; i < visibleChildren.length; i++) {
+    const childId = visibleChildren[i];
+    const childFams = Object.values(families).filter(
+      (f) => f.partners.some((p) => p.personId === childId) && !visiting.has(f.id)
     );
     if (childFams.length === 0) {
       totalChildWidth += PERSON_WIDTH;
     } else {
-      // Sum widths of all child's families
-      let childTotalWidth = 0;
       for (const cf of childFams) {
-        childTotalWidth += familySubtreeWidth(cf.id, families, new Set(visitedFams));
+        totalChildWidth += familySubtreeWidth(cf.id, families, allPersonIds, cache, new Set(visiting));
       }
-      totalChildWidth += childTotalWidth;
     }
-    if (i < fam.children.length - 1) totalChildWidth += H_GAP;
+    if (i < visibleChildren.length - 1) totalChildWidth += H_GAP;
   }
 
-  return Math.max(coupleWidth, totalChildWidth);
+  const width = Math.max(coupleWidth, totalChildWidth);
+  cache.set(famId, width);
+  visiting.delete(famId);
+  return width;
 }
 
 // ─── main layout ─────────────────────────────────────────────────────────────
@@ -78,36 +147,40 @@ export async function computeLayout(
     ? Object.keys(persons).filter((id) => visiblePersonIds.has(id))
     : Object.keys(persons);
 
-  // Find root families: families where both partners are roots (not children of any visible family)
+  // Assign generation depth
+  const genMap = assignGenerations(allPersonIds, families);
+
+  // Find root families (all partners are generation 0 and in allPersonIds)
   const childIds = new Set(
-    Object.values(families)
-      .flatMap((f) => f.children.map((c) => c.personId))
+    Object.values(families).flatMap((f) => f.children.map((c) => c.personId))
       .filter((id) => allPersonIds.includes(id))
   );
+  const rootPersonIds = new Set(allPersonIds.filter((id) => !childIds.has(id)));
 
-  // Root persons: visible persons who are not children of any visible person
-  const rootPersonIds = allPersonIds.filter((id) => !childIds.has(id));
-
-  // Root families: families where ALL partners are root persons (none are children of another visible family)
-  // This ensures grandparent families appear at the top, not families where one partner has unknown parents
   const rootFamilies = Object.values(families).filter((f) =>
-    f.partners.every((p) =>
-      !allPersonIds.includes(p.personId) || rootPersonIds.includes(p.personId)
-    )
+    f.partners.every((p) => !allPersonIds.includes(p.personId) || rootPersonIds.has(p.personId))
   );
 
-  // Solo roots: root persons not in any family
-  const rootFamilyPartnerIds = new Set(
-    rootFamilies.flatMap((f) => f.partners.map((p) => p.personId))
+  const soloRootIds = allPersonIds.filter(
+    (id) => rootPersonIds.has(id) &&
+      !Object.values(families).some((f) => f.partners.some((p) => p.personId === id))
   );
-  const soloRoots = rootPersonIds.filter((id) => !rootFamilyPartnerIds.has(id));
+
+  // Subtree width cache
+  const widthCache = new Map<string, number>();
+  const rootWidths = rootFamilies.map((f) =>
+    familySubtreeWidth(f.id, families, allPersonIds, widthCache)
+  );
+  const soloWidth = soloRootIds.length * PERSON_WIDTH + Math.max(0, soloRootIds.length - 1) * H_GAP;
+  const totalRootWidth = rootWidths.reduce((a, b) => a + b, 0)
+    + H_GAP * 2 * Math.max(0, rootFamilies.length - 1)
+    + (soloRootIds.length > 0 ? H_GAP * 2 + soloWidth : 0);
 
   const positions = new Map<string, { x: number; y: number }>();
   const heartPositions = new Map<string, { x: number; y: number }>();
   const placedFamilies = new Set<string>();
 
-  // placeFamily: recursively places a family centered at centerX, with couple at y=coupleY
-  function placeFamily(fam: Family, centerX: number, coupleY: number) {
+  function placeFamily(fam: Family, centerX: number) {
     if (placedFamilies.has(fam.id)) return;
     placedFamilies.add(fam.id);
 
@@ -115,16 +188,21 @@ export async function computeLayout(
     const hasP1 = p1 && allPersonIds.includes(p1.personId);
     const hasP2 = p2 && allPersonIds.includes(p2.personId);
 
-    // Place partners side-by-side centered on centerX
+    // Use generation-based Y for all persons in this family
+    const partnerGen = hasP1
+      ? (genMap.get(p1.personId) ?? 0)
+      : hasP2
+      ? (genMap.get(p2.personId) ?? 0)
+      : 0;
+    const coupleY = partnerGen * ROW_HEIGHT;
+
     if (hasP1 && hasP2) {
-      // Two partners: p1 on left, p2 on right, heart centered between them
       const leftX = centerX - PERSON_WIDTH - COUPLE_GAP / 2;
       const rightX = centerX + COUPLE_GAP / 2;
       if (!positions.has(p1.personId)) positions.set(p1.personId, { x: leftX, y: coupleY });
       if (!positions.has(p2.personId)) positions.set(p2.personId, { x: rightX, y: coupleY });
 
       if (HEART_FAMILIES.has(fam.id)) {
-        // Heart centered between the two cards
         heartPositions.set(fam.id, {
           x: centerX - HEART_SIZE / 2,
           y: coupleY + PERSON_HEIGHT / 2 - HEART_SIZE / 2,
@@ -142,83 +220,71 @@ export async function computeLayout(
 
     if (visibleChildren.length === 0) return;
 
-    // Calculate child subtree widths
+    // Compute child subtree widths for horizontal distribution
     const childSubtreeWidths = visibleChildren.map((childId) => {
-      const childFams = familiesWhereParent(childId, families).filter(
-        (cf) => !placedFamilies.has(cf.id)
+      const childFams = Object.values(families).filter(
+        (f) => f.partners.some((p) => p.personId === childId) && !placedFamilies.has(f.id)
       );
       if (childFams.length === 0) return PERSON_WIDTH;
-      let w = 0;
-      for (let i = 0; i < childFams.length; i++) {
-        w += familySubtreeWidth(childFams[i].id, families, new Set(placedFamilies));
-        if (i < childFams.length - 1) w += H_GAP;
-      }
-      return w;
+      return childFams.reduce((sum, cf, i) =>
+        sum + familySubtreeWidth(cf.id, families, allPersonIds, widthCache) + (i > 0 ? H_GAP : 0), 0
+      );
     });
 
     const totalChildWidth =
       childSubtreeWidths.reduce((a, b) => a + b, 0) + H_GAP * (visibleChildren.length - 1);
 
-    const childY = coupleY + PERSON_HEIGHT + V_GAP;
     let cursor = centerX - totalChildWidth / 2;
 
     for (let i = 0; i < visibleChildren.length; i++) {
       const childId = visibleChildren[i];
       const childWidth = childSubtreeWidths[i];
       const childCenter = cursor + childWidth / 2;
+      const childGen = genMap.get(childId) ?? (partnerGen + 1);
+      const childY = childGen * ROW_HEIGHT;
 
-      // Place child person centered in their subtree slot
       if (!positions.has(childId)) {
         positions.set(childId, { x: childCenter - PERSON_WIDTH / 2, y: childY });
       }
 
-      // Recurse into child's own families
-      const childFams = familiesWhereParent(childId, families).filter(
-        (cf) => !placedFamilies.has(cf.id)
+      const childFams = Object.values(families).filter(
+        (f) => f.partners.some((p) => p.personId === childId) && !placedFamilies.has(f.id)
       );
       for (const cf of childFams) {
-        placeFamily(cf, childCenter, childY + PERSON_HEIGHT + V_GAP);
+        placeFamily(cf, childCenter);
       }
 
       cursor += childWidth + H_GAP;
     }
   }
 
-  // Calculate total width of all root families to center them
-  const rootWidths = rootFamilies.map((f) => familySubtreeWidth(f.id, families));
-  const totalRootWidth =
-    rootWidths.reduce((a, b) => a + b, 0) + H_GAP * 2 * (rootFamilies.length - 1);
-
+  // Place root families
   let rootCursor = -totalRootWidth / 2;
-
   for (let i = 0; i < rootFamilies.length; i++) {
     const fam = rootFamilies[i];
     const w = rootWidths[i];
-    const center = rootCursor + w / 2;
-    placeFamily(fam, center, 0);
+    placeFamily(fam, rootCursor + w / 2);
     rootCursor += w + H_GAP * 2;
   }
 
   // Place solo roots
-  let soloCursor = rootCursor;
-  for (const id of soloRoots) {
+  for (const id of soloRootIds) {
     if (!positions.has(id)) {
-      positions.set(id, { x: soloCursor, y: 0 });
-      soloCursor += PERSON_WIDTH + H_GAP;
+      positions.set(id, { x: rootCursor, y: 0 });
+      rootCursor += PERSON_WIDTH + H_GAP;
     }
   }
 
-  // Place any remaining unplaced persons
+  // Place any remaining unplaced
   for (const id of allPersonIds) {
     if (!positions.has(id)) {
-      positions.set(id, { x: soloCursor, y: 0 });
-      soloCursor += PERSON_WIDTH + H_GAP;
+      positions.set(id, { x: rootCursor, y: 0 });
+      rootCursor += PERSON_WIDTH + H_GAP;
     }
   }
 
-  // ── Build React Flow nodes ──────────────────────────────────────────────────
+  // ── React Flow nodes ───────────────────────────────────────────────────────
   const rfNodes: Node[] = [];
-
   for (const id of allPersonIds) {
     const pos = positions.get(id) ?? { x: 0, y: 0 };
     rfNodes.push({
@@ -230,7 +296,7 @@ export async function computeLayout(
     });
   }
 
-  // Heart nodes for married couples
+  // Heart nodes
   for (const [famId, pos] of heartPositions) {
     rfNodes.push({
       id: `heart-${famId}`,
@@ -243,24 +309,23 @@ export async function computeLayout(
     });
   }
 
-  // ── Build React Flow edges ──────────────────────────────────────────────────
+  // ── React Flow edges ───────────────────────────────────────────────────────
   const rfEdges: Edge[] = [];
   const edgeStyle = { stroke: '#6366f1', strokeWidth: 2 };
   const dissolvedEdgeStyle = { stroke: '#9ca3af', strokeWidth: 2, strokeDasharray: '6,4' };
 
   for (const fam of Object.values(families)) {
-    const visiblePartners = fam.partners.filter((p) => allPersonIds.includes(p.personId));
-    const visibleChildren = fam.children.filter((c) => allPersonIds.includes(c.personId));
+    const vp = fam.partners.filter((p) => allPersonIds.includes(p.personId));
+    const vc = fam.children.filter((c) => allPersonIds.includes(c.personId));
 
-    const [p1, p2] = visiblePartners;
+    const [p1, p2] = vp;
     const hasP1 = !!p1;
     const hasP2 = !!p2;
+    const style = fam.dissolved ? dissolvedEdgeStyle : edgeStyle;
 
-    // Couple connector edge (horizontal line between partners)
+    // Couple connector: bottom of each partner card → shared midpoint node, then to children
     if (hasP1 && hasP2) {
-      const style = fam.dissolved ? dissolvedEdgeStyle : edgeStyle;
       if (HEART_FAMILIES.has(fam.id)) {
-        // Two edges: p1 → heart, heart → p2
         rfEdges.push({
           id: `couple-a-${fam.id}`,
           source: `person-${p1.personId}`,
@@ -292,7 +357,7 @@ export async function computeLayout(
       }
     }
 
-    // Parent → child edges
+    // Parent → child: from bottom of p1 (or p2) to top of each child
     const parentNodeId = hasP1
       ? `person-${p1.personId}`
       : hasP2
@@ -300,13 +365,14 @@ export async function computeLayout(
       : null;
 
     if (parentNodeId) {
-      for (const child of visibleChildren) {
+      for (const child of vc) {
         rfEdges.push({
           id: `parent-child-${fam.id}-${child.personId}`,
           source: parentNodeId,
           target: `person-${child.personId}`,
           type: 'smoothstep',
           style: edgeStyle,
+          sourceHandle: 'bottom',
         });
       }
     }

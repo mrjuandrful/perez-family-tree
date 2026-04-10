@@ -190,6 +190,20 @@
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-10T00:00:00.000Z"
     },
+    "P014": {
+      "id": "P014",
+      "names": {
+        "given": { "en": "Ana Osiris", "es": "Ana Osiris" },
+        "surname": { "en": "Martinez", "es": "Martinez" },
+        "nickname": { "en": "Perez", "es": "Pérez" }
+      },
+      "gender": "female",
+      "living": true,
+      "mediaIds": [],
+      "tags": ["perez-line"],
+      "createdAt": "2026-04-10T00:00:00.000Z",
+      "updatedAt": "2026-04-10T00:00:00.000Z"
+    },
     "P016": {
       "id": "P016",
       "names": {
@@ -284,7 +298,8 @@
         { "personId": "P011", "role": "partner2" }
       ],
       "children": [
-        { "personId": "P008", "relationship": "biological" }
+        { "personId": "P008", "relationship": "biological" },
+        { "personId": "P014", "relationship": "biological" }
       ],
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-10T00:00:00.000Z"

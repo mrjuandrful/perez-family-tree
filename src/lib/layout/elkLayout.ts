@@ -657,9 +657,8 @@ export async function computeLayout(
     famRouteX.set(fam.id, routeX);
   }
 
-  // ── Step 2: extract segments using correct routeX, compute crossings ──────
+  // ── Step 2: extract segments using correct routeX ────────────────────────
   type Seg = import('./connectorGeometry').Segment;
-  const allSegments: Seg[] = [];
   const famSegments = new Map<string, Seg[]>();
 
   for (const fam of Object.values(families)) {
@@ -675,12 +674,74 @@ export async function computeLayout(
 
     const segs = extractSegments(p1Pos, p2Pos, childPositions, fam.id, famRouteX.get(fam.id));
     famSegments.set(fam.id, segs);
+  }
+
+  // ── Step 2b: detect co-linear parallel segments, assign lane offsets ──────
+  // Group segments by their axis-aligned line key (vertical: "v:X", horizontal: "h:Y").
+  // Families that share a line get spread apart by LANE_STEP px per slot.
+  const LANE_STEP = 5;
+  const famLaneOffset = new Map<string, number>(); // famId → X offset for all its path segments
+
+  const lineToFams = new Map<string, Set<string>>(); // lineKey → set of famIds
+  for (const [famId, segs] of famSegments) {
+    for (const seg of segs) {
+      const isV = Math.abs(seg.x1 - seg.x2) < 0.5;
+      const key = isV ? `v:${Math.round(seg.x1)}` : `h:${Math.round(seg.y1)}`;
+      if (!lineToFams.has(key)) lineToFams.set(key, new Set());
+      lineToFams.get(key)!.add(famId);
+    }
+  }
+
+  // For each line that has multiple families, assign lane offsets
+  const famLaneVotes = new Map<string, number[]>(); // famId → list of proposed offsets
+  for (const [, fams] of lineToFams) {
+    if (fams.size < 2) continue;
+    const sorted = Array.from(fams).sort(); // deterministic ordering
+    const total = sorted.length;
+    const startOffset = -Math.floor(total / 2) * LANE_STEP;
+    sorted.forEach((famId, i) => {
+      const offset = startOffset + i * LANE_STEP;
+      if (!famLaneVotes.has(famId)) famLaneVotes.set(famId, []);
+      famLaneVotes.get(famId)!.push(offset);
+    });
+  }
+  // Each family gets the median of its proposed offsets (handles conflicts from multiple shared lines)
+  for (const [famId, votes] of famLaneVotes) {
+    votes.sort((a, b) => a - b);
+    famLaneOffset.set(famId, votes[Math.floor(votes.length / 2)]);
+  }
+
+  // ── Step 3: re-extract segments with lane offsets, compute crossings ───────
+  // Re-extract with offsets applied so crossing detection uses the actual drawn positions.
+  const allSegments: Seg[] = [];
+  const famSegmentsOffsetted = new Map<string, Seg[]>();
+
+  for (const fam of Object.values(families)) {
+    const vp = fam.partners.filter((p) => allPersonIds.includes(p.personId));
+    const vc = fam.children.filter((c) => allPersonIds.includes(c.personId));
+    if (vc.length === 0) continue;
+
+    const [p1, p2] = vp;
+    const offset = famLaneOffset.get(fam.id) ?? 0;
+    const p1Pos = p1 ? (positions.get(p1.personId) ?? null) : null;
+    const p2Pos = p2 ? (positions.get(p2.personId) ?? null) : null;
+    const childPositions = vc.map((c) => positions.get(c.personId)).filter(Boolean) as { x: number; y: number }[];
+    if (childPositions.length === 0) continue;
+
+    // Apply lane offset: shift all connector X coords by offset
+    const shiftPos = (p: { x: number; y: number } | null) =>
+      p ? { x: p.x + offset, y: p.y } : null;
+    const segs = extractSegments(
+      shiftPos(p1Pos), shiftPos(p2Pos),
+      childPositions.map((c) => ({ x: c.x + offset, y: c.y })),
+      fam.id, famRouteX.get(fam.id) !== undefined ? famRouteX.get(fam.id)! + offset : undefined
+    );
+    famSegmentsOffsetted.set(fam.id, segs);
     allSegments.push(...segs);
   }
 
-  // ── Step 3: compute crossings from correct segments ───────────────────────
   const famCrossings = new Map<string, import('./connectorGeometry').Crossing[]>();
-  for (const [famId, segs] of famSegments) {
+  for (const [famId, segs] of famSegmentsOffsetted) {
     const seen = new Set<string>();
     const crossings: import('./connectorGeometry').Crossing[] = [];
     for (const seg of segs) {
@@ -760,6 +821,7 @@ export async function computeLayout(
     const sourceId = hasP1 ? `person-${p1.personId}` : `person-${p2!.personId}`;
     const targetId = `person-${vc[0].personId}`;
 
+    const laneOffset = famLaneOffset.get(fam.id) ?? 0;
     rfEdges.push({
       id: `connector-${fam.id}`,
       source: sourceId,
@@ -772,6 +834,7 @@ export async function computeLayout(
         color,
         crossings: famCrossings.get(fam.id) ?? [],
         routeX,
+        laneOffset,
       },
       style: { pointerEvents: 'none' },
       zIndex: 5,

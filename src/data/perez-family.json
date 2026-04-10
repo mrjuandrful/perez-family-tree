@@ -1,0 +1,195 @@
+{
+  "meta": {
+    "version": "1.0",
+    "title": { "en": "Perez Family Tree", "es": "Árbol Genealógico Pérez" },
+    "description": {
+      "en": "The Perez family tree, spanning multiple generations.",
+      "es": "El árbol genealógico de la familia Pérez, abarcando múltiples generaciones."
+    },
+    "rootPersonId": "P001",
+    "createdAt": "2026-04-09T00:00:00.000Z",
+    "updatedAt": "2026-04-09T00:00:00.000Z"
+  },
+  "persons": {
+    "P001": {
+      "id": "P001",
+      "names": {
+        "given": { "en": "Juan", "es": "Juan" },
+        "surname": { "en": "Perez", "es": "Pérez" }
+      },
+      "gender": "male",
+      "birth": {
+        "date": { "year": 1945, "month": 3, "day": 12 },
+        "place": {
+          "display": { "en": "Guadalajara, Mexico", "es": "Guadalajara, México" },
+          "city": "Guadalajara",
+          "country": "Mexico",
+          "countryCode": "MX"
+        }
+      },
+      "death": {
+        "date": { "year": 2010, "month": 11, "day": 5 },
+        "place": {
+          "display": { "en": "Los Angeles, CA", "es": "Los Ángeles, California" },
+          "city": "Los Angeles",
+          "state": "California",
+          "country": "United States",
+          "countryCode": "US"
+        }
+      },
+      "bio": {
+        "en": "Juan Perez emigrated from Guadalajara to Los Angeles in 1968, where he built a life for his family.",
+        "es": "Juan Pérez emigró de Guadalajara a Los Ángeles en 1968, donde construyó una vida para su familia."
+      },
+      "mediaIds": [],
+      "tags": ["immigrant", "perez-line"],
+      "createdAt": "2026-04-09T00:00:00.000Z",
+      "updatedAt": "2026-04-09T00:00:00.000Z"
+    },
+    "P002": {
+      "id": "P002",
+      "names": {
+        "given": { "en": "Maria", "es": "María" },
+        "surname": { "en": "Gonzalez", "es": "González" }
+      },
+      "gender": "female",
+      "birth": {
+        "date": { "year": 1948, "month": 7, "day": 22 },
+        "place": {
+          "display": { "en": "Guadalajara, Mexico", "es": "Guadalajara, México" },
+          "city": "Guadalajara",
+          "country": "Mexico",
+          "countryCode": "MX"
+        }
+      },
+      "bio": {
+        "en": "Maria Gonzalez married Juan Perez in 1970. She was known for her cooking and keeping the family close.",
+        "es": "María González se casó con Juan Pérez en 1970. Era conocida por su cocina y por mantener unida a la familia."
+      },
+      "mediaIds": [],
+      "tags": ["gonzalez-line"],
+      "createdAt": "2026-04-09T00:00:00.000Z",
+      "updatedAt": "2026-04-09T00:00:00.000Z"
+    },
+    "P003": {
+      "id": "P003",
+      "names": {
+        "given": { "en": "Carlos", "es": "Carlos" },
+        "surname": { "en": "Perez", "es": "Pérez" }
+      },
+      "gender": "male",
+      "birth": {
+        "date": { "year": 1971, "month": 5, "day": 18 },
+        "place": {
+          "display": { "en": "Los Angeles, CA", "es": "Los Ángeles, California" },
+          "city": "Los Angeles",
+          "state": "California",
+          "country": "United States",
+          "countryCode": "US"
+        }
+      },
+      "living": true,
+      "bio": {
+        "en": "Carlos Perez is the eldest son of Juan and Maria. He lives in Los Angeles.",
+        "es": "Carlos Pérez es el hijo mayor de Juan y María. Vive en Los Ángeles."
+      },
+      "mediaIds": [],
+      "tags": ["perez-line"],
+      "createdAt": "2026-04-09T00:00:00.000Z",
+      "updatedAt": "2026-04-09T00:00:00.000Z"
+    },
+    "P004": {
+      "id": "P004",
+      "names": {
+        "given": { "en": "Rosa", "es": "Rosa" },
+        "surname": { "en": "Perez", "es": "Pérez" }
+      },
+      "gender": "female",
+      "birth": {
+        "date": { "year": 1974, "month": 9, "day": 3 },
+        "place": {
+          "display": { "en": "Los Angeles, CA", "es": "Los Ángeles, California" },
+          "city": "Los Angeles",
+          "state": "California",
+          "country": "United States",
+          "countryCode": "US"
+        }
+      },
+      "living": true,
+      "bio": {
+        "en": "Rosa Perez is the daughter of Juan and Maria. She is a teacher in San Diego.",
+        "es": "Rosa Pérez es la hija de Juan y María. Es maestra en San Diego."
+      },
+      "mediaIds": [],
+      "tags": ["perez-line"],
+      "createdAt": "2026-04-09T00:00:00.000Z",
+      "updatedAt": "2026-04-09T00:00:00.000Z"
+    },
+    "P005": {
+      "id": "P005",
+      "names": {
+        "given": { "en": "Miguel", "es": "Miguel" },
+        "surname": { "en": "Perez", "es": "Pérez" }
+      },
+      "gender": "male",
+      "birth": {
+        "date": { "year": 2000, "month": 1, "day": 15 },
+        "place": {
+          "display": { "en": "Los Angeles, CA", "es": "Los Ángeles, California" },
+          "city": "Los Angeles",
+          "state": "California",
+          "country": "United States",
+          "countryCode": "US"
+        }
+      },
+      "living": true,
+      "bio": {
+        "en": "Miguel Perez is the son of Carlos Perez.",
+        "es": "Miguel Pérez es el hijo de Carlos Pérez."
+      },
+      "mediaIds": [],
+      "tags": ["perez-line"],
+      "createdAt": "2026-04-09T00:00:00.000Z",
+      "updatedAt": "2026-04-09T00:00:00.000Z"
+    }
+  },
+  "families": {
+    "F001": {
+      "id": "F001",
+      "type": "marriage",
+      "partners": [
+        { "personId": "P001", "role": "partner1" },
+        { "personId": "P002", "role": "partner2" }
+      ],
+      "union": {
+        "date": { "year": 1970, "month": 6, "day": 14 },
+        "place": {
+          "display": { "en": "Los Angeles, CA", "es": "Los Ángeles, California" },
+          "city": "Los Angeles",
+          "state": "California",
+          "country": "United States",
+          "countryCode": "US"
+        }
+      },
+      "children": [
+        { "personId": "P003", "relationship": "biological" },
+        { "personId": "P004", "relationship": "biological" }
+      ],
+      "createdAt": "2026-04-09T00:00:00.000Z",
+      "updatedAt": "2026-04-09T00:00:00.000Z"
+    },
+    "F002": {
+      "id": "F002",
+      "type": "unknown",
+      "partners": [
+        { "personId": "P003", "role": "partner1" }
+      ],
+      "children": [
+        { "personId": "P005", "relationship": "biological" }
+      ],
+      "createdAt": "2026-04-09T00:00:00.000Z",
+      "updatedAt": "2026-04-09T00:00:00.000Z"
+    }
+  },
+  "media": {}
+}

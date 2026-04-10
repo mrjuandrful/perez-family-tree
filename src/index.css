@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  background: #f9fafb;
+  color: #111827;
+}
+
+#root {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* React Flow custom styles */
+.react-flow__node {
+  cursor: pointer;
+}
+
+.react-flow__node:focus {
+  outline: none;
+}

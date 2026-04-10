@@ -14,6 +14,7 @@ import '@xyflow/react/dist/style.css';
 
 import PersonNode from './PersonNode';
 import HeartNode from './HeartNode';
+import GenerationBandNode from './GenerationBandNode';
 import FamilyConnectorEdge from './FamilyConnectorEdge';
 import TreeControls from './TreeControls';
 import { useTreeLayout } from './useTreeLayout';
@@ -22,6 +23,7 @@ import { useUIStore } from '../../store';
 const nodeTypes: NodeTypes = {
   personNode: PersonNode,
   heartNode: HeartNode,
+  generationBand: GenerationBandNode,
 };
 
 const edgeTypes: EdgeTypes = {

@@ -3,9 +3,11 @@ import type { FamilyTreeData, Family } from '../../types';
 
 export const PERSON_WIDTH = 180;
 export const PERSON_HEIGHT = 96;
-const H_GAP = 50;    // horizontal gap between sibling subtrees
-const ROW_HEIGHT = 220; // vertical distance between generation rows (node height + spacing)
+const H_GAP = 60;    // horizontal gap between sibling subtrees
+const ROW_HEIGHT = 240; // vertical distance between generation rows (node height + spacing)
 const COUPLE_GAP = 50; // horizontal gap between the two partner cards (must fit heart)
+const BAND_WIDTH = 8000; // wide enough to always fill the viewport
+const BAND_HEIGHT = ROW_HEIGHT; // each band fills its full row slot
 
 const HEART_SIZE = 28;
 
@@ -352,8 +354,45 @@ export async function computeLayout(
     }
   }
 
+  // ── Generation band nodes (rendered behind everything) ────────────────────
+  // Compute which generations are present and label them relative to root person
+  const rootPersonId = data.meta.rootPersonId;
+  const rootGen = rootPersonId ? (genMap.get(rootPersonId) ?? null) : null;
+
+  const generationLabels: Record<number, string> = {};
+  if (rootGen !== null) {
+    const genSet = new Set(allPersonIds.map((id) => genMap.get(id) ?? 0));
+    for (const g of genSet) {
+      const diff = g - rootGen;
+      if (diff === 0) generationLabels[g] = 'Your Generation';
+      else if (diff === -1) generationLabels[g] = 'Parents';
+      else if (diff === -2) generationLabels[g] = 'Grandparents';
+      else if (diff === -3) generationLabels[g] = 'Great-Grandparents';
+      else if (diff === 1) generationLabels[g] = 'Children';
+      else if (diff === 2) generationLabels[g] = 'Grandchildren';
+      else generationLabels[g] = `Generation ${g}`;
+    }
+  }
+
   // ── React Flow nodes ───────────────────────────────────────────────────────
   const rfNodes: Node[] = [];
+
+  // Band nodes first so they render behind person nodes
+  const genSet = new Set(allPersonIds.map((id) => genMap.get(id) ?? 0));
+  for (const g of genSet) {
+    const bandY = g * ROW_HEIGHT - 20;
+    rfNodes.push({
+      id: `band-gen-${g}`,
+      type: 'generationBand',
+      position: { x: -BAND_WIDTH / 2, y: bandY },
+      data: { generation: g, label: generationLabels[g] ?? `Generation ${g}` },
+      style: { width: BAND_WIDTH, height: BAND_HEIGHT, pointerEvents: 'none' },
+      selectable: false,
+      draggable: false,
+      zIndex: -1,
+    });
+  }
+
   for (const id of allPersonIds) {
     const pos = positions.get(id) ?? { x: 0, y: 0 };
     rfNodes.push({

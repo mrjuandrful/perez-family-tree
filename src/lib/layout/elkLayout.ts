@@ -161,28 +161,20 @@ export async function computeLayout(
     f.partners.every((p) => !allPersonIds.includes(p.personId) || rootPersonIds.has(p.personId))
   );
 
-  const soloRootIds = allPersonIds.filter(
-    (id) => rootPersonIds.has(id) &&
-      !Object.values(families).some((f) => f.partners.some((p) => p.personId === id))
-  );
-
   // Subtree width cache
   const widthCache = new Map<string, number>();
-  const rootWidths = rootFamilies.map((f) =>
-    familySubtreeWidth(f.id, families, allPersonIds, widthCache)
-  );
-  const soloWidth = soloRootIds.length * PERSON_WIDTH + Math.max(0, soloRootIds.length - 1) * H_GAP;
-  const totalRootWidth = rootWidths.reduce((a, b) => a + b, 0)
-    + H_GAP * 2 * Math.max(0, rootFamilies.length - 1)
-    + (soloRootIds.length > 0 ? H_GAP * 2 + soloWidth : 0);
 
   const positions = new Map<string, { x: number; y: number }>();
   const heartPositions = new Map<string, { x: number; y: number }>();
   const placedFamilies = new Set<string>();
 
-  // placeFamily: places a couple centered at centerX, then fans children below.
-  // A child's position is set here only if they have no family of their own.
-  // If a child has their own family, that family's placeFamily call will set their position.
+  // ── Pass 1: place all non-root families top-down, starting from the deepest root family ──
+  // Find the "anchor" root family — the one whose subtree contains everyone else.
+  // We pick the root family with the largest subtree width.
+  const nonRootFamilies = Object.values(families).filter((f) =>
+    !rootFamilies.includes(f)
+  );
+
   function placeFamily(fam: Family, centerX: number) {
     if (placedFamilies.has(fam.id)) return;
     placedFamilies.add(fam.id);
@@ -198,7 +190,6 @@ export async function computeLayout(
       : 0;
     const coupleY = partnerGen * ROW_HEIGHT;
 
-    // Always place partners from centerX — overwrite any prior solo-child placement
     if (hasP1 && hasP2) {
       const leftX = centerX - PERSON_WIDTH - COUPLE_GAP / 2;
       const rightX = centerX + COUPLE_GAP / 2;
@@ -223,7 +214,6 @@ export async function computeLayout(
 
     if (visibleChildren.length === 0) return;
 
-    // Subtree width for each child slot
     const childSubtreeWidths = visibleChildren.map((childId) => {
       const childFams = Object.values(families).filter(
         (f) => f.partners.some((p) => p.personId === childId)
@@ -246,7 +236,6 @@ export async function computeLayout(
       const childGen = genMap.get(childId) ?? (partnerGen + 1);
       const childY = childGen * ROW_HEIGHT;
 
-      // Recurse into child's own families — they will set the child's position as a partner
       const unplacedChildFams = Object.values(families).filter(
         (f) => f.partners.some((p) => p.personId === childId) && !placedFamilies.has(f.id)
       );
@@ -257,8 +246,6 @@ export async function computeLayout(
         }
       }
 
-      // If child still has no position (all their families were already placed, or no families),
-      // place them as a solo node centered in their slot
       if (!positions.has(childId)) {
         positions.set(childId, { x: childCenter - PERSON_WIDTH / 2, y: childY });
       }
@@ -267,28 +254,80 @@ export async function computeLayout(
     }
   }
 
-  // Place root families
-  let rootCursor = -totalRootWidth / 2;
-  for (let i = 0; i < rootFamilies.length; i++) {
-    const fam = rootFamilies[i];
-    const w = rootWidths[i];
-    placeFamily(fam, rootCursor + w / 2);
-    rootCursor += w + H_GAP * 2;
+  // Place non-root families first (they anchor all child positions)
+  // Sort by generation so parents are placed before children
+  const nonRootSorted = nonRootFamilies.sort((a, b) => {
+    const genA = Math.min(...a.partners.map((p) => genMap.get(p.personId) ?? 0));
+    const genB = Math.min(...b.partners.map((p) => genMap.get(p.personId) ?? 0));
+    return genA - genB;
+  });
+
+  // Find the widest non-root subtree to use as the horizontal anchor
+  let anchorFamily = nonRootSorted[0];
+  let anchorWidth = 0;
+  for (const f of nonRootSorted) {
+    const w = familySubtreeWidth(f.id, families, allPersonIds, widthCache);
+    if (w > anchorWidth) { anchorWidth = w; anchorFamily = f; }
   }
 
-  // Place solo roots
-  for (const id of soloRootIds) {
-    if (!positions.has(id)) {
-      positions.set(id, { x: rootCursor, y: 0 });
-      rootCursor += PERSON_WIDTH + H_GAP;
+  if (anchorFamily) {
+    placeFamily(anchorFamily, 0);
+  }
+  // Place any remaining non-root families not yet placed
+  for (const f of nonRootSorted) {
+    if (!placedFamilies.has(f.id)) placeFamily(f, 0);
+  }
+
+  // ── Pass 2: place root (grandparent) families centered above their children ──
+  for (const fam of rootFamilies) {
+    if (placedFamilies.has(fam.id)) continue;
+
+    const visibleChildren = fam.children
+      .map((c) => c.personId)
+      .filter((id) => allPersonIds.includes(id));
+
+    let centerX = 0;
+    if (visibleChildren.length > 0) {
+      // Center above the child(ren) that are already placed
+      const placedChildXs = visibleChildren
+        .map((id) => positions.get(id))
+        .filter(Boolean)
+        .map((p) => p!.x + PERSON_WIDTH / 2);
+
+      if (placedChildXs.length > 0) {
+        centerX = placedChildXs.reduce((a, b) => a + b, 0) / placedChildXs.length;
+      }
+    }
+
+    placedFamilies.add(fam.id);
+
+    const [p1, p2] = fam.partners;
+    const hasP1 = p1 && allPersonIds.includes(p1.personId);
+    const hasP2 = p2 && allPersonIds.includes(p2.personId);
+    const coupleY = 0; // root families are always gen 0
+
+    if (hasP1 && hasP2) {
+      positions.set(p1.personId, { x: centerX - PERSON_WIDTH - COUPLE_GAP / 2, y: coupleY });
+      positions.set(p2.personId, { x: centerX + COUPLE_GAP / 2, y: coupleY });
+      if (HEART_FAMILIES.has(fam.id)) {
+        heartPositions.set(fam.id, {
+          x: centerX - HEART_SIZE / 2,
+          y: coupleY + PERSON_HEIGHT / 2 - HEART_SIZE / 2,
+        });
+      }
+    } else if (hasP1) {
+      positions.set(p1.personId, { x: centerX - PERSON_WIDTH / 2, y: coupleY });
+    } else if (hasP2) {
+      positions.set(p2.personId, { x: centerX - PERSON_WIDTH / 2, y: coupleY });
     }
   }
 
-  // Place any remaining unplaced
+  // Place solo roots and any remaining unplaced
+  let fallbackCursor = 0;
   for (const id of allPersonIds) {
     if (!positions.has(id)) {
-      positions.set(id, { x: rootCursor, y: 0 });
-      rootCursor += PERSON_WIDTH + H_GAP;
+      positions.set(id, { x: fallbackCursor, y: 0 });
+      fallbackCursor += PERSON_WIDTH + H_GAP;
     }
   }
 

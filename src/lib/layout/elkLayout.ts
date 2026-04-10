@@ -196,20 +196,56 @@ export async function computeLayout(
     const coupleY = partnerGen * ROW_HEIGHT;
 
     if (hasP1 && hasP2) {
-      const leftX = centerX - PERSON_WIDTH - COUPLE_GAP / 2;
-      const rightX = centerX + COUPLE_GAP / 2;
-      positions.set(p1.personId, { x: leftX, y: coupleY });
-      positions.set(p2.personId, { x: rightX, y: coupleY });
-
-      if (!fam.dissolved) {
-        heartPositions.set(fam.id, {
-          x: centerX - HEART_SIZE / 2,
-          y: coupleY + PERSON_HEIGHT / 2 - HEART_SIZE / 2,
-        });
+      // If one partner is already placed, derive centerX from their position
+      // rather than overwriting them
+      const p1Placed = positions.has(p1.personId);
+      const p2Placed = positions.has(p2.personId);
+      if (p1Placed && !p2Placed) {
+        const p1X = positions.get(p1.personId)!.x;
+        centerX = p1X + PERSON_WIDTH + COUPLE_GAP / 2;
+        positions.set(p2.personId, { x: centerX + COUPLE_GAP / 2, y: coupleY });
+        // recompute heart using actual p1 center
+        if (!fam.dissolved) {
+          const actualCenterX = p1X + PERSON_WIDTH + COUPLE_GAP / 2;
+          heartPositions.set(fam.id, {
+            x: actualCenterX - HEART_SIZE / 2,
+            y: coupleY + PERSON_HEIGHT / 2 - HEART_SIZE / 2,
+          });
+        }
+      } else if (p2Placed && !p1Placed) {
+        const p2X = positions.get(p2.personId)!.x;
+        centerX = p2X - PERSON_WIDTH - COUPLE_GAP / 2;
+        positions.set(p1.personId, { x: centerX - PERSON_WIDTH - COUPLE_GAP / 2, y: coupleY });
+        if (!fam.dissolved) {
+          heartPositions.set(fam.id, {
+            x: centerX - HEART_SIZE / 2,
+            y: coupleY + PERSON_HEIGHT / 2 - HEART_SIZE / 2,
+          });
+        }
+      } else if (!p1Placed && !p2Placed) {
+        positions.set(p1.personId, { x: centerX - PERSON_WIDTH - COUPLE_GAP / 2, y: coupleY });
+        positions.set(p2.personId, { x: centerX + COUPLE_GAP / 2, y: coupleY });
+        if (!fam.dissolved) {
+          heartPositions.set(fam.id, {
+            x: centerX - HEART_SIZE / 2,
+            y: coupleY + PERSON_HEIGHT / 2 - HEART_SIZE / 2,
+          });
+        }
+      } else {
+        // Both already placed — just add the heart if needed
+        if (!fam.dissolved) {
+          const p1X = positions.get(p1.personId)!.x;
+          const p2X = positions.get(p2.personId)!.x;
+          const midX = (p1X + PERSON_WIDTH + p2X) / 2;
+          heartPositions.set(fam.id, {
+            x: midX - HEART_SIZE / 2,
+            y: coupleY + PERSON_HEIGHT / 2 - HEART_SIZE / 2,
+          });
+        }
       }
-    } else if (hasP1) {
+    } else if (hasP1 && !positions.has(p1.personId)) {
       positions.set(p1.personId, { x: centerX - PERSON_WIDTH / 2, y: coupleY });
-    } else if (hasP2) {
+    } else if (hasP2 && !positions.has(p2.personId)) {
       positions.set(p2.personId, { x: centerX - PERSON_WIDTH / 2, y: coupleY });
     }
 
@@ -278,7 +314,8 @@ export async function computeLayout(
   if (anchorFamily) {
     placeFamily(anchorFamily, 0);
   }
-  // Place any remaining non-root families not yet placed
+  // Place any remaining non-root families not yet placed.
+  // placeFamily() will self-correct centerX if one partner is already positioned.
   for (const f of nonRootSorted) {
     if (!placedFamilies.has(f.id)) placeFamily(f, 0);
   }

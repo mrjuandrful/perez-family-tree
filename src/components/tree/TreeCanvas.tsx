@@ -14,8 +14,7 @@ import '@xyflow/react/dist/style.css';
 
 import PersonNode from './PersonNode';
 import HeartNode from './HeartNode';
-import JunctionNode from './JunctionNode';
-import RoundedStepEdge from './RoundedStepEdge';
+import FamilyConnectorEdge from './FamilyConnectorEdge';
 import TreeControls from './TreeControls';
 import { useTreeLayout } from './useTreeLayout';
 import { useUIStore } from '../../store';
@@ -23,11 +22,10 @@ import { useUIStore } from '../../store';
 const nodeTypes: NodeTypes = {
   personNode: PersonNode,
   heartNode: HeartNode,
-  junctionNode: JunctionNode,
 };
 
 const edgeTypes: EdgeTypes = {
-  roundedStep: RoundedStepEdge,
+  familyConnector: FamilyConnectorEdge,
 };
 
 function TreeCanvasInner() {

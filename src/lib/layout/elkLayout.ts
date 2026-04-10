@@ -6,12 +6,10 @@ export const PERSON_HEIGHT = 80;
 const H_GAP = 50;    // horizontal gap between sibling subtrees
 const ROW_HEIGHT = 220; // vertical distance between generation rows (node height + spacing)
 const COUPLE_GAP = 50; // horizontal gap between the two partner cards (must fit heart)
-const JUNCTION_Y_OFFSET = 40; // how far below the couple row the junction dot sits
 
 // Families with a heart connector node
 const HEART_FAMILIES = new Set(['F001', 'F003', 'F004']);
 const HEART_SIZE = 28;
-const JUNCTION_SIZE = 8;
 
 export interface LayoutResult {
   nodes: Node[];
@@ -180,7 +178,6 @@ export async function computeLayout(
 
   const positions = new Map<string, { x: number; y: number }>();
   const heartPositions = new Map<string, { x: number; y: number }>();
-  const junctionPositions = new Map<string, { x: number; y: number }>();
   const placedFamilies = new Set<string>();
 
   // placeFamily: places a couple centered at centerX, then fans children below.
@@ -225,12 +222,6 @@ export async function computeLayout(
       .filter((id) => allPersonIds.includes(id));
 
     if (visibleChildren.length === 0) return;
-
-    // Junction node: centered below the couple midpoint
-    junctionPositions.set(fam.id, {
-      x: centerX - JUNCTION_SIZE / 2,
-      y: coupleY + PERSON_HEIGHT + JUNCTION_Y_OFFSET - JUNCTION_SIZE / 2,
-    });
 
     // Subtree width for each child slot
     const childSubtreeWidths = visibleChildren.map((childId) => {
@@ -314,7 +305,6 @@ export async function computeLayout(
     });
   }
 
-  // Heart nodes
   for (const [famId, pos] of heartPositions) {
     rfNodes.push({
       id: `heart-${famId}`,
@@ -322,19 +312,6 @@ export async function computeLayout(
       position: pos,
       data: { famId },
       style: { width: HEART_SIZE, height: HEART_SIZE },
-      selectable: false,
-      draggable: false,
-    });
-  }
-
-  // Junction nodes (one per family with children)
-  for (const [famId, pos] of junctionPositions) {
-    rfNodes.push({
-      id: `jxn-${famId}`,
-      type: 'junctionNode',
-      position: pos,
-      data: {},
-      style: { width: JUNCTION_SIZE, height: JUNCTION_SIZE },
       selectable: false,
       draggable: false,
     });
@@ -353,9 +330,8 @@ export async function computeLayout(
     const hasP1 = !!p1;
     const hasP2 = !!p2;
     const coupleStyle = fam.dissolved ? dissolvedEdgeStyle : edgeStyle;
-    const hasJunction = junctionPositions.has(fam.id);
 
-    // ── Couple connector (horizontal, between partners) ──────────────────────
+    // ── Couple connector (horizontal line between partners, with optional heart) ──
     if (hasP1 && hasP2) {
       if (HEART_FAMILIES.has(fam.id)) {
         rfEdges.push({
@@ -389,46 +365,27 @@ export async function computeLayout(
       }
     }
 
-    if (!hasJunction || vc.length === 0) continue;
+    // ── Family connector: one custom SVG edge draws the entire T-bar ──────────
+    if (vc.length === 0) continue;
 
-    const jxnId = `jxn-${fam.id}`;
+    const p1Pos = hasP1 ? (positions.get(p1.personId) ?? null) : null;
+    const p2Pos = hasP2 ? (positions.get(p2.personId) ?? null) : null;
+    const childPositions = vc.map((c) => positions.get(c.personId)).filter(Boolean) as { x: number; y: number }[];
 
-    // ── Parent bottoms → junction ────────────────────────────────────────────
-    if (hasP1) {
-      rfEdges.push({
-        id: `p1-jxn-${fam.id}`,
-        source: `person-${p1.personId}`,
-        target: jxnId,
-        type: 'roundedStep',
-        style: edgeStyle,
-        sourceHandle: 'bottom',
-        targetHandle: 'top',
-      });
-    }
-    if (hasP2) {
-      rfEdges.push({
-        id: `p2-jxn-${fam.id}`,
-        source: `person-${p2.personId}`,
-        target: jxnId,
-        type: 'roundedStep',
-        style: edgeStyle,
-        sourceHandle: 'bottom',
-        targetHandle: 'top',
-      });
-    }
+    if (childPositions.length === 0) continue;
 
-    // ── Junction → each child top ────────────────────────────────────────────
-    for (const child of vc) {
-      rfEdges.push({
-        id: `jxn-child-${fam.id}-${child.personId}`,
-        source: jxnId,
-        target: `person-${child.personId}`,
-        type: 'roundedStep',
-        style: edgeStyle,
-        sourceHandle: 'bottom',
-        targetHandle: 'top',
-      });
-    }
+    // source/target are required by React Flow but the custom edge ignores them
+    const sourceId = hasP1 ? `person-${p1.personId}` : `person-${p2!.personId}`;
+    const targetId = `person-${vc[0].personId}`;
+
+    rfEdges.push({
+      id: `connector-${fam.id}`,
+      source: sourceId,
+      target: targetId,
+      type: 'familyConnector',
+      data: { p1: p1Pos, p2: p2Pos, children: childPositions },
+      style: { pointerEvents: 'none' },
+    });
   }
 
   return { nodes: rfNodes, edges: rfEdges };

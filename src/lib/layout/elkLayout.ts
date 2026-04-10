@@ -5,11 +5,11 @@ export const PERSON_WIDTH = 180;
 export const PERSON_HEIGHT = 80;
 const H_GAP = 50;    // horizontal gap between sibling subtrees
 const ROW_HEIGHT = 220; // vertical distance between generation rows (node height + spacing)
-const COUPLE_GAP = 40; // horizontal gap between the two partner cards
+const COUPLE_GAP = 50; // horizontal gap between the two partner cards (must fit heart)
 
 // Families with a heart connector node
 const HEART_FAMILIES = new Set(['F001', 'F003', 'F004']);
-const HEART_SIZE = 24;
+const HEART_SIZE = 28;
 
 export interface LayoutResult {
   nodes: Node[];
@@ -180,6 +180,9 @@ export async function computeLayout(
   const heartPositions = new Map<string, { x: number; y: number }>();
   const placedFamilies = new Set<string>();
 
+  // placeFamily: places a couple centered at centerX, then fans children below.
+  // A child's position is set here only if they have no family of their own.
+  // If a child has their own family, that family's placeFamily call will set their position.
   function placeFamily(fam: Family, centerX: number) {
     if (placedFamilies.has(fam.id)) return;
     placedFamilies.add(fam.id);
@@ -188,7 +191,6 @@ export async function computeLayout(
     const hasP1 = p1 && allPersonIds.includes(p1.personId);
     const hasP2 = p2 && allPersonIds.includes(p2.personId);
 
-    // Use generation-based Y for all persons in this family
     const partnerGen = hasP1
       ? (genMap.get(p1.personId) ?? 0)
       : hasP2
@@ -196,11 +198,12 @@ export async function computeLayout(
       : 0;
     const coupleY = partnerGen * ROW_HEIGHT;
 
+    // Always place partners from centerX — overwrite any prior solo-child placement
     if (hasP1 && hasP2) {
       const leftX = centerX - PERSON_WIDTH - COUPLE_GAP / 2;
       const rightX = centerX + COUPLE_GAP / 2;
-      if (!positions.has(p1.personId)) positions.set(p1.personId, { x: leftX, y: coupleY });
-      if (!positions.has(p2.personId)) positions.set(p2.personId, { x: rightX, y: coupleY });
+      positions.set(p1.personId, { x: leftX, y: coupleY });
+      positions.set(p2.personId, { x: rightX, y: coupleY });
 
       if (HEART_FAMILIES.has(fam.id)) {
         heartPositions.set(fam.id, {
@@ -209,9 +212,9 @@ export async function computeLayout(
         });
       }
     } else if (hasP1) {
-      if (!positions.has(p1.personId)) positions.set(p1.personId, { x: centerX - PERSON_WIDTH / 2, y: coupleY });
+      positions.set(p1.personId, { x: centerX - PERSON_WIDTH / 2, y: coupleY });
     } else if (hasP2) {
-      if (!positions.has(p2.personId)) positions.set(p2.personId, { x: centerX - PERSON_WIDTH / 2, y: coupleY });
+      positions.set(p2.personId, { x: centerX - PERSON_WIDTH / 2, y: coupleY });
     }
 
     const visibleChildren = fam.children
@@ -220,10 +223,10 @@ export async function computeLayout(
 
     if (visibleChildren.length === 0) return;
 
-    // Compute child subtree widths for horizontal distribution
+    // Subtree width for each child slot
     const childSubtreeWidths = visibleChildren.map((childId) => {
       const childFams = Object.values(families).filter(
-        (f) => f.partners.some((p) => p.personId === childId) && !placedFamilies.has(f.id)
+        (f) => f.partners.some((p) => p.personId === childId)
       );
       if (childFams.length === 0) return PERSON_WIDTH;
       return childFams.reduce((sum, cf, i) =>
@@ -243,15 +246,18 @@ export async function computeLayout(
       const childGen = genMap.get(childId) ?? (partnerGen + 1);
       const childY = childGen * ROW_HEIGHT;
 
-      if (!positions.has(childId)) {
-        positions.set(childId, { x: childCenter - PERSON_WIDTH / 2, y: childY });
-      }
-
+      // Recurse into child's own families first — they will set the child's position as a partner
       const childFams = Object.values(families).filter(
         (f) => f.partners.some((p) => p.personId === childId) && !placedFamilies.has(f.id)
       );
-      for (const cf of childFams) {
-        placeFamily(cf, childCenter);
+
+      if (childFams.length > 0) {
+        for (const cf of childFams) {
+          placeFamily(cf, childCenter);
+        }
+      } else {
+        // Child has no family — place them as a solo person in their slot
+        positions.set(childId, { x: childCenter - PERSON_WIDTH / 2, y: childY });
       }
 
       cursor += childWidth + H_GAP;

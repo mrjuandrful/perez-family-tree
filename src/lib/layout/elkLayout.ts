@@ -1,5 +1,6 @@
 import type { Node, Edge } from '@xyflow/react';
 import type { FamilyTreeData, Family } from '../../types';
+import { extractSegments, intersectSegments } from './connectorGeometry';
 
 export const PERSON_WIDTH = 200;
 export const PERSON_HEIGHT = 100;
@@ -472,10 +473,57 @@ export async function computeLayout(
     });
   }
 
+  // ── Per-family colors ─────────────────────────────────────────────────────
+  const FAMILY_COLORS = [
+    '#6366f1', // indigo
+    '#0ea5e9', // sky
+    '#10b981', // emerald
+    '#f59e0b', // amber
+    '#ec4899', // pink
+    '#8b5cf6', // violet
+    '#14b8a6', // teal
+    '#f97316', // orange
+  ];
+  const famIds = Object.keys(families).sort();
+  const famColor = new Map(famIds.map((id, i) => [id, FAMILY_COLORS[i % FAMILY_COLORS.length]]));
+
+  // ── Compute connector segments and crossings ───────────────────────────────
+  // Build all segments for families that have children
+  const allSegments: import('./connectorGeometry').Segment[] = [];
+  const famSegments = new Map<string, import('./connectorGeometry').Segment[]>();
+
+  for (const fam of Object.values(families)) {
+    const vp = fam.partners.filter((p) => allPersonIds.includes(p.personId));
+    const vc = fam.children.filter((c) => allPersonIds.includes(c.personId));
+    if (vc.length === 0) continue;
+
+    const [p1, p2] = vp;
+    const p1Pos = p1 ? (positions.get(p1.personId) ?? null) : null;
+    const p2Pos = p2 ? (positions.get(p2.personId) ?? null) : null;
+    const childPositions = vc.map((c) => positions.get(c.personId)).filter(Boolean) as { x: number; y: number }[];
+    if (childPositions.length === 0) continue;
+
+    const segs = extractSegments(p1Pos, p2Pos, childPositions, fam.id);
+    famSegments.set(fam.id, segs);
+    allSegments.push(...segs);
+  }
+
+  // For each family, find all crossings on its segments from OTHER families' segments
+  const famCrossings = new Map<string, import('./connectorGeometry').Crossing[]>();
+  for (const [famId, segs] of famSegments) {
+    const crossings: import('./connectorGeometry').Crossing[] = [];
+    for (const seg of segs) {
+      for (const other of allSegments) {
+        if (other.famId === famId) continue;
+        const pt = intersectSegments(seg, other);
+        if (pt) crossings.push({ cx: pt.x, cy: pt.y });
+      }
+    }
+    famCrossings.set(famId, crossings);
+  }
+
   // ── React Flow edges ───────────────────────────────────────────────────────
   const rfEdges: Edge[] = [];
-  const edgeStyle = { stroke: '#6366f1', strokeWidth: 2 };
-  const dissolvedEdgeStyle = { stroke: '#9ca3af', strokeWidth: 2, strokeDasharray: '6,4' };
 
   for (const fam of Object.values(families)) {
     const vp = fam.partners.filter((p) => allPersonIds.includes(p.personId));
@@ -484,9 +532,12 @@ export async function computeLayout(
     const [p1, p2] = vp;
     const hasP1 = !!p1;
     const hasP2 = !!p2;
-    const coupleStyle = fam.dissolved ? dissolvedEdgeStyle : edgeStyle;
+    const color = famColor.get(fam.id) ?? '#6366f1';
+    const coupleStyle = fam.dissolved
+      ? { stroke: color, strokeWidth: 2, strokeDasharray: '6,4' }
+      : { stroke: color, strokeWidth: 2 };
 
-    // ── Couple connector (horizontal line between partners, with optional heart) ──
+    // ── Couple connector ──────────────────────────────────────────────────────
     if (hasP1 && hasP2) {
       if (!fam.dissolved) {
         rfEdges.push({
@@ -497,6 +548,7 @@ export async function computeLayout(
           style: coupleStyle,
           sourceHandle: 'right',
           targetHandle: 'left',
+          zIndex: 10,
         });
         rfEdges.push({
           id: `couple-b-${fam.id}`,
@@ -506,6 +558,7 @@ export async function computeLayout(
           style: coupleStyle,
           sourceHandle: 'right',
           targetHandle: 'left',
+          zIndex: 10,
         });
       } else {
         rfEdges.push({
@@ -516,20 +569,19 @@ export async function computeLayout(
           style: coupleStyle,
           sourceHandle: 'right',
           targetHandle: 'left',
+          zIndex: 10,
         });
       }
     }
 
-    // ── Family connector: one custom SVG edge draws the entire T-bar ──────────
+    // ── Family connector ──────────────────────────────────────────────────────
     if (vc.length === 0) continue;
 
     const p1Pos = hasP1 ? (positions.get(p1.personId) ?? null) : null;
     const p2Pos = hasP2 ? (positions.get(p2.personId) ?? null) : null;
     const childPositions = vc.map((c) => positions.get(c.personId)).filter(Boolean) as { x: number; y: number }[];
-
     if (childPositions.length === 0) continue;
 
-    // source/target are required by React Flow but the custom edge ignores them
     const sourceId = hasP1 ? `person-${p1.personId}` : `person-${p2!.personId}`;
     const targetId = `person-${vc[0].personId}`;
 
@@ -538,8 +590,15 @@ export async function computeLayout(
       source: sourceId,
       target: targetId,
       type: 'familyConnector',
-      data: { p1: p1Pos, p2: p2Pos, children: childPositions },
+      data: {
+        p1: p1Pos,
+        p2: p2Pos,
+        children: childPositions,
+        color,
+        crossings: famCrossings.get(fam.id) ?? [],
+      },
       style: { pointerEvents: 'none' },
+      zIndex: 5,
     });
   }
 

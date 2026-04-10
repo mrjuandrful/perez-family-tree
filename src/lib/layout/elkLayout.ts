@@ -279,6 +279,11 @@ export async function computeLayout(
   }
 
   // ── Pass 2: place root (grandparent) families centered above their children ──
+  // First compute ideal centerX for each root family, then resolve overlaps.
+  const COUPLE_FULL_WIDTH = PERSON_WIDTH * 2 + COUPLE_GAP; // total width a couple occupies
+
+  const rootPlacements: Array<{ fam: Family; centerX: number }> = [];
+
   for (const fam of rootFamilies) {
     if (placedFamilies.has(fam.id)) continue;
 
@@ -288,23 +293,40 @@ export async function computeLayout(
 
     let centerX = 0;
     if (visibleChildren.length > 0) {
-      // Center above the child(ren) that are already placed
       const placedChildXs = visibleChildren
         .map((id) => positions.get(id))
         .filter(Boolean)
         .map((p) => p!.x + PERSON_WIDTH / 2);
-
       if (placedChildXs.length > 0) {
         centerX = placedChildXs.reduce((a, b) => a + b, 0) / placedChildXs.length;
       }
     }
+    rootPlacements.push({ fam, centerX });
+  }
 
+  // Sort by centerX so we resolve left-to-right
+  rootPlacements.sort((a, b) => a.centerX - b.centerX);
+
+  // Push apart any overlapping couples (minimum gap between right edge of one and left edge of next)
+  const MIN_GAP = H_GAP;
+  for (let i = 1; i < rootPlacements.length; i++) {
+    const prev = rootPlacements[i - 1];
+    const curr = rootPlacements[i];
+    const prevRight = prev.centerX + COUPLE_FULL_WIDTH / 2;
+    const currLeft  = curr.centerX - COUPLE_FULL_WIDTH / 2;
+    if (currLeft < prevRight + MIN_GAP) {
+      curr.centerX = prevRight + MIN_GAP + COUPLE_FULL_WIDTH / 2;
+    }
+  }
+
+  // Apply positions
+  for (const { fam, centerX } of rootPlacements) {
     placedFamilies.add(fam.id);
 
     const [p1, p2] = fam.partners;
     const hasP1 = p1 && allPersonIds.includes(p1.personId);
     const hasP2 = p2 && allPersonIds.includes(p2.personId);
-    const coupleY = 0; // root families are always gen 0
+    const coupleY = 0;
 
     if (hasP1 && hasP2) {
       positions.set(p1.personId, { x: centerX - PERSON_WIDTH - COUPLE_GAP / 2, y: coupleY });

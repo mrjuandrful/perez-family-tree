@@ -15,164 +15,161 @@ export interface FamilyConnectorData {
   color: string;
   crossings: Crossing[];
   routeX?: number;
-  laneOffset?: number;
+  vNudge?: number; // X shift applied to every vertical segment of this family
+  hNudge?: number; // Y shift applied to every horizontal segment of this family
 }
 
-// Find crossings that lie on the segment (x1,y1)→(x2,y2).
-// fullX1/Y1/fullX2/Y2 are the full segment extents for lookup (before corner trimming).
-function crossingsOnSeg(
-  x1: number, y1: number, x2: number, y2: number,
+// Returns humps on a vertical segment at x going from fy1→fy2 (full range for lookup).
+// Actual drawn portion is y1→y2 (corner-trimmed).
+function humpsOnVertical(
+  x: number, y1: number, y2: number,
+  fy1: number, fy2: number,
   crossings: Crossing[]
-): { cy: number }[] {
-  const isV = Math.abs(x1 - x2) < 0.5;
-  if (!isV) return []; // only vertical segments draw humps
+): string {
   const guard = HUMP_R + 2;
-  const lo = Math.min(y1, y2), hi = Math.max(y1, y2);
-  return crossings
-    .filter((c) => Math.abs(c.cx - x1) <= 2 && c.cy > lo + guard && c.cy < hi - guard)
-    .map((c) => ({ cy: c.cy }))
-    .sort((a, b) => a.cy - b.cy);
+  const lo = Math.min(fy1, fy2), hi = Math.max(fy1, fy2);
+  const hits = crossings
+    .filter((c) => Math.abs(c.cx - x) <= 2 && c.cy > lo + guard && c.cy < hi - guard)
+    .map((c) => c.cy)
+    .sort((a, b) => a - b);
+
+  if (hits.length === 0) return ` L ${x} ${y2}`;
+  let d = '';
+  for (const cy of hits) {
+    if (cy <= Math.min(y1, y2) || cy >= Math.max(y1, y2)) continue;
+    d += ` L ${x} ${cy - HUMP_R} A ${HUMP_R} ${HUMP_R} 0 0 1 ${x} ${cy + HUMP_R}`;
+  }
+  d += ` L ${x} ${y2}`;
+  return d;
 }
 
-// Build path commands for one segment, with humps where vertical lines are crossed.
-// Horizontal segments pass straight through (no humps — vertical lines bridge over them).
-// fullX1/fullY1/fullX2/fullY2: full extent of this segment for crossing detection
-// (actual path starts/ends at x1,y1 → x2,y2 which may be corner-trimmed)
-function segPath(
-  x1: number, y1: number, x2: number, y2: number,
-  crossings: Crossing[],
-  fullY1?: number, fullY2?: number
-): string {
-  const isV = Math.abs(x1 - x2) < 0.5;
-  if (!isV) return ` L ${x2} ${y2}`;
-
-  const fy1 = fullY1 ?? y1;
-  const fy2 = fullY2 ?? y2;
-  const hits = crossingsOnSeg(x1, fy1, x2, fy2, crossings);
-  if (hits.length === 0) return ` L ${x2} ${y2}`;
-
-  let d = '';
-  for (const { cy } of hits) {
-    // skip humps outside the actual drawn range
-    if (cy <= Math.min(y1, y2) || cy >= Math.max(y1, y2)) continue;
-    d += ` L ${x1} ${cy - HUMP_R} A ${HUMP_R} ${HUMP_R} 0 0 1 ${x1} ${cy + HUMP_R}`;
-  }
-  d += ` L ${x2} ${y2}`;
-  return d;
+// Straight horizontal line (no humps — vertical segments bridge over horizontals)
+function hLine(_x1: number, y: number, x2: number): string {
+  return ` L ${x2} ${y}`;
 }
 
 function buildPath(
   p1: Pos | null, p2: Pos | null, children: Pos[],
   crossings: Crossing[], routeX: number | undefined,
-  laneOffset: number
+  vNudge: number, hNudge: number
 ): string {
   if (children.length === 0) return '';
 
-  // Apply lane offset to all X coordinates so this family's lines are shifted
-  const ox = laneOffset;
-  const shiftP = (p: Pos | null) => p ? { x: p.x + ox, y: p.y } : null;
-  const sp1 = shiftP(p1);
-  const sp2 = shiftP(p2);
-  const sChildren = children.map((c) => ({ x: c.x + ox, y: c.y }));
-  const sRouteX = routeX !== undefined ? routeX + ox : undefined;
+  // vx: X coordinate of a vertical line rooted at card center cx, nudged
+  // hy: Y coordinate of a horizontal line at base y, nudged
+  const vx = (cx: number) => cx + vNudge;
+  const hy = (y: number) => y + hNudge;
 
-  const childBarY = sChildren[0].y - CHILD_BAR_OFFSET;
-  const childCenters = sChildren.map((c) => c.x + CONN_PW / 2).sort((a, b) => a - b);
+  const childBarY = children[0].y - CHILD_BAR_OFFSET;
+  const childCenters = children.map((c) => c.x + CONN_PW / 2).sort((a, b) => a - b);
   const leftChildX = childCenters[0];
   const rightChildX = childCenters[childCenters.length - 1];
   const midChildX = (leftChildX + rightChildX) / 2;
 
+  // nudged versions
+  const vleftChildX = vx(leftChildX);
+  const vrightChildX = vx(rightChildX);
+  const vmidChildX = vx(midChildX);
+  const hchildBarY = hy(childBarY);
+
   const parts: string[] = [];
 
-  if (sp1 && sp2) {
-    const p1cx = sp1.x + CONN_PW / 2;
-    const p2cx = sp2.x + CONN_PW / 2;
-    const pBy = sp1.y + CONN_PH;
-    const barY = pBy + PARENT_BAR_DROP;
-    const stemX = (p1cx + p2cx) / 2;
+  if (p1 && p2) {
+    const p1cx = p1.x + CONN_PW / 2;
+    const p2cx = p2.x + CONN_PW / 2;
+    const pBy = p1.y + CONN_PH;          // bottom of parent cards (not nudged — fixed by card)
+    const barY = hy(pBy + PARENT_BAR_DROP); // horizontal bar connecting parents — h-nudged
+    const vp1cx = vx(p1cx);
+    const vp2cx = vx(p2cx);
+    const stemX = vx((p1cx + p2cx) / 2);
 
-    // Left parent drop (full range pBy→barY for crossing detection)
+    // Left parent drop: vertical from card bottom to barY, with hump detection
     parts.push(
       `M ${p1cx} ${pBy}` +
-      segPath(p1cx, pBy, p1cx, barY - R, crossings, pBy, barY) +
-      ` Q ${p1cx} ${barY} ${p1cx + R} ${barY} L ${stemX} ${barY}`
+      humpsOnVertical(vp1cx, pBy, barY - R, pBy, barY, crossings) +
+      ` Q ${vp1cx} ${barY} ${vp1cx + R} ${barY}` +
+      hLine(vp1cx + R, barY, stemX)
     );
     // Right parent drop
     parts.push(
       `M ${p2cx} ${pBy}` +
-      segPath(p2cx, pBy, p2cx, barY - R, crossings, pBy, barY) +
-      ` Q ${p2cx} ${barY} ${p2cx - R} ${barY} L ${stemX} ${barY}`
+      humpsOnVertical(vp2cx, pBy, barY - R, pBy, barY, crossings) +
+      ` Q ${vp2cx} ${barY} ${vp2cx - R} ${barY}` +
+      hLine(vp2cx - R, barY, stemX)
     );
 
-    if (sRouteX !== undefined) {
-      const jog1Y = pBy + PARENT_BAR_DROP + 10;
-      const jog2Y = childBarY - 10;
-      const goRight = sRouteX > stemX;
+    if (routeX !== undefined) {
+      const vrouteX = vx(routeX);
+      const jog1Y = hy(pBy + PARENT_BAR_DROP + 10);
+      const jog2Y = hy(childBarY - 10);
+      const goRight = vrouteX > stemX;
       parts.push(
         `M ${stemX} ${barY}` +
-        segPath(stemX, barY, stemX, jog1Y - R, crossings, barY, jog1Y) +
+        humpsOnVertical(stemX, barY, jog1Y - R, barY, jog1Y, crossings) +
         ` Q ${stemX} ${jog1Y} ${stemX + (goRight ? R : -R)} ${jog1Y}` +
-        ` L ${sRouteX + (goRight ? -R : R)} ${jog1Y}` +
-        ` Q ${sRouteX} ${jog1Y} ${sRouteX} ${jog1Y + R}` +
-        segPath(sRouteX, jog1Y + R, sRouteX, jog2Y - R, crossings, jog1Y, jog2Y) +
-        ` Q ${sRouteX} ${jog2Y} ${sRouteX + (goRight ? -R : R)} ${jog2Y}` +
-        ` L ${midChildX + (goRight ? R : -R)} ${jog2Y}` +
-        ` Q ${midChildX} ${jog2Y} ${midChildX} ${jog2Y + R}` +
-        segPath(midChildX, jog2Y + R, midChildX, childBarY, crossings, jog2Y, childBarY)
+        hLine(stemX + (goRight ? R : -R), jog1Y, vrouteX + (goRight ? -R : R)) +
+        ` Q ${vrouteX} ${jog1Y} ${vrouteX} ${jog1Y + R}` +
+        humpsOnVertical(vrouteX, jog1Y + R, jog2Y - R, jog1Y, jog2Y, crossings) +
+        ` Q ${vrouteX} ${jog2Y} ${vrouteX + (goRight ? -R : R)} ${jog2Y}` +
+        hLine(vrouteX + (goRight ? -R : R), jog2Y, vmidChildX + (goRight ? R : -R)) +
+        ` Q ${vmidChildX} ${jog2Y} ${vmidChildX} ${jog2Y + R}` +
+        humpsOnVertical(vmidChildX, jog2Y + R, hchildBarY, jog2Y, hchildBarY, crossings)
       );
-    } else if (Math.abs(stemX - midChildX) > 2) {
-      const midY = pBy + CONN_PH + (childBarY - pBy - CONN_PH) * 0.5;
-      const goRight = midChildX > stemX;
+    } else if (Math.abs(stemX - vmidChildX) > 2) {
+      const midY = hy(pBy + CONN_PH + (childBarY - pBy - CONN_PH) * 0.5);
+      const goRight = vmidChildX > stemX;
       parts.push(
         `M ${stemX} ${barY}` +
-        segPath(stemX, barY, stemX, midY - R, crossings, barY, midY) +
+        humpsOnVertical(stemX, barY, midY - R, barY, midY, crossings) +
         ` Q ${stemX} ${midY} ${stemX + (goRight ? R : -R)} ${midY}` +
-        ` L ${midChildX + (goRight ? -R : R)} ${midY}` +
-        ` Q ${midChildX} ${midY} ${midChildX} ${midY + R}` +
-        segPath(midChildX, midY + R, midChildX, childBarY, crossings, midY, childBarY)
+        hLine(stemX + (goRight ? R : -R), midY, vmidChildX + (goRight ? -R : R)) +
+        ` Q ${vmidChildX} ${midY} ${vmidChildX} ${midY + R}` +
+        humpsOnVertical(vmidChildX, midY + R, hchildBarY, midY, hchildBarY, crossings)
       );
     } else {
       parts.push(
         `M ${stemX} ${barY}` +
-        segPath(stemX, barY, stemX, childBarY, crossings)
+        humpsOnVertical(stemX, barY, hchildBarY, barY, hchildBarY, crossings)
       );
     }
   } else {
-    const px = (sp1 ?? sp2)!;
+    const px = (p1 ?? p2)!;
     const pbx = px.x + CONN_PW / 2;
     const pby = px.y + CONN_PH;
+    const vpbx = vx(pbx);
 
-    if (sRouteX !== undefined) {
-      const jog1Y = pby + PARENT_BAR_DROP + 10;
-      const jog2Y = childBarY - 10;
-      const goRight = sRouteX > pbx;
+    if (routeX !== undefined) {
+      const vrouteX = vx(routeX);
+      const jog1Y = hy(pby + PARENT_BAR_DROP + 10);
+      const jog2Y = hy(childBarY - 10);
+      const goRight = vrouteX > vpbx;
       parts.push(
         `M ${pbx} ${pby}` +
-        segPath(pbx, pby, pbx, jog1Y - R, crossings, pby, jog1Y) +
-        ` Q ${pbx} ${jog1Y} ${pbx + (goRight ? R : -R)} ${jog1Y}` +
-        ` L ${sRouteX + (goRight ? -R : R)} ${jog1Y}` +
-        ` Q ${sRouteX} ${jog1Y} ${sRouteX} ${jog1Y + R}` +
-        segPath(sRouteX, jog1Y + R, sRouteX, jog2Y - R, crossings, jog1Y, jog2Y) +
-        ` Q ${sRouteX} ${jog2Y} ${sRouteX + (goRight ? -R : R)} ${jog2Y}` +
-        ` L ${midChildX + (goRight ? R : -R)} ${jog2Y}` +
-        ` Q ${midChildX} ${jog2Y} ${midChildX} ${jog2Y + R}` +
-        segPath(midChildX, jog2Y + R, midChildX, childBarY, crossings, jog2Y, childBarY)
+        humpsOnVertical(vpbx, pby, jog1Y - R, pby, jog1Y, crossings) +
+        ` Q ${vpbx} ${jog1Y} ${vpbx + (goRight ? R : -R)} ${jog1Y}` +
+        hLine(vpbx + (goRight ? R : -R), jog1Y, vrouteX + (goRight ? -R : R)) +
+        ` Q ${vrouteX} ${jog1Y} ${vrouteX} ${jog1Y + R}` +
+        humpsOnVertical(vrouteX, jog1Y + R, jog2Y - R, jog1Y, jog2Y, crossings) +
+        ` Q ${vrouteX} ${jog2Y} ${vrouteX + (goRight ? -R : R)} ${jog2Y}` +
+        hLine(vrouteX + (goRight ? -R : R), jog2Y, vmidChildX + (goRight ? R : -R)) +
+        ` Q ${vmidChildX} ${jog2Y} ${vmidChildX} ${jog2Y + R}` +
+        humpsOnVertical(vmidChildX, jog2Y + R, hchildBarY, jog2Y, hchildBarY, crossings)
       );
-    } else if (Math.abs(pbx - midChildX) > 2) {
-      const midY = pby + (childBarY - pby) * 0.5;
-      const goRight = midChildX > pbx;
+    } else if (Math.abs(vpbx - vmidChildX) > 2) {
+      const midY = hy(pby + (childBarY - pby) * 0.5);
+      const goRight = vmidChildX > vpbx;
       parts.push(
         `M ${pbx} ${pby}` +
-        segPath(pbx, pby, pbx, midY - R, crossings, pby, midY) +
-        ` Q ${pbx} ${midY} ${pbx + (goRight ? R : -R)} ${midY}` +
-        ` L ${midChildX + (goRight ? -R : R)} ${midY}` +
-        ` Q ${midChildX} ${midY} ${midChildX} ${midY + R}` +
-        segPath(midChildX, midY + R, midChildX, childBarY, crossings, midY, childBarY)
+        humpsOnVertical(vpbx, pby, midY - R, pby, midY, crossings) +
+        ` Q ${vpbx} ${midY} ${vpbx + (goRight ? R : -R)} ${midY}` +
+        hLine(vpbx + (goRight ? R : -R), midY, vmidChildX + (goRight ? -R : R)) +
+        ` Q ${vmidChildX} ${midY} ${vmidChildX} ${midY + R}` +
+        humpsOnVertical(vmidChildX, midY + R, hchildBarY, midY, hchildBarY, crossings)
       );
     } else {
       parts.push(
-        `M ${pbx} ${pby}` +
-        segPath(pbx, pby, pbx, childBarY, crossings)
+        `M ${vpbx} ${pby}` +
+        humpsOnVertical(vpbx, pby, hchildBarY, pby, hchildBarY, crossings)
       );
     }
   }
@@ -180,20 +177,20 @@ function buildPath(
   // Child bar + drops
   if (childCenters.length === 1) {
     parts.push(
-      `M ${childCenters[0]} ${childBarY}` +
-      segPath(childCenters[0], childBarY, childCenters[0], sChildren[0].y, crossings, childBarY, sChildren[0].y)
+      `M ${vleftChildX} ${hchildBarY}` +
+      humpsOnVertical(vleftChildX, hchildBarY, children[0].y, hchildBarY, children[0].y, crossings)
     );
   } else {
     parts.push(
-      `M ${leftChildX} ${sChildren[0].y} V ${childBarY + R}` +
-      ` Q ${leftChildX} ${childBarY} ${leftChildX + R} ${childBarY}` +
-      ` L ${rightChildX - R} ${childBarY}` +
-      ` Q ${rightChildX} ${childBarY} ${rightChildX} ${childBarY + R} V ${sChildren[0].y}`
+      `M ${vleftChildX} ${children[0].y} V ${hchildBarY + R}` +
+      ` Q ${vleftChildX} ${hchildBarY} ${vleftChildX + R} ${hchildBarY}` +
+      hLine(vleftChildX + R, hchildBarY, vrightChildX - R) +
+      ` Q ${vrightChildX} ${hchildBarY} ${vrightChildX} ${hchildBarY + R} V ${children[0].y}`
     );
     for (const cx of childCenters.slice(1, -1)) {
       parts.push(
-        `M ${cx} ${childBarY}` +
-        segPath(cx, childBarY, cx, sChildren[0].y, crossings, childBarY, sChildren[0].y)
+        `M ${vx(cx)} ${hchildBarY}` +
+        humpsOnVertical(vx(cx), hchildBarY, children[0].y, hchildBarY, children[0].y, crossings)
       );
     }
   }
@@ -202,9 +199,10 @@ function buildPath(
 }
 
 function FamilyConnectorEdge({ data }: EdgeProps) {
-  const { p1, p2, children, color, crossings = [], routeX, laneOffset = 0 } = (data as unknown) as FamilyConnectorData;
+  const { p1, p2, children, color, crossings = [], routeX, vNudge = 0, hNudge = 0 } =
+    (data as unknown) as FamilyConnectorData;
   if (!children || children.length === 0) return null;
-  const d = buildPath(p1 ?? null, p2 ?? null, children, crossings, routeX, laneOffset);
+  const d = buildPath(p1 ?? null, p2 ?? null, children, crossings, routeX, vNudge, hNudge);
   if (!d) return null;
   return (
     <path

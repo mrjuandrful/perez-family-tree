@@ -64,13 +64,28 @@ function buildPath(p1: Pos | null, p2: Pos | null, children: Pos[]): string {
     parts.push(`M ${leftChildX} ${childBarY} H ${rightChildX}`);
   }
 
-  // Vertical drops from child bar to each child top
+  // Vertical drops from child bar to each child top, with rounded corner at the branch
   for (const cx of childCenters) {
     const childTopY = children[0].y;
-    parts.push(
-      `M ${cx} ${childBarY}` +
-      ` V ${childTopY}`
-    );
+    if (childCenters.length === 1 || Math.abs(cx - (leftChildX + rightChildX) / 2) < 1) {
+      // Center child or single child — straight drop, no corner needed
+      parts.push(`M ${cx} ${childBarY} V ${childTopY}`);
+    } else if (cx < (leftChildX + rightChildX) / 2) {
+      // Left child: go left from bar, round corner down
+      parts.push(
+        `M ${cx + R} ${childBarY}` +
+        ` H ${cx + R}` +
+        ` Q ${cx} ${childBarY} ${cx} ${childBarY + R}` +
+        ` V ${childTopY}`
+      );
+    } else {
+      // Right child: go right from bar, round corner down
+      parts.push(
+        `M ${cx - R} ${childBarY}` +
+        ` Q ${cx} ${childBarY} ${cx} ${childBarY + R}` +
+        ` V ${childTopY}`
+      );
+    }
   }
 
   return parts.join(' ');

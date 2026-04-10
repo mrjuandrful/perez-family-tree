@@ -319,7 +319,7 @@ export async function computeLayout(
     }
   }
 
-  // Apply positions
+  // Apply positions and re-center single children under their grandparent couple
   for (const { fam, centerX } of rootPlacements) {
     placedFamilies.add(fam.id);
 
@@ -341,6 +341,40 @@ export async function computeLayout(
       positions.set(p1.personId, { x: centerX - PERSON_WIDTH / 2, y: coupleY });
     } else if (hasP2) {
       positions.set(p2.personId, { x: centerX - PERSON_WIDTH / 2, y: coupleY });
+    }
+
+    // If this couple has a single child who is also a partner in another family,
+    // re-center that child's family under this couple's centerX
+    const visibleChildren = fam.children
+      .map((c) => c.personId)
+      .filter((id) => allPersonIds.includes(id));
+
+    if (visibleChildren.length === 1) {
+      const childId = visibleChildren[0];
+      const childPos = positions.get(childId);
+      if (childPos) {
+        const delta = centerX - (childPos.x + PERSON_WIDTH / 2);
+        if (Math.abs(delta) > 1) {
+          // Shift the child and their entire partner subtree horizontally
+          // Find the family the child belongs to as a partner
+          const childFamily = Object.values(families).find(
+            (f) => f.partners.some((p) => p.personId === childId)
+          );
+          if (childFamily) {
+            // Shift all partners in that family
+            for (const partner of childFamily.partners) {
+              const pos = positions.get(partner.personId);
+              if (pos) positions.set(partner.personId, { x: pos.x + delta, y: pos.y });
+            }
+            // Update heart position if any
+            const hPos = heartPositions.get(childFamily.id);
+            if (hPos) heartPositions.set(childFamily.id, { x: hPos.x + delta, y: hPos.y });
+          } else {
+            // Solo child — just shift them
+            positions.set(childId, { x: childPos.x + delta, y: childPos.y });
+          }
+        }
+      }
     }
   }
 

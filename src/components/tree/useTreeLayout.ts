@@ -67,9 +67,10 @@ export function useTreeLayout() {
         visiblePersonIds = expanded;
       }
 
-      // Generation filter (BFS from focus person)
-      if (generationFilter > 0 && focusPersonId) {
-        const bfsIds = bfsGenerations(data, focusPersonId, generationFilter);
+      // Generation filter (BFS from focus person, or root person if none selected)
+      const genAnchorId = focusPersonId ?? data.meta.rootPersonId ?? null;
+      if (generationFilter > 0 && genAnchorId) {
+        const bfsIds = bfsGenerations(data, genAnchorId, generationFilter);
         if (visiblePersonIds) {
           visiblePersonIds = new Set([...visiblePersonIds].filter((id) => bfsIds.has(id)));
         } else {

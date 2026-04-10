@@ -85,33 +85,24 @@ function buildPath(p1: Pos | null, p2: Pos | null, children: Pos[]): string {
     }
   }
 
-  // ── Horizontal child bar ─────────────────────────────────────────────────────
-  if (leftChildX < rightChildX) {
-    parts.push(`M ${leftChildX} ${childBarY} H ${rightChildX}`);
-  }
+  // ── Child bar + drops ───────────────────────────────────────────────────────
+  const childTopY = children[0].y;
 
-  // ── Drops from bar to each child top ────────────────────────────────────────
-  for (const cx of childCenters) {
-    const childTopY = children[0].y;
-    if (childCenters.length === 1) {
-      // Single child — straight drop
-      parts.push(`M ${cx} ${childBarY} V ${childTopY}`);
-    } else if (cx === leftChildX) {
-      // Leftmost child — corner curves left-then-down
-      parts.push(
-        `M ${cx + R} ${childBarY}` +
-        ` Q ${cx} ${childBarY} ${cx} ${childBarY + R}` +
-        ` V ${childTopY}`
-      );
-    } else if (cx === rightChildX) {
-      // Rightmost child — corner curves right-then-down
-      parts.push(
-        `M ${cx - R} ${childBarY}` +
-        ` Q ${cx} ${childBarY} ${cx} ${childBarY + R}` +
-        ` V ${childTopY}`
-      );
-    } else {
-      // Middle child — straight drop
+  if (childCenters.length === 1) {
+    // Single child — straight drop from stem
+    parts.push(`M ${childCenters[0]} ${childBarY} V ${childTopY}`);
+  } else {
+    // Left end: start below leftmost child, round corner up-then-right along bar
+    parts.push(
+      `M ${leftChildX} ${childTopY}` +
+      ` V ${childBarY + R}` +
+      ` Q ${leftChildX} ${childBarY} ${leftChildX + R} ${childBarY}` +
+      ` H ${rightChildX - R}` +
+      ` Q ${rightChildX} ${childBarY} ${rightChildX} ${childBarY + R}` +
+      ` V ${childTopY}`
+    );
+    // Middle children — straight drops from bar
+    for (const cx of childCenters.slice(1, -1)) {
       parts.push(`M ${cx} ${childBarY} V ${childTopY}`);
     }
   }

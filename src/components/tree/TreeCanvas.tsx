@@ -56,7 +56,7 @@ function TreeCanvasInner() {
   }
 
   return (
-    <div className="flex-1 relative">
+    <div style={{ width: '100%', height: '100%' }}>
       <ReactFlow
         nodes={syncedNodes}
         edges={layoutEdges}

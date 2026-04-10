@@ -13,8 +13,10 @@ export default function TreePage() {
       </div>
 
       {/* Canvas */}
-      <div className="flex-1 relative overflow-hidden">
-        <TreeCanvas />
+      <div className="flex-1 relative" style={{ minHeight: 0 }}>
+        <div style={{ position: 'absolute', inset: 0 }}>
+          <TreeCanvas />
+        </div>
         <ProfilePanel />
       </div>
     </div>

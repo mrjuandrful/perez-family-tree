@@ -129,7 +129,7 @@ export async function computeLayout(
       source: edge.sources[0],
       target: edge.targets[0],
       type: 'smoothstep',
-      style: { stroke: '#9ca3af', strokeWidth: 1.5 },
+      style: { stroke: '#6366f1', strokeWidth: 2 },
     });
   }
 

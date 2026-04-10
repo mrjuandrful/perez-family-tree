@@ -3,9 +3,17 @@ import type { FamilyTreeData, Person, Family, Media } from '../types';
 import seedData from '../data/perez-family.json';
 
 const STORAGE_KEY = 'perez-family-tree-data';
+const SEED_VERSION = 'v2'; // bump this whenever seed data changes to bust cached data
+const SEED_VERSION_KEY = 'perez-family-tree-seed-version';
 
 function loadData(): FamilyTreeData {
   try {
+    const storedVersion = localStorage.getItem(SEED_VERSION_KEY);
+    if (storedVersion !== SEED_VERSION) {
+      // Seed data changed — clear stale cache
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.setItem(SEED_VERSION_KEY, SEED_VERSION);
+    }
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) return JSON.parse(saved) as FamilyTreeData;
   } catch {

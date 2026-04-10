@@ -155,7 +155,7 @@
         "surname": { "en": "Perez", "es": "Pérez" }
       },
       "gender": "female",
-      "living": false,
+      "living": true,
       "mediaIds": [],
       "tags": ["perez-line"],
       "createdAt": "2026-04-10T00:00:00.000Z",
@@ -182,9 +182,89 @@
         "nickname": { "en": "Dalda", "es": "Dalda" }
       },
       "gender": "female",
-      "living": false,
+      "living": true,
       "mediaIds": [],
       "tags": ["santana-line"],
+      "createdAt": "2026-04-10T00:00:00.000Z",
+      "updatedAt": "2026-04-10T00:00:00.000Z"
+    },
+    "P014": {
+      "id": "P014",
+      "names": {
+        "given": { "en": "Ana Osiris", "es": "Ana Osiris" },
+        "surname": { "en": "Martinez", "es": "Martinez" },
+        "nickname": { "en": "Perez", "es": "Pérez" }
+      },
+      "gender": "female",
+      "living": true,
+      "mediaIds": [],
+      "tags": ["perez-line"],
+      "createdAt": "2026-04-10T00:00:00.000Z",
+      "updatedAt": "2026-04-10T00:00:00.000Z"
+    },
+    "P015": {
+      "id": "P015",
+      "names": {
+        "given": { "en": "Antonio", "es": "Antonio" },
+        "surname": { "en": "Martinez", "es": "Martinez" }
+      },
+      "gender": "male",
+      "living": true,
+      "mediaIds": [],
+      "tags": ["martinez-line"],
+      "createdAt": "2026-04-10T00:00:00.000Z",
+      "updatedAt": "2026-04-10T00:00:00.000Z"
+    },
+    "P016": {
+      "id": "P016",
+      "names": {
+        "given": { "en": "Jennifer", "es": "Jennifer" },
+        "surname": { "en": "Perez", "es": "Pérez" },
+        "nickname": { "en": "Safanova", "es": "Safanova" }
+      },
+      "gender": "female",
+      "living": true,
+      "mediaIds": [],
+      "tags": ["safanova-line"],
+      "createdAt": "2026-04-10T00:00:00.000Z",
+      "updatedAt": "2026-04-10T00:00:00.000Z"
+    },
+    "P017": {
+      "id": "P017",
+      "names": {
+        "given": { "en": "Senka Sakura", "es": "Senka Sakura" },
+        "surname": { "en": "Perez", "es": "Pérez" }
+      },
+      "gender": "female",
+      "living": true,
+      "mediaIds": [],
+      "tags": ["perez-line"],
+      "createdAt": "2026-04-10T00:00:00.000Z",
+      "updatedAt": "2026-04-10T00:00:00.000Z"
+    },
+    "P018": {
+      "id": "P018",
+      "names": {
+        "given": { "en": "Dennis Herbert", "es": "Dennis Herbert" },
+        "surname": { "en": "Zitt", "es": "Zitt" }
+      },
+      "gender": "male",
+      "living": true,
+      "mediaIds": [],
+      "tags": ["zitt-line"],
+      "createdAt": "2026-04-10T00:00:00.000Z",
+      "updatedAt": "2026-04-10T00:00:00.000Z"
+    },
+    "P019": {
+      "id": "P019",
+      "names": {
+        "given": { "en": "Anna Louisa", "es": "Anna Louisa" },
+        "surname": { "en": "Zitt", "es": "Zitt" }
+      },
+      "gender": "female",
+      "living": true,
+      "mediaIds": [],
+      "tags": ["zitt-line"],
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-10T00:00:00.000Z"
     }
@@ -229,7 +309,8 @@
         { "personId": "P011", "role": "partner2" }
       ],
       "children": [
-        { "personId": "P008", "relationship": "biological" }
+        { "personId": "P008", "relationship": "biological" },
+        { "personId": "P014", "relationship": "biological" }
       ],
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-10T00:00:00.000Z"
@@ -243,6 +324,43 @@
       ],
       "children": [
         { "personId": "P009", "relationship": "biological" }
+      ],
+      "createdAt": "2026-04-10T00:00:00.000Z",
+      "updatedAt": "2026-04-10T00:00:00.000Z"
+    },
+    "F005": {
+      "id": "F005",
+      "type": "marriage",
+      "partners": [
+        { "personId": "P015", "role": "partner1" },
+        { "personId": "P014", "role": "partner2" }
+      ],
+      "children": [],
+      "createdAt": "2026-04-10T00:00:00.000Z",
+      "updatedAt": "2026-04-10T00:00:00.000Z"
+    },
+    "F006": {
+      "id": "F006",
+      "type": "marriage",
+      "partners": [
+        { "personId": "P007", "role": "partner1" },
+        { "personId": "P016", "role": "partner2" }
+      ],
+      "children": [
+        { "personId": "P017", "relationship": "biological" }
+      ],
+      "createdAt": "2026-04-10T00:00:00.000Z",
+      "updatedAt": "2026-04-10T00:00:00.000Z"
+    },
+    "F007": {
+      "id": "F007",
+      "type": "marriage",
+      "partners": [
+        { "personId": "P018", "role": "partner1" },
+        { "personId": "P019", "role": "partner2" }
+      ],
+      "children": [
+        { "personId": "P002", "relationship": "biological" }
       ],
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-10T00:00:00.000Z"

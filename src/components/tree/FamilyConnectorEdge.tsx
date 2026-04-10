@@ -102,9 +102,8 @@ function buildPath(
     );
 
     if (routeX !== undefined) {
-      // Outer routing: down from stem, jog to routeX, down, jog to midChildX
-      const jog1Y = pBy + Math.round((childBarY - pBy) * 0.3);
-      const jog2Y = childBarY - 20;
+      const jog1Y = pBy + PARENT_BAR_DROP + 10;
+      const jog2Y = childBarY - 10;
       const goRight = routeX > stemX;
       parts.push(
         `M ${stemX} ${barY}` +
@@ -138,8 +137,8 @@ function buildPath(
     const pby = px.y + CONN_PH;
 
     if (routeX !== undefined) {
-      const jog1Y = pby + Math.round((childBarY - pby) * 0.3);
-      const jog2Y = childBarY - 20;
+      const jog1Y = pby + PARENT_BAR_DROP + 10;
+      const jog2Y = childBarY - 10;
       const goRight = routeX > pbx;
       parts.push(
         `M ${pbx} ${pby}` +

@@ -78,9 +78,10 @@ export function extractSegments(
     add(p1cx, barY, p2cx, barY);
 
     if (routeX !== undefined) {
-      // Route: stem down, jog right/left to routeX, drop to childBarY, jog to midChildX
-      const jog1Y = pBy + CONN_PH * 0.4; // first horizontal jog Y (in gap)
-      const jog2Y = childBarY - 20;       // second jog (just above child bar)
+      // Route: down from parent bar, jog out to routeX (outside all cards),
+      // drop all the way to just above child row, jog back to midChildX, drop to childBarY
+      const jog1Y = pBy + PARENT_BAR_DROP + 10; // just below parent bar
+      const jog2Y = childBarY - 10;              // just above child bar
       add(stemX, barY, stemX, jog1Y);
       add(stemX, jog1Y, routeX, jog1Y);
       add(routeX, jog1Y, routeX, jog2Y);
@@ -100,8 +101,8 @@ export function extractSegments(
     const pby = px.y + CONN_PH;
 
     if (routeX !== undefined) {
-      const jog1Y = pby + CONN_PH * 0.4;
-      const jog2Y = childBarY - 20;
+      const jog1Y = pby + PARENT_BAR_DROP + 10;
+      const jog2Y = childBarY - 10;
       add(pbx, pby, pbx, jog1Y);
       add(pbx, jog1Y, routeX, jog1Y);
       add(routeX, jog1Y, routeX, jog2Y);

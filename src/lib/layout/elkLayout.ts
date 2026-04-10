@@ -498,10 +498,69 @@ export async function computeLayout(
   const famIds = Object.keys(families).sort();
   const famColor = new Map(famIds.map((id, i) => [id, FAMILY_COLORS[i % FAMILY_COLORS.length]]));
 
-  // ── Compute connector segments and crossings ───────────────────────────────
-  // Build all segments for families that have children
-  const allSegments: import('./connectorGeometry').Segment[] = [];
-  const famSegments = new Map<string, import('./connectorGeometry').Segment[]>();
+  // ── Step 1: compute routeX for every family that needs it ────────────────
+  // A family needs routeX when its connector would pass through cards on an intermediate generation row.
+  const famRouteX = new Map<string, number | undefined>();
+
+  for (const fam of Object.values(families)) {
+    const vp = fam.partners.filter((p) => allPersonIds.includes(p.personId));
+    const vc = fam.children.filter((c) => allPersonIds.includes(c.personId));
+    if (vc.length === 0) { famRouteX.set(fam.id, undefined); continue; }
+
+    const [p1, p2] = vp;
+    const p1Pos = p1 ? (positions.get(p1.personId) ?? null) : null;
+    const p2Pos = p2 ? (positions.get(p2.personId) ?? null) : null;
+    const childPositions = vc.map((c) => positions.get(c.personId)).filter(Boolean) as { x: number; y: number }[];
+    if (childPositions.length === 0) { famRouteX.set(fam.id, undefined); continue; }
+
+    const partnerGen = p1 ? (genMap.get(p1.personId) ?? 0) : (genMap.get(p2!.personId) ?? 0);
+    const childGen = genMap.get(vc[0].personId) ?? partnerGen + 1;
+
+    let routeX: number | undefined;
+
+    if (childGen > partnerGen + 1) {
+      // Spans more than one generation — ALWAYS route outside to avoid crossing intermediate rows
+      let maxRight = -Infinity;
+      for (let g = partnerGen; g <= childGen; g++) {
+        maxRight = Math.max(maxRight, genMaxX.get(g) ?? -Infinity);
+      }
+      routeX = maxRight + 70;
+    } else {
+      // Adjacent generations — only route outside if stem X falls inside occupied area
+      const stemX = p1Pos && p2Pos
+        ? (p1Pos.x + PERSON_WIDTH / 2 + p2Pos.x + PERSON_WIDTH / 2) / 2
+        : ((p1Pos ?? p2Pos)!.x + PERSON_WIDTH / 2);
+      const childCenters = childPositions.map((c) => c.x + PERSON_WIDTH / 2);
+      const midChildX = (Math.min(...childCenters) + Math.max(...childCenters)) / 2;
+
+      // The Z horizontal travels between stemX and midChildX — check if it crosses any card
+      const zLeft = Math.min(stemX, midChildX);
+      const zRight = Math.max(stemX, midChildX);
+
+      // Check intermediate rows (none for adjacent gens, but check same gen cards)
+      let needsRoute = false;
+      for (let g = partnerGen + 1; g < childGen; g++) {
+        const rMin = genMinX.get(g) ?? Infinity;
+        const rMax = genMaxX.get(g) ?? -Infinity;
+        if (zRight > rMin - 10 && zLeft < rMax + 10) { needsRoute = true; break; }
+      }
+
+      if (needsRoute) {
+        let maxRight = -Infinity;
+        for (let g = partnerGen; g <= childGen; g++) {
+          maxRight = Math.max(maxRight, genMaxX.get(g) ?? -Infinity);
+        }
+        routeX = maxRight + 70;
+      }
+    }
+
+    famRouteX.set(fam.id, routeX);
+  }
+
+  // ── Step 2: extract segments using correct routeX, compute crossings ──────
+  type Seg = import('./connectorGeometry').Segment;
+  const allSegments: Seg[] = [];
+  const famSegments = new Map<string, Seg[]>();
 
   for (const fam of Object.values(families)) {
     const vp = fam.partners.filter((p) => allPersonIds.includes(p.personId));
@@ -514,14 +573,12 @@ export async function computeLayout(
     const childPositions = vc.map((c) => positions.get(c.personId)).filter(Boolean) as { x: number; y: number }[];
     if (childPositions.length === 0) continue;
 
-    // routeX for crossing detection is computed later; use undefined here
-    // (crossings are recalculated after routeX is known per-family)
-    const segs = extractSegments(p1Pos, p2Pos, childPositions, fam.id, undefined);
+    const segs = extractSegments(p1Pos, p2Pos, childPositions, fam.id, famRouteX.get(fam.id));
     famSegments.set(fam.id, segs);
     allSegments.push(...segs);
   }
 
-  // For each family, find all crossings on its segments from OTHER families' segments
+  // ── Step 3: compute crossings from correct segments ───────────────────────
   const famCrossings = new Map<string, import('./connectorGeometry').Crossing[]>();
   for (const [famId, segs] of famSegments) {
     const crossings: import('./connectorGeometry').Crossing[] = [];
@@ -595,42 +652,7 @@ export async function computeLayout(
     const childPositions = vc.map((c) => positions.get(c.personId)).filter(Boolean) as { x: number; y: number }[];
     if (childPositions.length === 0) continue;
 
-    // Compute routeX: if the stem X falls inside an occupied region on an
-    // intermediate row, route the connector to the right of all cards.
-    let routeX: number | undefined;
-    {
-      const partnerGen = hasP1 ? (genMap.get(p1.personId) ?? 0) : (genMap.get(p2!.personId) ?? 0);
-      const childGen = genMap.get(vc[0].personId) ?? partnerGen + 1;
-      const stemX = p1Pos && p2Pos
-        ? (p1Pos.x + PERSON_WIDTH / 2 + p2Pos.x + PERSON_WIDTH / 2) / 2
-        : ((p1Pos ?? p2Pos)!.x + PERSON_WIDTH / 2);
-      const childCenters = childPositions.map((c) => c.x + PERSON_WIDTH / 2);
-      const midChildX = (Math.min(...childCenters) + Math.max(...childCenters)) / 2;
-
-      // Check all rows strictly between partnerGen and childGen
-      let needsRoute = false;
-      for (let g = partnerGen + 1; g < childGen; g++) {
-        const minX = genMinX.get(g);
-        const maxX = genMaxX.get(g);
-        if (minX === undefined || maxX === undefined) continue;
-        // Does the stem vertical or the Z horizontal cross through this row's cards?
-        const checkX = Math.abs(stemX - midChildX) > 2 ? stemX : stemX;
-        if (checkX > minX - 20 && checkX < maxX + 20) {
-          needsRoute = true;
-          break;
-        }
-      }
-
-      if (needsRoute) {
-        // Route to the right of all cards across all intermediate rows
-        let maxRight = -Infinity;
-        for (let g = partnerGen; g <= childGen; g++) {
-          maxRight = Math.max(maxRight, genMaxX.get(g) ?? -Infinity);
-        }
-        routeX = maxRight + 60;
-      }
-    }
-
+    const routeX = famRouteX.get(fam.id);
     const sourceId = hasP1 ? `person-${p1.personId}` : `person-${p2!.personId}`;
     const targetId = `person-${vc[0].personId}`;
 

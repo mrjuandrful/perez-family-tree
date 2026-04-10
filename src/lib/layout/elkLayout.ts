@@ -397,7 +397,8 @@ export async function computeLayout(
   // Band nodes first so they render behind person nodes
   const genSet = new Set(allPersonIds.map((id) => genMap.get(id) ?? 0));
   for (const g of genSet) {
-    const bandY = g * ROW_HEIGHT - 20;
+    // Band spans the full row: from top-of-row to top-of-next-row
+    const bandY = g * ROW_HEIGHT - 10;
     rfNodes.push({
       id: `band-gen-${g}`,
       type: 'generationBand',
@@ -406,7 +407,8 @@ export async function computeLayout(
       style: { width: BAND_WIDTH, height: BAND_HEIGHT, pointerEvents: 'none' },
       selectable: false,
       draggable: false,
-      zIndex: -1,
+      zIndex: -10,
+      focusable: false,
     });
   }
 

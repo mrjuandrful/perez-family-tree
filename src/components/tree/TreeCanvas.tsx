@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useEffect, useRef } from 'react';
 import {
   ReactFlow,
   ReactFlowProvider,
@@ -6,6 +6,7 @@ import {
   MiniMap,
   useNodesState,
   useEdgesState,
+  useReactFlow,
   type NodeTypes,
   type EdgeTypes,
   type NodeMouseHandler,
@@ -34,6 +35,8 @@ function TreeCanvasInner() {
   const { nodes: layoutNodes, edges: layoutEdges, loading } = useTreeLayout();
   const [, , onNodesChange] = useNodesState(layoutNodes);
   const [, , onEdgesChange] = useEdgesState(layoutEdges);
+  const { fitView } = useReactFlow();
+  const prevLayoutKey = useRef<string>('');
 
   const setSelectedPerson = useUIStore((s) => s.setSelectedPerson);
   const setFocusPerson = useUIStore((s) => s.setFocusPerson);
@@ -46,6 +49,24 @@ function TreeCanvasInner() {
       selected: n.id === `person-${selectedPersonId}`,
     }));
   }, [layoutNodes, selectedPersonId]);
+
+  // Re-fit view on layout change, but only to person/heart nodes (exclude bands)
+  useEffect(() => {
+    if (loading) return;
+    const key = layoutNodes.map((n) => n.id).join(',');
+    if (key === prevLayoutKey.current) return;
+    prevLayoutKey.current = key;
+
+    // Small delay to let React Flow render the new nodes first
+    const timer = setTimeout(() => {
+      fitView({
+        padding: 0.15,
+        maxZoom: 1,
+        nodes: layoutNodes.filter((n) => n.type === 'personNode' || n.type === 'heartNode'),
+      });
+    }, 50);
+    return () => clearTimeout(timer);
+  }, [layoutNodes, loading, fitView]);
 
   const handleNodeClick: NodeMouseHandler = useCallback((_event, node) => {
     if (node.type === 'personNode') {
@@ -73,16 +94,15 @@ function TreeCanvasInner() {
         onNodeClick={handleNodeClick}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
-        fitView
-        fitViewOptions={{ padding: 0.1 }}
         minZoom={0.1}
         maxZoom={2}
         className="bg-gray-50 dark:bg-slate-950"
       >
         <Background color="#e5e7eb" gap={20} className="dark:[&>*]:stroke-slate-800" />
         <MiniMap
-          nodeColor={(n) => n.type === 'familyNode' ? '#818cf8' : '#6366f1'}
+          nodeColor={(n) => n.type === 'personNode' ? '#6366f1' : '#c7d2fe'}
           className="!bg-white !border-gray-200"
+          nodeStrokeWidth={0}
         />
         <TreeControls />
       </ReactFlow>

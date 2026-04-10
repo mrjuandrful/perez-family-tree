@@ -8,7 +8,7 @@
     },
     "rootPersonId": "P001",
     "createdAt": "2026-04-09T00:00:00.000Z",
-    "updatedAt": "2026-04-09T00:00:00.000Z"
+    "updatedAt": "2026-04-10T00:00:00.000Z"
   },
   "persons": {
     "P001": {
@@ -76,6 +76,112 @@
       "tags": ["perez-line"],
       "createdAt": "2026-04-09T00:00:00.000Z",
       "updatedAt": "2026-04-09T00:00:00.000Z"
+    },
+    "P006": {
+      "id": "P006",
+      "names": {
+        "given": { "en": "Gonzalo Evaristo", "es": "Gonzalo Evaristo" },
+        "surname": { "en": "Perez", "es": "Pérez" }
+      },
+      "gender": "male",
+      "living": true,
+      "mediaIds": [],
+      "tags": ["perez-line"],
+      "createdAt": "2026-04-10T00:00:00.000Z",
+      "updatedAt": "2026-04-10T00:00:00.000Z"
+    },
+    "P007": {
+      "id": "P007",
+      "names": {
+        "given": { "en": "Daniel Orlando", "es": "Daniel Orlando" },
+        "surname": { "en": "Perez", "es": "Pérez" }
+      },
+      "gender": "male",
+      "living": true,
+      "mediaIds": [],
+      "tags": ["perez-line"],
+      "createdAt": "2026-04-10T00:00:00.000Z",
+      "updatedAt": "2026-04-10T00:00:00.000Z"
+    },
+    "P008": {
+      "id": "P008",
+      "names": {
+        "given": { "en": "Juan Gonzalo", "es": "Juan Gonzalo" },
+        "surname": { "en": "Perez", "es": "Pérez" }
+      },
+      "gender": "male",
+      "living": true,
+      "mediaIds": [],
+      "tags": ["perez-line"],
+      "createdAt": "2026-04-10T00:00:00.000Z",
+      "updatedAt": "2026-04-10T00:00:00.000Z"
+    },
+    "P009": {
+      "id": "P009",
+      "names": {
+        "given": { "en": "Zaida", "es": "Zaida" },
+        "surname": { "en": "Perez", "es": "Pérez" },
+        "nickname": { "en": "Santana", "es": "Santana" }
+      },
+      "gender": "female",
+      "living": true,
+      "mediaIds": [],
+      "tags": ["santana-line"],
+      "createdAt": "2026-04-10T00:00:00.000Z",
+      "updatedAt": "2026-04-10T00:00:00.000Z"
+    },
+    "P010": {
+      "id": "P010",
+      "names": {
+        "given": { "en": "Gonzalo", "es": "Gonzalo" },
+        "surname": { "en": "Perez", "es": "Pérez" }
+      },
+      "gender": "male",
+      "living": false,
+      "mediaIds": [],
+      "tags": ["perez-line"],
+      "createdAt": "2026-04-10T00:00:00.000Z",
+      "updatedAt": "2026-04-10T00:00:00.000Z"
+    },
+    "P011": {
+      "id": "P011",
+      "names": {
+        "given": { "en": "Osiris", "es": "Osiris" },
+        "surname": { "en": "Perez", "es": "Pérez" }
+      },
+      "gender": "female",
+      "living": false,
+      "mediaIds": [],
+      "tags": ["perez-line"],
+      "createdAt": "2026-04-10T00:00:00.000Z",
+      "updatedAt": "2026-04-10T00:00:00.000Z"
+    },
+    "P012": {
+      "id": "P012",
+      "names": {
+        "given": { "en": "Evaristo", "es": "Evaristo" },
+        "surname": { "en": "Santana", "es": "Santana" }
+      },
+      "gender": "male",
+      "living": false,
+      "mediaIds": [],
+      "tags": ["santana-line"],
+      "createdAt": "2026-04-10T00:00:00.000Z",
+      "updatedAt": "2026-04-10T00:00:00.000Z"
+    },
+    "P013": {
+      "id": "P013",
+      "names": {
+        "given": { "en": "Zoila", "es": "Zoila" },
+        "surname": { "en": "Santana", "es": "Santana" },
+        "nickname": { "en": "Dalda", "es": "Dalda" }
+      },
+      "gender": "female",
+      "living": false,
+      "mediaIds": [],
+      "tags": ["santana-line"],
+      "createdAt": "2026-04-10T00:00:00.000Z",
+      "updatedAt": "2026-04-10T00:00:00.000Z"
     }
   },
   "families": {
@@ -93,6 +199,48 @@
       ],
       "createdAt": "2026-04-09T00:00:00.000Z",
       "updatedAt": "2026-04-09T00:00:00.000Z"
+    },
+    "F002": {
+      "id": "F002",
+      "type": "marriage",
+      "dissolved": true,
+      "partners": [
+        { "personId": "P008", "role": "partner1" },
+        { "personId": "P009", "role": "partner2" }
+      ],
+      "children": [
+        { "personId": "P006", "relationship": "biological" },
+        { "personId": "P001", "relationship": "biological" },
+        { "personId": "P007", "relationship": "biological" }
+      ],
+      "createdAt": "2026-04-10T00:00:00.000Z",
+      "updatedAt": "2026-04-10T00:00:00.000Z"
+    },
+    "F003": {
+      "id": "F003",
+      "type": "marriage",
+      "partners": [
+        { "personId": "P010", "role": "partner1" },
+        { "personId": "P011", "role": "partner2" }
+      ],
+      "children": [
+        { "personId": "P008", "relationship": "biological" }
+      ],
+      "createdAt": "2026-04-10T00:00:00.000Z",
+      "updatedAt": "2026-04-10T00:00:00.000Z"
+    },
+    "F004": {
+      "id": "F004",
+      "type": "marriage",
+      "partners": [
+        { "personId": "P012", "role": "partner1" },
+        { "personId": "P013", "role": "partner2" }
+      ],
+      "children": [
+        { "personId": "P009", "relationship": "biological" }
+      ],
+      "createdAt": "2026-04-10T00:00:00.000Z",
+      "updatedAt": "2026-04-10T00:00:00.000Z"
     }
   },
   "media": {}

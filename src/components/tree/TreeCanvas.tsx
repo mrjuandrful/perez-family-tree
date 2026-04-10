@@ -12,14 +12,12 @@ import {
 import '@xyflow/react/dist/style.css';
 
 import PersonNode from './PersonNode';
-import FamilyNode from './FamilyNode';
 import TreeControls from './TreeControls';
 import { useTreeLayout } from './useTreeLayout';
 import { useUIStore } from '../../store';
 
 const nodeTypes: NodeTypes = {
   personNode: PersonNode,
-  familyNode: FamilyNode,
 };
 
 function TreeCanvasInner() {

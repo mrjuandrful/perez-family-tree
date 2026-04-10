@@ -1,36 +1,52 @@
-import ELK from 'elkjs/lib/elk.bundled.js';
 import type { Node, Edge } from '@xyflow/react';
-import type { FamilyTreeData } from '../../types';
+import type { FamilyTreeData, Family } from '../../types';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const elk = new (ELK as any)();
-
-const PERSON_WIDTH = 180;
-const PERSON_HEIGHT = 80;
-const FAMILY_WIDTH = 20;
-const FAMILY_HEIGHT = 20;
+export const PERSON_WIDTH = 180;
+export const PERSON_HEIGHT = 72;
+const H_GAP = 40;   // horizontal gap between siblings
+const V_GAP = 100;  // vertical gap between generations
+const COUPLE_GAP = 24; // gap between the two partners
 
 export interface LayoutResult {
   nodes: Node[];
   edges: Edge[];
 }
 
-interface ElkNode {
-  id: string;
-  width?: number;
-  height?: number;
-  x?: number;
-  y?: number;
-  children?: ElkNode[];
-  edges?: ElkEdge[];
-  layoutOptions?: Record<string, string>;
+// ─── helpers ────────────────────────────────────────────────────────────────
+
+function familiesWhereParent(personId: string, families: FamilyTreeData['families']): Family[] {
+  return Object.values(families).filter((f) =>
+    f.partners.some((p) => p.personId === personId)
+  );
 }
 
-interface ElkEdge {
-  id: string;
-  sources: string[];
-  targets: string[];
+// ─── subtree width calculation ───────────────────────────────────────────────
+
+function subtreeWidth(
+  personId: string,
+  families: FamilyTreeData['families'],
+  visited = new Set<string>()
+): number {
+  if (visited.has(personId)) return PERSON_WIDTH;
+  visited.add(personId);
+
+  const parentFamilies = familiesWhereParent(personId, families);
+  if (parentFamilies.length === 0) return PERSON_WIDTH;
+
+  let totalChildWidth = 0;
+  for (const fam of parentFamilies) {
+    const childIds = fam.children.map((c) => c.personId);
+    if (childIds.length === 0) continue;
+    const widths = childIds.map((cid) => subtreeWidth(cid, families, new Set(visited)));
+    totalChildWidth += widths.reduce((a, b) => a + b, 0) + H_GAP * (childIds.length - 1);
+  }
+
+  // The couple occupies 2 cards + COUPLE_GAP
+  const coupleWidth = PERSON_WIDTH * 2 + COUPLE_GAP;
+  return Math.max(coupleWidth, totalChildWidth);
 }
+
+// ─── main layout ─────────────────────────────────────────────────────────────
 
 export async function computeLayout(
   data: FamilyTreeData,
@@ -38,99 +54,180 @@ export async function computeLayout(
 ): Promise<LayoutResult> {
   const { persons, families } = data;
 
-  const personIds = visiblePersonIds
+  const allPersonIds = visiblePersonIds
     ? Object.keys(persons).filter((id) => visiblePersonIds.has(id))
     : Object.keys(persons);
 
-  const elkNodes: ElkNode[] = [
-    ...personIds.map((id) => ({
-      id: `person-${id}`,
-      width: PERSON_WIDTH,
-      height: PERSON_HEIGHT,
-    })),
-  ];
+  // Find root people: those who are not children of any visible person
+  const childIds = new Set(
+    Object.values(families)
+      .flatMap((f) => f.children.map((c) => c.personId))
+      .filter((id) => allPersonIds.includes(id))
+  );
+  const roots = allPersonIds.filter((id) => !childIds.has(id));
 
-  const elkEdges: ElkEdge[] = [];
+  const positions = new Map<string, { x: number; y: number }>();
+  const placedFamilies = new Set<string>();
 
-  const includedFamilies = Object.values(families).filter((fam) => {
-    const hasVisiblePartner = fam.partners.some((p) => personIds.includes(p.personId));
-    const hasVisibleChild = fam.children.some((c) => personIds.includes(c.personId));
-    return hasVisiblePartner || hasVisibleChild;
-  });
+  // Track all visible partner IDs so we don't re-place them as roots
+  const placedAsPartner = new Set<string>();
 
-  for (const fam of includedFamilies) {
-    const famNodeId = `family-${fam.id}`;
-    elkNodes.push({ id: famNodeId, width: FAMILY_WIDTH, height: FAMILY_HEIGHT });
+  function placeFamily(
+    fam: Family,
+    centerX: number,
+    parentBottomY: number
+  ) {
+    if (placedFamilies.has(fam.id)) return;
+    placedFamilies.add(fam.id);
 
-    for (const partner of fam.partners) {
-      if (!personIds.includes(partner.personId)) continue;
-      elkEdges.push({
-        id: `edge-partner-${fam.id}-${partner.personId}`,
-        sources: [`person-${partner.personId}`],
-        targets: [famNodeId],
-      });
+    const visibleChildren = fam.children
+      .map((c) => c.personId)
+      .filter((id) => allPersonIds.includes(id));
+
+    // Place partners side-by-side centered on centerX
+    const [p1, p2] = fam.partners;
+    const coupleY = parentBottomY;
+
+    if (p1 && allPersonIds.includes(p1.personId)) {
+      if (!positions.has(p1.personId)) {
+        positions.set(p1.personId, {
+          x: centerX - PERSON_WIDTH - COUPLE_GAP / 2,
+          y: coupleY,
+        });
+        placedAsPartner.add(p1.personId);
+      }
+    }
+    if (p2 && allPersonIds.includes(p2.personId)) {
+      if (!positions.has(p2.personId)) {
+        positions.set(p2.personId, {
+          x: centerX + COUPLE_GAP / 2,
+          y: coupleY,
+        });
+        placedAsPartner.add(p2.personId);
+      }
     }
 
-    for (const child of fam.children) {
-      if (!personIds.includes(child.personId)) continue;
-      elkEdges.push({
-        id: `edge-child-${fam.id}-${child.personId}`,
-        sources: [famNodeId],
-        targets: [`person-${child.personId}`],
-      });
+    if (visibleChildren.length === 0) return;
+
+    // Calculate total width needed for children row
+    const childWidths = visibleChildren.map((cid) => subtreeWidth(cid, families));
+    const totalWidth =
+      childWidths.reduce((a, b) => a + b, 0) + H_GAP * (visibleChildren.length - 1);
+
+    const childY = coupleY + PERSON_HEIGHT + V_GAP;
+    let cursor = centerX - totalWidth / 2;
+
+    for (let i = 0; i < visibleChildren.length; i++) {
+      const childId = visibleChildren[i];
+      const childCenter = cursor + childWidths[i] / 2;
+      positions.set(childId, { x: childCenter - PERSON_WIDTH / 2, y: childY });
+
+      // Recurse into child's own families
+      const childFamilies = familiesWhereParent(childId, families);
+      for (const cf of childFamilies) {
+        placeFamily(cf, childCenter, childY + PERSON_HEIGHT + V_GAP);
+      }
+
+      cursor += childWidths[i] + H_GAP;
     }
   }
 
-  const graph: ElkNode = {
-    id: 'root',
-    layoutOptions: {
-      'elk.algorithm': 'layered',
-      'elk.direction': 'DOWN',
-      'elk.layered.spacing.nodeNodeBetweenLayers': '60',
-      'elk.spacing.nodeNode': '30',
-      'elk.layered.nodePlacement.strategy': 'BRANDES_KOEPF',
-    },
-    children: elkNodes,
-    edges: elkEdges,
-  };
+  // Place each root person and their descendant families
+  // First pass: collect families rooted from each root person
+  let rootCursor = 0;
+  const rootFamilyGroups: Array<{ famId: string; center: number }> = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const laid: ElkNode = await elk.layout(graph as any);
+  for (const rootId of roots) {
+    const rootFams = familiesWhereParent(rootId, families).filter(
+      (f) => !placedFamilies.has(f.id)
+    );
+    if (rootFams.length === 0) {
+      // Solo person with no family
+      if (!positions.has(rootId)) {
+        positions.set(rootId, { x: rootCursor, y: 0 });
+        rootCursor += PERSON_WIDTH + H_GAP;
+      }
+    } else {
+      for (const fam of rootFams) {
+        const sw = subtreeWidth(rootId, families);
+        const center = rootCursor + sw / 2;
+        rootFamilyGroups.push({ famId: fam.id, center });
+        rootCursor += sw + H_GAP * 2;
+      }
+    }
+  }
 
+  // Place all root families
+  for (const { famId, center } of rootFamilyGroups) {
+    const fam = families[famId];
+    if (fam) placeFamily(fam, center, 0);
+  }
+
+  // Place any remaining unplaced persons (partners not yet positioned)
+  for (const id of allPersonIds) {
+    if (!positions.has(id)) {
+      positions.set(id, { x: rootCursor, y: 0 });
+      rootCursor += PERSON_WIDTH + H_GAP;
+    }
+  }
+
+  // ── Build React Flow nodes ──────────────────────────────────────────────────
   const rfNodes: Node[] = [];
-  const rfEdges: Edge[] = [];
-
-  for (const n of laid.children ?? []) {
-    if (n.id.startsWith('person-')) {
-      const personId = n.id.replace('person-', '');
-      rfNodes.push({
-        id: n.id,
-        type: 'personNode',
-        position: { x: n.x ?? 0, y: n.y ?? 0 },
-        data: { personId },
-        style: { width: PERSON_WIDTH, height: PERSON_HEIGHT },
-      });
-    } else if (n.id.startsWith('family-')) {
-      const familyId = n.id.replace('family-', '');
-      rfNodes.push({
-        id: n.id,
-        type: 'familyNode',
-        position: { x: n.x ?? 0, y: n.y ?? 0 },
-        data: { familyId },
-        style: { width: FAMILY_WIDTH, height: FAMILY_HEIGHT },
-      });
-    }
+  for (const id of allPersonIds) {
+    const pos = positions.get(id) ?? { x: 0, y: 0 };
+    rfNodes.push({
+      id: `person-${id}`,
+      type: 'personNode',
+      position: pos,
+      data: { personId: id },
+      style: { width: PERSON_WIDTH, height: PERSON_HEIGHT },
+    });
   }
 
-  for (const e of laid.edges ?? []) {
-    const edge = e as ElkEdge;
-    rfEdges.push({
-      id: edge.id,
-      source: edge.sources[0],
-      target: edge.targets[0],
-      type: 'smoothstep',
-      style: { stroke: '#6366f1', strokeWidth: 2 },
-    });
+  // ── Build React Flow edges ──────────────────────────────────────────────────
+  const rfEdges: Edge[] = [];
+  const edgeStyle = { stroke: '#6366f1', strokeWidth: 2 };
+
+  for (const fam of Object.values(families)) {
+    const visiblePartners = fam.partners.filter((p) => allPersonIds.includes(p.personId));
+    const visibleChildren = fam.children.filter((c) => allPersonIds.includes(c.personId));
+
+    const [p1, p2] = visiblePartners;
+    const hasP1 = !!p1;
+    const hasP2 = !!p2;
+
+    // Couple connector edge (horizontal, rendered as a straight line)
+    if (hasP1 && hasP2) {
+      rfEdges.push({
+        id: `couple-${fam.id}`,
+        source: `person-${p1.personId}`,
+        target: `person-${p2.personId}`,
+        type: 'straight',
+        style: edgeStyle,
+        sourceHandle: null,
+        targetHandle: null,
+      });
+    }
+
+    // Parent → child edges
+    // Connect from whichever partner exists (prefer p1, fall back to p2)
+    const parentNodeId = hasP1
+      ? `person-${p1.personId}`
+      : hasP2
+      ? `person-${p2.personId}`
+      : null;
+
+    if (parentNodeId) {
+      for (const child of visibleChildren) {
+        rfEdges.push({
+          id: `parent-child-${fam.id}-${child.personId}`,
+          source: parentNodeId,
+          target: `person-${child.personId}`,
+          type: 'smoothstep',
+          style: edgeStyle,
+        });
+      }
+    }
   }
 
   return { nodes: rfNodes, edges: rfEdges };

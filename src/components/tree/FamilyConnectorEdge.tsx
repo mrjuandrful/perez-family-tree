@@ -100,8 +100,8 @@ function buildPath(
 
     if (routeX !== undefined) {
       const vrouteX = vx(routeX);
-      const jog1Y = hy(pBy + PARENT_BAR_DROP + 10);
-      const jog2Y = hy(childBarY - 10);
+      const jog1Y = barY + 10;        // barY already nudged — just offset below it
+      const jog2Y = hchildBarY - 10;  // hchildBarY already nudged — just offset above it
       const goRight = vrouteX > stemX;
       parts.push(
         `M ${stemX} ${barY}` +
@@ -116,7 +116,7 @@ function buildPath(
         humpsOnVertical(vmidChildX, jog2Y + R, hchildBarY, jog2Y, hchildBarY, crossings)
       );
     } else if (Math.abs(stemX - vmidChildX) > 2) {
-      const midY = hy(barY + (childBarY - barY) * 0.5);
+      const midY = barY + (hchildBarY - barY) * 0.5; // both already nudged
       const goRight = vmidChildX > stemX;
       parts.push(
         `M ${stemX} ${barY}` +

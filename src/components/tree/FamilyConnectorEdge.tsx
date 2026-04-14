@@ -116,8 +116,7 @@ function buildPath(
         humpsOnVertical(vmidChildX, jog2Y + R, hchildBarY, jog2Y, hchildBarY, crossings)
       );
     } else if (Math.abs(stemX - vmidChildX) > 2) {
-      const midY = barY + (hchildBarY - barY) * 0.5;
-      const childRowY = children[0].y;
+      const midY = barY + (hchildBarY - barY) * 0.5; // both already nudged
       const goRight = vmidChildX > stemX;
       parts.push(
         `M ${stemX} ${barY}` +
@@ -125,13 +124,12 @@ function buildPath(
         ` Q ${stemX} ${midY} ${stemX + (goRight ? R : -R)} ${midY}` +
         hLine(stemX + (goRight ? R : -R), midY, vmidChildX + (goRight ? -R : R)) +
         ` Q ${vmidChildX} ${midY} ${vmidChildX} ${midY + R}` +
-        humpsOnVertical(vmidChildX, midY + R, childRowY, midY, childRowY, crossings)
+        humpsOnVertical(vmidChildX, midY + R, hchildBarY, midY, hchildBarY, crossings)
       );
     } else {
-      const childRowY = children[0].y;
       parts.push(
         `M ${stemX} ${barY}` +
-        humpsOnVertical(stemX, barY, childRowY, barY, childRowY, crossings)
+        humpsOnVertical(stemX, barY, hchildBarY, barY, hchildBarY, crossings)
       );
     }
   } else {

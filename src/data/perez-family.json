@@ -292,11 +292,11 @@
         "surname": { "en": "Zitt", "es": "Zitt" }
       },
       "gender": "female",
-      "living": true,
+      "living": false,
       "mediaIds": [],
       "tags": ["zitt-line"],
       "createdAt": "2026-04-10T00:00:00.000Z",
-      "updatedAt": "2026-04-10T00:00:00.000Z"
+      "updatedAt": "2026-04-14T00:00:00.000Z"
     }
   },
   "families": {

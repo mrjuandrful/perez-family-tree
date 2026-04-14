@@ -3,8 +3,8 @@
 
 export const CONN_PW = 200;   // must match PERSON_WIDTH in elkLayout
 export const CONN_PH = 100;   // must match PERSON_HEIGHT
-export const PARENT_BAR_DROP = 28;  // px below parent bottom before horizontal bar
-export const CHILD_BAR_OFFSET = 36; // px above child top for horizontal child bar
+export const PARENT_BAR_DROP = 48;  // px below parent bottom before horizontal bar
+export const CHILD_BAR_OFFSET = 56; // px above child top for horizontal child bar
 export const ROW_H = 260;           // must match ROW_HEIGHT in elkLayout
 
 export interface Pos { x: number; y: number; }

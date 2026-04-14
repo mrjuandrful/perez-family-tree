@@ -13,6 +13,9 @@ export interface Segment {
   x1: number; y1: number;
   x2: number; y2: number;
   famId: string;
+  /** True for the vertical drop from a parent card bottom down to the horizontal bar.
+   *  These segments are anchored to the card position and must NOT be nudged. */
+  parentDrop?: boolean;
 }
 
 export interface Crossing {
@@ -63,8 +66,8 @@ export function extractSegments(
   const rightChildX = childCenters[childCenters.length - 1];
   const midChildX = (leftChildX + rightChildX) / 2;
 
-  const add = (x1: number, y1: number, x2: number, y2: number) =>
-    segs.push({ x1, y1, x2, y2, famId });
+  const add = (x1: number, y1: number, x2: number, y2: number, parentDrop = false) =>
+    segs.push({ x1, y1, x2, y2, famId, parentDrop });
 
   if (p1 && p2) {
     const p1cx = p1.x + CONN_PW / 2;
@@ -73,8 +76,8 @@ export function extractSegments(
     const barY = pBy + PARENT_BAR_DROP;
     const stemX = (p1cx + p2cx) / 2;
 
-    add(p1cx, pBy, p1cx, barY);
-    add(p2cx, pBy, p2cx, barY);
+    add(p1cx, pBy, p1cx, barY, true);   // parent drop — not nudged
+    add(p2cx, pBy, p2cx, barY, true);   // parent drop — not nudged
     add(p1cx, barY, p2cx, barY);
 
     if (routeX !== undefined) {
@@ -103,18 +106,18 @@ export function extractSegments(
     if (routeX !== undefined) {
       const jog1Y = pby + PARENT_BAR_DROP + 10;
       const jog2Y = childBarY - 10;
-      add(pbx, pby, pbx, jog1Y);
+      add(pbx, pby, pbx, jog1Y, true);  // parent drop — not nudged
       add(pbx, jog1Y, routeX, jog1Y);
       add(routeX, jog1Y, routeX, jog2Y);
       add(routeX, jog2Y, midChildX, jog2Y);
       add(midChildX, jog2Y, midChildX, childBarY);
     } else if (Math.abs(pbx - midChildX) > 2) {
       const midY = pby + (childBarY - pby) * 0.5;
-      add(pbx, pby, pbx, midY);
+      add(pbx, pby, pbx, midY, true);   // parent drop — not nudged
       add(pbx, midY, midChildX, midY);
       add(midChildX, midY, midChildX, childBarY);
     } else {
-      add(pbx, pby, pbx, childBarY);
+      add(pbx, pby, pbx, childBarY, true); // single straight drop — not nudged
     }
   }
 

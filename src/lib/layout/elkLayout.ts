@@ -692,6 +692,7 @@ export async function computeLayout(
 
   for (const [famId, segs] of famSegments) {
     for (const seg of segs) {
+      if (seg.parentDrop) continue; // parent drops anchored to card — never overlapping
       const isV = Math.abs(seg.x1 - seg.x2) < 0.5;
       if (isV) {
         const xKey = Math.round(seg.x1);
@@ -776,6 +777,7 @@ export async function computeLayout(
   // what the renderer actually draws.
   function applyNudge(segs: Seg[], vNudge: number, hNudge: number): Seg[] {
     return segs.map((s) => {
+      if (s.parentDrop) return s; // parent drops are anchored to card position — never nudged
       const isV = Math.abs(s.x1 - s.x2) < 0.5;
       if (isV) return { ...s, x1: s.x1 + vNudge, x2: s.x2 + vNudge };
       else     return { ...s, y1: s.y1 + hNudge, y2: s.y2 + hNudge };

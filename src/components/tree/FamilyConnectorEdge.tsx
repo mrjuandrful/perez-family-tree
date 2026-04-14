@@ -79,23 +79,23 @@ function buildPath(
     const p2cx = p2.x + CONN_PW / 2;
     const pBy = p1.y + CONN_PH;          // bottom of parent cards (not nudged — fixed by card)
     const barY = hy(pBy + PARENT_BAR_DROP); // horizontal bar connecting parents — h-nudged
-    const vp1cx = vx(p1cx);
-    const vp2cx = vx(p2cx);
+    // Parent drops are NOT nudged — they always connect to the actual card bottom.
+    // Only the stem (from barY downward) is nudged.
     const stemX = vx((p1cx + p2cx) / 2);
 
-    // Left parent drop: vertical from card bottom to barY, with hump detection
+    // Left parent drop: vertical from card bottom to barY (at card center, no nudge)
     parts.push(
       `M ${p1cx} ${pBy}` +
-      humpsOnVertical(vp1cx, pBy, barY - R, pBy, barY, crossings) +
-      ` Q ${vp1cx} ${barY} ${vp1cx + R} ${barY}` +
-      hLine(vp1cx + R, barY, stemX)
+      humpsOnVertical(p1cx, pBy, barY - R, pBy, barY, crossings) +
+      ` Q ${p1cx} ${barY} ${p1cx + R} ${barY}` +
+      hLine(p1cx + R, barY, stemX)
     );
     // Right parent drop
     parts.push(
       `M ${p2cx} ${pBy}` +
-      humpsOnVertical(vp2cx, pBy, barY - R, pBy, barY, crossings) +
-      ` Q ${vp2cx} ${barY} ${vp2cx - R} ${barY}` +
-      hLine(vp2cx - R, barY, stemX)
+      humpsOnVertical(p2cx, pBy, barY - R, pBy, barY, crossings) +
+      ` Q ${p2cx} ${barY} ${p2cx - R} ${barY}` +
+      hLine(p2cx - R, barY, stemX)
     );
 
     if (routeX !== undefined) {
@@ -133,21 +133,22 @@ function buildPath(
       );
     }
   } else {
+    // Single parent — parent drop uses un-nudged pbx (connects to actual card center)
     const px = (p1 ?? p2)!;
     const pbx = px.x + CONN_PW / 2;
     const pby = px.y + CONN_PH;
-    const vpbx = vx(pbx);
+    const vpbx = vx(pbx); // nudged X used only for stem below first jog
 
     if (routeX !== undefined) {
       const vrouteX = vx(routeX);
       const jog1Y = hy(pby + PARENT_BAR_DROP + 10);
       const jog2Y = hy(childBarY - 10);
-      const goRight = vrouteX > vpbx;
+      const goRight = vrouteX > pbx;
       parts.push(
         `M ${pbx} ${pby}` +
-        humpsOnVertical(vpbx, pby, jog1Y - R, pby, jog1Y, crossings) +
-        ` Q ${vpbx} ${jog1Y} ${vpbx + (goRight ? R : -R)} ${jog1Y}` +
-        hLine(vpbx + (goRight ? R : -R), jog1Y, vrouteX + (goRight ? -R : R)) +
+        humpsOnVertical(pbx, pby, jog1Y - R, pby, jog1Y, crossings) +
+        ` Q ${pbx} ${jog1Y} ${pbx + (goRight ? R : -R)} ${jog1Y}` +
+        hLine(pbx + (goRight ? R : -R), jog1Y, vrouteX + (goRight ? -R : R)) +
         ` Q ${vrouteX} ${jog1Y} ${vrouteX} ${jog1Y + R}` +
         humpsOnVertical(vrouteX, jog1Y + R, jog2Y - R, jog1Y, jog2Y, crossings) +
         ` Q ${vrouteX} ${jog2Y} ${vrouteX + (goRight ? -R : R)} ${jog2Y}` +
@@ -155,21 +156,21 @@ function buildPath(
         ` Q ${vmidChildX} ${jog2Y} ${vmidChildX} ${jog2Y + R}` +
         humpsOnVertical(vmidChildX, jog2Y + R, hchildBarY, jog2Y, hchildBarY, crossings)
       );
-    } else if (Math.abs(vpbx - vmidChildX) > 2) {
+    } else if (Math.abs(pbx - vmidChildX) > 2) {
       const midY = hy(pby + (childBarY - pby) * 0.5);
-      const goRight = vmidChildX > vpbx;
+      const goRight = vmidChildX > pbx;
       parts.push(
         `M ${pbx} ${pby}` +
-        humpsOnVertical(vpbx, pby, midY - R, pby, midY, crossings) +
-        ` Q ${vpbx} ${midY} ${vpbx + (goRight ? R : -R)} ${midY}` +
-        hLine(vpbx + (goRight ? R : -R), midY, vmidChildX + (goRight ? -R : R)) +
+        humpsOnVertical(pbx, pby, midY - R, pby, midY, crossings) +
+        ` Q ${pbx} ${midY} ${pbx + (goRight ? R : -R)} ${midY}` +
+        hLine(pbx + (goRight ? R : -R), midY, vmidChildX + (goRight ? -R : R)) +
         ` Q ${vmidChildX} ${midY} ${vmidChildX} ${midY + R}` +
         humpsOnVertical(vmidChildX, midY + R, hchildBarY, midY, hchildBarY, crossings)
       );
     } else {
       parts.push(
-        `M ${vpbx} ${pby}` +
-        humpsOnVertical(vpbx, pby, hchildBarY, pby, hchildBarY, crossings)
+        `M ${pbx} ${pby}` +
+        humpsOnVertical(pbx, pby, hchildBarY, pby, hchildBarY, crossings)
       );
     }
   }

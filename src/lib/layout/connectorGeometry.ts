@@ -91,7 +91,7 @@ export function extractSegments(
       add(routeX, jog2Y, midChildX, jog2Y);
       add(midChildX, jog2Y, midChildX, childBarY);
     } else if (Math.abs(stemX - midChildX) > 2) {
-      const midY = pBy + CONN_PH + (childBarY - pBy - CONN_PH) * 0.5;
+      const midY = barY + (childBarY - barY) * 0.5;
       add(stemX, barY, stemX, midY);
       add(stemX, midY, midChildX, midY);
       add(midChildX, midY, midChildX, childBarY);

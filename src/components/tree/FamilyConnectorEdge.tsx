@@ -6,7 +6,7 @@ import {
 } from '../../lib/layout/connectorGeometry';
 
 const R = 8;
-const HUMP_R = 6;
+const HUMP_R = 4;
 
 export interface FamilyConnectorData {
   p1: Pos | null;
@@ -26,7 +26,7 @@ function humpsOnVertical(
   fy1: number, fy2: number,
   crossings: Crossing[]
 ): string {
-  const guard = HUMP_R + 2;
+  const guard = HUMP_R + 1;
   const lo = Math.min(fy1, fy2), hi = Math.max(fy1, fy2);
   const hits = crossings
     .filter((c) => Math.abs(c.cx - x) <= 2 && c.cy > lo + guard && c.cy < hi - guard)
@@ -116,7 +116,7 @@ function buildPath(
         humpsOnVertical(vmidChildX, jog2Y + R, hchildBarY, jog2Y, hchildBarY, crossings)
       );
     } else if (Math.abs(stemX - vmidChildX) > 2) {
-      const midY = hy(pBy + CONN_PH + (childBarY - pBy - CONN_PH) * 0.5);
+      const midY = hy(barY + (childBarY - barY) * 0.5);
       const goRight = vmidChildX > stemX;
       parts.push(
         `M ${stemX} ${barY}` +

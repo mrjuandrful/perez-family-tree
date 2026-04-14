@@ -680,7 +680,7 @@ export async function computeLayout(
   //   hNudge: Y shift applied to ALL horizontal segments of this family
   // Strategy: group segments by line key (v:X or h:Y). Within each group,
   // find overlapping segment pairs. Assign slots 0,1,2,... and nudge = slot*STEP - center.
-  const LANE_STEP = 10;
+  const LANE_STEP = 20;
 
   // segNudge: famId → { vNudge, hNudge }
   const famVNudge = new Map<string, number>(); // X shift for vertical segments

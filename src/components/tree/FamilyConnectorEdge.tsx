@@ -137,8 +137,6 @@ function buildPath(
     const px = (p1 ?? p2)!;
     const pbx = px.x + CONN_PW / 2;
     const pby = px.y + CONN_PH;
-    const vpbx = vx(pbx); // nudged X used only for stem below first jog
-
     if (routeX !== undefined) {
       const vrouteX = vx(routeX);
       const jog1Y = hy(pby + PARENT_BAR_DROP + 10);

@@ -3,8 +3,6 @@ import {
   intersectSegments,
   extractSegments,
   CONN_PW,
-  CONN_PH,
-  PARENT_BAR_DROP,
   CHILD_BAR_OFFSET,
 } from '../connectorGeometry';
 import type { Segment } from '../connectorGeometry';

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { computeLayout, PERSON_WIDTH, PERSON_HEIGHT } from '../elkLayout';
+import { computeLayout } from '../elkLayout';
 import type { FamilyTreeData } from '../../../types';
 
 // ── minimal fixture builders ──────────────────────────────────────────────────

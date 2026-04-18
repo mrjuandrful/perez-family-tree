@@ -94,9 +94,9 @@ export function extractSegments(
       const midY = barY + (childBarY - barY) * 0.5;
       add(stemX, barY, stemX, midY);
       add(stemX, midY, midChildX, midY);
-      add(midChildX, midY, midChildX, childBarY);
+      add(midChildX, midY, midChildX, children[0].y);
     } else {
-      add(stemX, barY, stemX, childBarY);
+      add(stemX, barY, stemX, children[0].y);
     }
   } else {
     const px = (p1 ?? p2)!;
@@ -110,14 +110,14 @@ export function extractSegments(
       add(pbx, jog1Y, routeX, jog1Y);
       add(routeX, jog1Y, routeX, jog2Y);
       add(routeX, jog2Y, midChildX, jog2Y);
-      add(midChildX, jog2Y, midChildX, childBarY);
+      add(midChildX, jog2Y, midChildX, children[0].y);
     } else if (Math.abs(pbx - midChildX) > 2) {
       const midY = pby + (childBarY - pby) * 0.5;
       add(pbx, pby, pbx, midY, true);   // parent drop — not nudged
       add(pbx, midY, midChildX, midY);
-      add(midChildX, midY, midChildX, childBarY);
+      add(midChildX, midY, midChildX, children[0].y);
     } else {
-      add(pbx, pby, pbx, childBarY, true); // single straight drop — not nudged
+      add(pbx, pby, pbx, children[0].y, true); // single straight drop — not nudged
     }
   }
 

@@ -56,13 +56,25 @@ export function useTreeLayout() {
       }
 
       // Generation filter (BFS from focus person, or root person if none selected)
-      const genAnchorId = focusPersonId ?? data.meta.rootPersonId ?? null;
-      if (generationFilter > 0 && genAnchorId) {
-        const bfsIds = bfsGenerations(data, genAnchorId, generationFilter);
-        if (visiblePersonIds) {
-          visiblePersonIds = new Set([...visiblePersonIds].filter((id) => bfsIds.has(id)));
-        } else {
-          visiblePersonIds = bfsIds;
+      if (generationFilter > 0) {
+        // Find the anchor person: prefer focus person if visible, else pick any visible person, else use root
+        let genAnchorId = focusPersonId;
+        if (visiblePersonIds && !visiblePersonIds.has(genAnchorId ?? '')) {
+          // Focus person not in visible set, pick first visible person
+          const visibleArray = Array.from(visiblePersonIds);
+          genAnchorId = visibleArray.length > 0 ? visibleArray[0] : null;
+        }
+        if (!genAnchorId) {
+          genAnchorId = data.meta.rootPersonId ?? null;
+        }
+
+        if (genAnchorId) {
+          const bfsIds = bfsGenerations(data, genAnchorId, generationFilter);
+          if (visiblePersonIds) {
+            visiblePersonIds = new Set([...visiblePersonIds].filter((id) => bfsIds.has(id)));
+          } else {
+            visiblePersonIds = bfsIds;
+          }
         }
       }
 

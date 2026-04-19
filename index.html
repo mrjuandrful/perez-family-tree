@@ -2,11 +2,39 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <!-- Primary identity -->
     <title>Perez Family Tree</title>
+    <meta name="description" content="Browse, search, and explore the Perez family tree across multiple generations and branches." />
+    <meta name="application-name" content="Perez Family Tree" />
+    <meta name="author" content="Juan Miguel Perez" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/perez-family-tree/icons/icon.svg" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/perez-family-tree/icons/icon-192.png" />
+
+    <!-- PWA manifest -->
+    <link rel="manifest" href="/perez-family-tree/manifest.json" />
+
+    <!-- Theme colors -->
+    <meta name="theme-color" content="#7c3aed" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#4c1d95" media="(prefers-color-scheme: dark)" />
+
+    <!-- Apple / iOS PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Pérez Tree" />
+    <link rel="apple-touch-icon" href="/perez-family-tree/icons/icon.svg" />
+
+    <!-- Open Graph (link previews in iMessage, WhatsApp, etc.) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Perez Family Tree" />
+    <meta property="og:description" content="Explore the Perez family — multiple generations, multiple branches." />
+    <meta property="og:image" content="/perez-family-tree/icons/icon.svg" />
+
+    <!-- GitHub Pages SPA redirect handler -->
     <script>
-      // GitHub Pages SPA redirect handler
       (function() {
         var redirect = sessionStorage.redirect;
         delete sessionStorage.redirect;
@@ -15,8 +43,18 @@
         }
       })();
     </script>
-    <script type="module" crossorigin src="/perez-family-tree/assets/index-DRqX33W7.js"></script>
-    <link rel="stylesheet" crossorigin href="/perez-family-tree/assets/index-tVG6qVy7.css">
+
+    <!-- Service worker registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/perez-family-tree/sw.js', { scope: '/perez-family-tree/' })
+            .catch(function(err) { console.warn('SW registration failed:', err); });
+        });
+      }
+    </script>
+    <script type="module" crossorigin src="/perez-family-tree/assets/index-kweGfZ86.js"></script>
+    <link rel="stylesheet" crossorigin href="/perez-family-tree/assets/index-DbPcriQw.css">
   </head>
   <body>
     <div id="root"></div>

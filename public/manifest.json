@@ -1,0 +1,50 @@
+{
+  "name": "Perez Family Tree",
+  "short_name": "Pérez Tree",
+  "description": "Browse, search, and explore the Perez family tree — multiple generations, multiple branches.",
+  "start_url": "/perez-family-tree/",
+  "scope": "/perez-family-tree/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f5f3ff",
+  "theme_color": "#7c3aed",
+  "lang": "en",
+  "categories": ["lifestyle", "social"],
+  "icons": [
+    {
+      "src": "/perez-family-tree/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/perez-family-tree/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/perez-family-tree/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Browse Family",
+      "short_name": "Browse",
+      "description": "Browse family members",
+      "url": "/perez-family-tree/browse",
+      "icons": [{ "src": "/perez-family-tree/icons/icon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "Family Tree",
+      "short_name": "Tree",
+      "description": "View the family tree diagram",
+      "url": "/perez-family-tree/tree",
+      "icons": [{ "src": "/perez-family-tree/icons/icon.svg", "sizes": "any" }]
+    }
+  ]
+}

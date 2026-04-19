@@ -8,7 +8,7 @@
     },
     "rootPersonId": "P001",
     "createdAt": "2026-04-09T00:00:00.000Z",
-    "updatedAt": "2026-04-10T00:00:00.000Z"
+    "updatedAt": "2026-04-19T00:00:00.000Z"
   },
   "persons": {
     "P001": {
@@ -231,6 +231,33 @@
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-10T00:00:00.000Z"
     },
+    "P018": {
+      "id": "P018",
+      "names": {
+        "given": { "en": "Dennis Herbert", "es": "Dennis Herbert" },
+        "surname": { "en": "Zitt", "es": "Zitt" }
+      },
+      "gender": "male",
+      "living": true,
+      "mediaIds": [],
+      "tags": ["zitt-line"],
+      "createdAt": "2026-04-10T00:00:00.000Z",
+      "updatedAt": "2026-04-10T00:00:00.000Z"
+    },
+    "P019": {
+      "id": "P019",
+      "names": {
+        "given": { "en": "Anna Louisa", "es": "Anna Louisa" },
+        "surname": { "en": "Zitt", "es": "Zitt" },
+        "nickname": { "en": "Coppola", "es": "Coppola" }
+      },
+      "gender": "female",
+      "living": false,
+      "mediaIds": [],
+      "tags": ["zitt-line"],
+      "createdAt": "2026-04-10T00:00:00.000Z",
+      "updatedAt": "2026-04-19T00:00:00.000Z"
+    },
     "P020": {
       "id": "P020",
       "names": {
@@ -272,31 +299,46 @@
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-10T00:00:00.000Z"
     },
-    "P018": {
-      "id": "P018",
+    "P023": {
+      "id": "P023",
       "names": {
-        "given": { "en": "Dennis Herbert", "es": "Dennis Herbert" },
+        "given": { "en": "Deanna", "es": "Deanna" },
+        "surname": { "en": "Lebet", "es": "Lebet" },
+        "nickname": { "en": "Zitt", "es": "Zitt" }
+      },
+      "gender": "female",
+      "living": true,
+      "mediaIds": [],
+      "tags": ["zitt-line"],
+      "createdAt": "2026-04-19T00:00:00.000Z",
+      "updatedAt": "2026-04-19T00:00:00.000Z"
+    },
+    "P024": {
+      "id": "P024",
+      "names": {
+        "given": { "en": "Patricia", "es": "Patricia" },
+        "surname": { "en": "Welton", "es": "Welton" },
+        "nickname": { "en": "Zitt", "es": "Zitt" }
+      },
+      "gender": "female",
+      "living": true,
+      "mediaIds": [],
+      "tags": ["zitt-line"],
+      "createdAt": "2026-04-19T00:00:00.000Z",
+      "updatedAt": "2026-04-19T00:00:00.000Z"
+    },
+    "P025": {
+      "id": "P025",
+      "names": {
+        "given": { "en": "Dennis", "es": "Dennis" },
         "surname": { "en": "Zitt", "es": "Zitt" }
       },
       "gender": "male",
       "living": true,
       "mediaIds": [],
       "tags": ["zitt-line"],
-      "createdAt": "2026-04-10T00:00:00.000Z",
-      "updatedAt": "2026-04-10T00:00:00.000Z"
-    },
-    "P019": {
-      "id": "P019",
-      "names": {
-        "given": { "en": "Anna Louisa", "es": "Anna Louisa" },
-        "surname": { "en": "Zitt", "es": "Zitt" }
-      },
-      "gender": "female",
-      "living": false,
-      "mediaIds": [],
-      "tags": ["zitt-line"],
-      "createdAt": "2026-04-10T00:00:00.000Z",
-      "updatedAt": "2026-04-14T00:00:00.000Z"
+      "createdAt": "2026-04-19T00:00:00.000Z",
+      "updatedAt": "2026-04-19T00:00:00.000Z"
     }
   },
   "families": {
@@ -393,10 +435,13 @@
         { "personId": "P019", "role": "partner2" }
       ],
       "children": [
-        { "personId": "P002", "relationship": "biological" }
+        { "personId": "P023", "relationship": "biological" },
+        { "personId": "P002", "relationship": "biological" },
+        { "personId": "P024", "relationship": "biological" },
+        { "personId": "P025", "relationship": "biological" }
       ],
       "createdAt": "2026-04-10T00:00:00.000Z",
-      "updatedAt": "2026-04-10T00:00:00.000Z"
+      "updatedAt": "2026-04-19T00:00:00.000Z"
     }
   },
   "media": {}

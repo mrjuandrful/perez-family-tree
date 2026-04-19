@@ -12,7 +12,7 @@ export default function PersonPage() {
 
   useEffect(() => {
     if (!id || !persons[id]) {
-      navigate('/', { replace: true });
+      navigate('/tree', { replace: true });
       return;
     }
     setSelectedPerson(id);

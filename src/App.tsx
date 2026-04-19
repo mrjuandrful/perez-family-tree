@@ -7,6 +7,7 @@ import BrowsePage from './pages/BrowsePage';
 import TreePage from './pages/TreePage';
 import TimelinePage from './pages/TimelinePage';
 import SettingsPage from './pages/SettingsPage';
+import UnassociatedPage from './pages/UnassociatedPage';
 import PersonPage from './pages/PersonPage';
 
 // ── Desktop top navigation bar ───────────────────────────────────────────────
@@ -32,6 +33,7 @@ function TopNav() {
           { to: '/browse',   label: t('nav_browse') || 'Browse',  end: false },
           { to: '/tree',     label: t('nav_tree'),   end: false },
           { to: '/timeline', label: t('nav_timeline'), end: false },
+          { to: '/unassociated', label: 'Connect', end: false },
           { to: '/settings', label: t('nav_settings'), end: false },
         ].map(({ to, label, end }) => (
           <NavLink
@@ -74,6 +76,7 @@ function MobileTopBar() {
     '/browse':   'Browse',
     '/tree':     'Family Tree',
     '/timeline': 'Timeline',
+    '/unassociated': 'Connect Members',
     '/settings': 'Settings',
   };
   const title = PAGE_TITLES[location.pathname] ?? 'Perez Family Tree';
@@ -102,6 +105,7 @@ function BottomNav() {
     { to: '/browse',   icon: <PeopleIcon />,   label: 'Browse',  end: false },
     { to: '/tree',     icon: <TreeTabIcon />,  label: 'Tree',    end: false },
     { to: '/timeline', icon: <TimelineIcon />, label: 'Timeline',end: false },
+    { to: '/unassociated', icon: <LinkIcon />, label: 'Connect', end: false },
     { to: '/settings', icon: <GearIcon />,     label: 'Settings',end: false },
   ];
 
@@ -177,6 +181,13 @@ function TimelineIcon() {
     </svg>
   );
 }
+function LinkIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+    </svg>
+  );
+}
 function GearIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
@@ -206,6 +217,7 @@ export default function App() {
             <Route path="/browse"   element={<BrowsePage />} />
             <Route path="/tree"     element={<TreePage />} />
             <Route path="/timeline" element={<TimelinePage />} />
+            <Route path="/unassociated" element={<UnassociatedPage />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="/person/:id" element={<PersonPage />} />
           </Routes>

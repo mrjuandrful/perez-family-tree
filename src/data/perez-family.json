@@ -1,344 +1,2985 @@
 {
   "meta": {
     "version": "1.0",
-    "title": { "en": "Perez Family Tree", "es": "Árbol Genealógico Pérez" },
+    "title": {
+      "en": "Perez Family Tree",
+      "es": "Árbol Genealógico Pérez"
+    },
     "description": {
       "en": "The Perez family tree.",
       "es": "El árbol genealógico de la familia Pérez."
     },
     "rootPersonId": "P001",
     "createdAt": "2026-04-09T00:00:00.000Z",
-    "updatedAt": "2026-04-19T00:00:00.000Z"
+    "updatedAt": "2026-04-19T18:02:41.159615Z"
   },
   "persons": {
     "P001": {
       "id": "P001",
       "names": {
-        "given": { "en": "Juan Miguel", "es": "Juan Miguel" },
-        "surname": { "en": "Perez", "es": "Pérez" }
+        "given": {
+          "en": "Juan Miguel",
+          "es": "Juan Miguel"
+        },
+        "surname": {
+          "en": "Perez",
+          "es": "Pérez"
+        }
       },
       "gender": "male",
       "living": true,
-      "birth": { "date": { "year": 1980, "month": 10, "day": 28 } },
+      "birth": {
+        "date": {
+          "year": 1980,
+          "month": 10,
+          "day": 28
+        }
+      },
       "mediaIds": [],
-      "tags": ["perez-line"],
+      "tags": [
+        "perez-line"
+      ],
       "createdAt": "2026-04-09T00:00:00.000Z",
       "updatedAt": "2026-04-09T00:00:00.000Z"
     },
     "P002": {
       "id": "P002",
       "names": {
-        "given": { "en": "Melissa", "es": "Melissa" },
-        "surname": { "en": "Perez", "es": "Pérez" },
-        "nickname": { "en": "Zitt", "es": "Zitt" }
+        "given": {
+          "en": "Melissa",
+          "es": "Melissa"
+        },
+        "surname": {
+          "en": "Perez",
+          "es": "Pérez"
+        },
+        "nickname": {
+          "en": "Zitt",
+          "es": "Zitt"
+        }
       },
       "gender": "female",
       "living": true,
-      "birth": { "date": { "year": 1981, "month": 3, "day": 15 } },
+      "birth": {
+        "date": {
+          "year": 1981,
+          "month": 3,
+          "day": 15
+        }
+      },
       "mediaIds": [],
-      "tags": ["zitt-line"],
+      "tags": [
+        "zitt-line"
+      ],
       "createdAt": "2026-04-09T00:00:00.000Z",
       "updatedAt": "2026-04-09T00:00:00.000Z"
     },
     "P003": {
       "id": "P003",
       "names": {
-        "given": { "en": "Julian Lucas", "es": "Julian Lucas" },
-        "surname": { "en": "Perez", "es": "Pérez" }
+        "given": {
+          "en": "Julian Lucas",
+          "es": "Julian Lucas"
+        },
+        "surname": {
+          "en": "Perez",
+          "es": "Pérez"
+        }
       },
       "gender": "male",
       "living": true,
-      "birth": { "date": { "year": 2011, "month": 2, "day": 4 } },
+      "birth": {
+        "date": {
+          "year": 2011,
+          "month": 2,
+          "day": 4
+        }
+      },
       "mediaIds": [],
-      "tags": ["perez-line"],
+      "tags": [
+        "perez-line"
+      ],
       "createdAt": "2026-04-09T00:00:00.000Z",
       "updatedAt": "2026-04-09T00:00:00.000Z"
     },
     "P004": {
       "id": "P004",
       "names": {
-        "given": { "en": "Alexa Santana", "es": "Alexa Santana" },
-        "surname": { "en": "Perez", "es": "Pérez" }
+        "given": {
+          "en": "Alexa Santana",
+          "es": "Alexa Santana"
+        },
+        "surname": {
+          "en": "Perez",
+          "es": "Pérez"
+        }
       },
       "gender": "female",
       "living": true,
-      "birth": { "date": { "year": 2015, "month": 2, "day": 4 } },
+      "birth": {
+        "date": {
+          "year": 2015,
+          "month": 2,
+          "day": 4
+        }
+      },
       "mediaIds": [],
-      "tags": ["perez-line"],
+      "tags": [
+        "perez-line"
+      ],
       "createdAt": "2026-04-09T00:00:00.000Z",
       "updatedAt": "2026-04-09T00:00:00.000Z"
     },
     "P005": {
       "id": "P005",
       "names": {
-        "given": { "en": "Sophia Quinn", "es": "Sophia Quinn" },
-        "surname": { "en": "Perez", "es": "Pérez" }
+        "given": {
+          "en": "Sophia Quinn",
+          "es": "Sophia Quinn"
+        },
+        "surname": {
+          "en": "Perez",
+          "es": "Pérez"
+        }
       },
       "gender": "female",
       "living": true,
-      "birth": { "date": { "year": 2022, "month": 10, "day": 4 } },
+      "birth": {
+        "date": {
+          "year": 2022,
+          "month": 10,
+          "day": 4
+        }
+      },
       "mediaIds": [],
-      "tags": ["perez-line"],
+      "tags": [
+        "perez-line"
+      ],
       "createdAt": "2026-04-09T00:00:00.000Z",
       "updatedAt": "2026-04-09T00:00:00.000Z"
     },
     "P006": {
       "id": "P006",
       "names": {
-        "given": { "en": "Gonzalo Evaristo", "es": "Gonzalo Evaristo" },
-        "surname": { "en": "Perez", "es": "Pérez" }
+        "given": {
+          "en": "Gonzalo Evaristo",
+          "es": "Gonzalo Evaristo"
+        },
+        "surname": {
+          "en": "Perez",
+          "es": "Pérez"
+        }
       },
       "gender": "male",
       "living": true,
-      "birth": { "date": { "year": 1976, "month": 7, "day": 27 } },
+      "birth": {
+        "date": {
+          "year": 1976,
+          "month": 7,
+          "day": 27
+        }
+      },
       "mediaIds": [],
-      "tags": ["perez-line"],
+      "tags": [
+        "perez-line"
+      ],
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-10T00:00:00.000Z"
     },
     "P007": {
       "id": "P007",
       "names": {
-        "given": { "en": "Daniel Orlando", "es": "Daniel Orlando" },
-        "surname": { "en": "Perez", "es": "Pérez" }
+        "given": {
+          "en": "Daniel Orlando",
+          "es": "Daniel Orlando"
+        },
+        "surname": {
+          "en": "Perez",
+          "es": "Pérez"
+        }
       },
       "gender": "male",
       "living": true,
-      "birth": { "date": { "year": 1982, "month": 6, "day": 23 } },
+      "birth": {
+        "date": {
+          "year": 1982,
+          "month": 6,
+          "day": 23
+        }
+      },
       "mediaIds": [],
-      "tags": ["perez-line"],
+      "tags": [
+        "perez-line"
+      ],
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-10T00:00:00.000Z"
     },
     "P008": {
       "id": "P008",
       "names": {
-        "given": { "en": "Juan Gonzalo", "es": "Juan Gonzalo" },
-        "surname": { "en": "Perez", "es": "Pérez" }
+        "given": {
+          "en": "Juan Gonzalo",
+          "es": "Juan Gonzalo"
+        },
+        "surname": {
+          "en": "Perez",
+          "es": "Pérez"
+        }
       },
       "gender": "male",
       "living": true,
       "mediaIds": [],
-      "tags": ["perez-line"],
+      "tags": [
+        "perez-line"
+      ],
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-10T00:00:00.000Z"
     },
     "P009": {
       "id": "P009",
       "names": {
-        "given": { "en": "Zaida", "es": "Zaida" },
-        "surname": { "en": "Perez", "es": "Pérez" },
-        "nickname": { "en": "Santana", "es": "Santana" }
+        "given": {
+          "en": "Zaida",
+          "es": "Zaida"
+        },
+        "surname": {
+          "en": "Perez",
+          "es": "Pérez"
+        },
+        "nickname": {
+          "en": "Santana",
+          "es": "Santana"
+        }
       },
       "gender": "female",
       "living": true,
       "mediaIds": [],
-      "tags": ["santana-line"],
+      "tags": [
+        "santana-line"
+      ],
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-10T00:00:00.000Z"
     },
     "P010": {
       "id": "P010",
       "names": {
-        "given": { "en": "Gonzalo", "es": "Gonzalo" },
-        "surname": { "en": "Perez", "es": "Pérez" }
+        "given": {
+          "en": "Gonzalo",
+          "es": "Gonzalo"
+        },
+        "surname": {
+          "en": "Perez",
+          "es": "Pérez"
+        }
       },
       "gender": "male",
       "living": false,
       "mediaIds": [],
-      "tags": ["perez-line"],
+      "tags": [
+        "perez-line"
+      ],
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-10T00:00:00.000Z"
     },
     "P011": {
       "id": "P011",
       "names": {
-        "given": { "en": "Osiris", "es": "Osiris" },
-        "surname": { "en": "Perez", "es": "Pérez" }
+        "given": {
+          "en": "Osiris",
+          "es": "Osiris"
+        },
+        "surname": {
+          "en": "Perez",
+          "es": "Pérez"
+        }
       },
       "gender": "female",
       "living": true,
       "mediaIds": [],
-      "tags": ["perez-line"],
+      "tags": [
+        "perez-line"
+      ],
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-10T00:00:00.000Z"
     },
     "P012": {
       "id": "P012",
       "names": {
-        "given": { "en": "Evaristo", "es": "Evaristo" },
-        "surname": { "en": "Santana", "es": "Santana" }
+        "given": {
+          "en": "Evaristo",
+          "es": "Evaristo"
+        },
+        "surname": {
+          "en": "Santana",
+          "es": "Santana"
+        }
       },
       "gender": "male",
       "living": false,
       "mediaIds": [],
-      "tags": ["santana-line"],
+      "tags": [
+        "santana-line"
+      ],
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-10T00:00:00.000Z"
     },
     "P013": {
       "id": "P013",
       "names": {
-        "given": { "en": "Zoila", "es": "Zoila" },
-        "surname": { "en": "Santana", "es": "Santana" },
-        "nickname": { "en": "Dalda", "es": "Dalda" }
+        "given": {
+          "en": "Zoila",
+          "es": "Zoila"
+        },
+        "surname": {
+          "en": "Santana",
+          "es": "Santana"
+        },
+        "nickname": {
+          "en": "Dalda",
+          "es": "Dalda"
+        }
       },
       "gender": "female",
       "living": true,
       "mediaIds": [],
-      "tags": ["santana-line"],
+      "tags": [
+        "santana-line"
+      ],
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-10T00:00:00.000Z"
     },
     "P014": {
       "id": "P014",
       "names": {
-        "given": { "en": "Ana Osiris", "es": "Ana Osiris" },
-        "surname": { "en": "Martinez", "es": "Martinez" },
-        "nickname": { "en": "Perez", "es": "Pérez" }
+        "given": {
+          "en": "Ana Osiris",
+          "es": "Ana Osiris"
+        },
+        "surname": {
+          "en": "Martinez",
+          "es": "Martinez"
+        },
+        "nickname": {
+          "en": "Perez",
+          "es": "Pérez"
+        }
       },
       "gender": "female",
       "living": true,
       "mediaIds": [],
-      "tags": ["perez-line"],
+      "tags": [
+        "perez-line"
+      ],
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-10T00:00:00.000Z"
     },
     "P016": {
       "id": "P016",
       "names": {
-        "given": { "en": "Jennifer", "es": "Jennifer" },
-        "surname": { "en": "Perez", "es": "Pérez" },
-        "nickname": { "en": "Safanova", "es": "Safanova" }
+        "given": {
+          "en": "Jennifer",
+          "es": "Jennifer"
+        },
+        "surname": {
+          "en": "Perez",
+          "es": "Pérez"
+        },
+        "nickname": {
+          "en": "Safanova",
+          "es": "Safanova"
+        }
       },
       "gender": "female",
       "living": true,
       "mediaIds": [],
-      "tags": ["safanova-line"],
+      "tags": [
+        "safanova-line"
+      ],
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-10T00:00:00.000Z"
     },
     "P017": {
       "id": "P017",
       "names": {
-        "given": { "en": "Senka Sakura", "es": "Senka Sakura" },
-        "surname": { "en": "Perez", "es": "Pérez" }
+        "given": {
+          "en": "Senka Sakura",
+          "es": "Senka Sakura"
+        },
+        "surname": {
+          "en": "Perez",
+          "es": "Pérez"
+        }
       },
       "gender": "female",
       "living": true,
       "mediaIds": [],
-      "tags": ["perez-line"],
+      "tags": [
+        "perez-line"
+      ],
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-10T00:00:00.000Z"
     },
     "P018": {
       "id": "P018",
       "names": {
-        "given": { "en": "Dennis Herbert", "es": "Dennis Herbert" },
-        "surname": { "en": "Zitt", "es": "Zitt" }
+        "given": {
+          "en": "Dennis Herbert",
+          "es": "Dennis Herbert"
+        },
+        "surname": {
+          "en": "Zitt",
+          "es": "Zitt"
+        }
       },
       "gender": "male",
       "living": true,
       "mediaIds": [],
-      "tags": ["zitt-line"],
+      "tags": [
+        "zitt-line"
+      ],
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-10T00:00:00.000Z"
     },
     "P019": {
       "id": "P019",
       "names": {
-        "given": { "en": "Anna Louisa", "es": "Anna Louisa" },
-        "surname": { "en": "Zitt", "es": "Zitt" },
-        "nickname": { "en": "Coppola", "es": "Coppola" }
+        "given": {
+          "en": "Anna Louisa",
+          "es": "Anna Louisa"
+        },
+        "surname": {
+          "en": "Zitt",
+          "es": "Zitt"
+        },
+        "nickname": {
+          "en": "Coppola",
+          "es": "Coppola"
+        }
       },
       "gender": "female",
       "living": false,
       "mediaIds": [],
-      "tags": ["zitt-line"],
+      "tags": [
+        "zitt-line"
+      ],
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-19T00:00:00.000Z"
     },
     "P020": {
       "id": "P020",
       "names": {
-        "given": { "en": "Antonio", "es": "Antonio" },
-        "surname": { "en": "Martinez", "es": "Martinez" }
+        "given": {
+          "en": "Antonio",
+          "es": "Antonio"
+        },
+        "surname": {
+          "en": "Martinez",
+          "es": "Martinez"
+        }
       },
       "gender": "male",
       "living": true,
       "mediaIds": [],
-      "tags": ["martinez-line"],
+      "tags": [
+        "martinez-line"
+      ],
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-10T00:00:00.000Z"
     },
     "P021": {
       "id": "P021",
       "names": {
-        "given": { "en": "Antonio", "es": "Antonio" },
-        "surname": { "en": "Martinez", "es": "Martinez" },
+        "given": {
+          "en": "Antonio",
+          "es": "Antonio"
+        },
+        "surname": {
+          "en": "Martinez",
+          "es": "Martinez"
+        },
         "suffix": "Jr."
       },
       "gender": "male",
       "living": true,
       "mediaIds": [],
-      "tags": ["martinez-line"],
+      "tags": [
+        "martinez-line"
+      ],
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-10T00:00:00.000Z"
     },
     "P022": {
       "id": "P022",
       "names": {
-        "given": { "en": "Ana Margarita", "es": "Ana Margarita" },
-        "surname": { "en": "Ramirez", "es": "Ramirez" },
-        "nickname": { "en": "Martinez", "es": "Martinez" }
+        "given": {
+          "en": "Ana Margarita",
+          "es": "Ana Margarita"
+        },
+        "surname": {
+          "en": "Ramirez",
+          "es": "Ramirez"
+        },
+        "nickname": {
+          "en": "Martinez",
+          "es": "Martinez"
+        }
       },
       "gender": "female",
       "living": true,
       "mediaIds": [],
-      "tags": ["martinez-line"],
+      "tags": [
+        "martinez-line"
+      ],
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-10T00:00:00.000Z"
     },
     "P023": {
       "id": "P023",
       "names": {
-        "given": { "en": "Deanna", "es": "Deanna" },
-        "surname": { "en": "Lebet", "es": "Lebet" },
-        "nickname": { "en": "Zitt", "es": "Zitt" }
+        "given": {
+          "en": "Deanna",
+          "es": "Deanna"
+        },
+        "surname": {
+          "en": "Lebet",
+          "es": "Lebet"
+        },
+        "nickname": {
+          "en": "Zitt",
+          "es": "Zitt"
+        }
       },
       "gender": "female",
       "living": true,
       "mediaIds": [],
-      "tags": ["zitt-line"],
+      "tags": [
+        "zitt-line"
+      ],
       "createdAt": "2026-04-19T00:00:00.000Z",
       "updatedAt": "2026-04-19T00:00:00.000Z"
     },
     "P024": {
       "id": "P024",
       "names": {
-        "given": { "en": "Patricia", "es": "Patricia" },
-        "surname": { "en": "Welton", "es": "Welton" },
-        "nickname": { "en": "Zitt", "es": "Zitt" }
+        "given": {
+          "en": "Patricia",
+          "es": "Patricia"
+        },
+        "surname": {
+          "en": "Welton",
+          "es": "Welton"
+        },
+        "nickname": {
+          "en": "Zitt",
+          "es": "Zitt"
+        }
       },
       "gender": "female",
       "living": true,
       "mediaIds": [],
-      "tags": ["zitt-line"],
+      "tags": [
+        "zitt-line"
+      ],
       "createdAt": "2026-04-19T00:00:00.000Z",
       "updatedAt": "2026-04-19T00:00:00.000Z"
     },
     "P025": {
       "id": "P025",
       "names": {
-        "given": { "en": "Dennis", "es": "Dennis" },
-        "surname": { "en": "Zitt", "es": "Zitt" }
+        "given": {
+          "en": "Dennis",
+          "es": "Dennis"
+        },
+        "surname": {
+          "en": "Zitt",
+          "es": "Zitt"
+        }
       },
       "gender": "male",
       "living": true,
       "mediaIds": [],
-      "tags": ["zitt-line"],
+      "tags": [
+        "zitt-line"
+      ],
       "createdAt": "2026-04-19T00:00:00.000Z",
       "updatedAt": "2026-04-19T00:00:00.000Z"
+    },
+    "P026": {
+      "id": "P026",
+      "names": {
+        "given": {
+          "en": "Miguel",
+          "es": "Miguel"
+        },
+        "surname": {
+          "en": "Dalda",
+          "es": "Dalda"
+        }
+      },
+      "gender": "male",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.087495Z",
+      "updatedAt": "2026-04-19T18:02:02.087519Z",
+      "note": "Zolia's father",
+      "associated": false
+    },
+    "P027": {
+      "id": "P027",
+      "names": {
+        "given": {
+          "en": "Ana",
+          "es": "Ana"
+        },
+        "surname": {
+          "en": "Martinez",
+          "es": "Martinez"
+        }
+      },
+      "gender": "female",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.087533Z",
+      "updatedAt": "2026-04-19T18:02:02.087534Z",
+      "note": "Zolia's mother",
+      "associated": false
+    },
+    "P028": {
+      "id": "P028",
+      "names": {
+        "given": {
+          "en": "Delia",
+          "es": "Delia"
+        },
+        "surname": {
+          "en": "Martinez",
+          "es": "Martinez"
+        }
+      },
+      "gender": "female",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.087546Z",
+      "updatedAt": "2026-04-19T18:02:02.087547Z",
+      "associated": false
+    },
+    "P029": {
+      "id": "P029",
+      "names": {
+        "given": {
+          "en": "Felix",
+          "es": "Felix"
+        },
+        "surname": {
+          "en": "Hermida",
+          "es": "Hermida"
+        }
+      },
+      "gender": "male",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.087553Z",
+      "updatedAt": "2026-04-19T18:02:02.087554Z",
+      "associated": false
+    },
+    "P030": {
+      "id": "P030",
+      "names": {
+        "given": {
+          "en": "Rosa",
+          "es": "Rosa"
+        },
+        "surname": {
+          "en": "Martinez",
+          "es": "Martinez"
+        }
+      },
+      "gender": "female",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.087560Z",
+      "updatedAt": "2026-04-19T18:02:02.087561Z",
+      "associated": false
+    },
+    "P031": {
+      "id": "P031",
+      "names": {
+        "given": {
+          "en": "Guillermo",
+          "es": "Guillermo"
+        },
+        "surname": {
+          "en": "Herrera",
+          "es": "Herrera"
+        }
+      },
+      "gender": "male",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.087566Z",
+      "updatedAt": "2026-04-19T18:02:02.087567Z",
+      "associated": false
+    },
+    "P032": {
+      "id": "P032",
+      "names": {
+        "given": {
+          "en": "Ramon",
+          "es": "Ramon"
+        },
+        "surname": {
+          "en": "Martinez",
+          "es": "Martinez"
+        }
+      },
+      "gender": "male",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.087572Z",
+      "updatedAt": "2026-04-19T18:02:02.087573Z",
+      "associated": false
+    },
+    "P033": {
+      "id": "P033",
+      "names": {
+        "given": {
+          "en": "Zoraida",
+          "es": "Zoraida"
+        },
+        "surname": {
+          "en": "Dalda",
+          "es": "Dalda"
+        }
+      },
+      "gender": "female",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.087589Z",
+      "updatedAt": "2026-04-19T18:02:02.087590Z",
+      "note": "Miguel Dalda's sister",
+      "associated": false
+    },
+    "P034": {
+      "id": "P034",
+      "names": {
+        "given": {
+          "en": "Maria Luisa",
+          "es": "Maria Luisa"
+        },
+        "surname": {
+          "en": "Dalda",
+          "es": "Dalda"
+        }
+      },
+      "gender": "female",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.087601Z",
+      "updatedAt": "2026-04-19T18:02:02.087603Z",
+      "note": "Miguel Dalda's sister",
+      "associated": false
+    },
+    "P035": {
+      "id": "P035",
+      "names": {
+        "given": {
+          "en": "Lucas",
+          "es": "Lucas"
+        },
+        "surname": {
+          "en": "Santana",
+          "es": "Santana"
+        }
+      },
+      "gender": "male",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.087621Z",
+      "updatedAt": "2026-04-19T18:02:02.087622Z",
+      "note": "Evaristo's father",
+      "associated": false
+    },
+    "P036": {
+      "id": "P036",
+      "names": {
+        "given": {
+          "en": "Maria",
+          "es": "Maria"
+        },
+        "surname": {
+          "en": "Rangel",
+          "es": "Rangel"
+        }
+      },
+      "gender": "female",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.087628Z",
+      "updatedAt": "2026-04-19T18:02:02.087629Z",
+      "note": "Evaristo's mother",
+      "associated": false
+    },
+    "P037": {
+      "id": "P037",
+      "names": {
+        "given": {
+          "en": "Guillermina",
+          "es": "Guillermina"
+        },
+        "surname": {
+          "en": "Santana",
+          "es": "Santana"
+        }
+      },
+      "gender": "female",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.087635Z",
+      "updatedAt": "2026-04-19T18:02:02.087636Z",
+      "note": "Lucas's sister",
+      "associated": false
+    },
+    "P038": {
+      "id": "P038",
+      "names": {
+        "given": {
+          "en": "Ramona",
+          "es": "Ramona"
+        },
+        "surname": {
+          "en": "Santana",
+          "es": "Santana"
+        }
+      },
+      "gender": "female",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.087641Z",
+      "updatedAt": "2026-04-19T18:02:02.087642Z",
+      "note": "Lucas's sister",
+      "associated": false
+    },
+    "P039": {
+      "id": "P039",
+      "names": {
+        "given": {
+          "en": "Olga",
+          "es": "Olga"
+        },
+        "surname": {
+          "en": "Olga",
+          "es": "Olga"
+        }
+      },
+      "gender": "female",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.087661Z",
+      "updatedAt": "2026-04-19T18:02:02.087664Z",
+      "associated": false
+    },
+    "P040": {
+      "id": "P040",
+      "names": {
+        "given": {
+          "en": "Unknown",
+          "es": "Unknown"
+        },
+        "surname": {
+          "en": "Father",
+          "es": "Father"
+        }
+      },
+      "gender": "male",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.087669Z",
+      "updatedAt": "2026-04-19T18:02:02.087670Z",
+      "associated": false
+    },
+    "P041": {
+      "id": "P041",
+      "names": {
+        "given": {
+          "en": "Joanna Marie",
+          "es": "Joanna Marie"
+        },
+        "surname": {
+          "en": "Perez",
+          "es": "Perez"
+        }
+      },
+      "gender": "female",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.087679Z",
+      "updatedAt": "2026-04-19T18:02:02.087680Z"
+    },
+    "P042": {
+      "id": "P042",
+      "names": {
+        "given": {
+          "en": "Dayanna",
+          "es": "Dayanna"
+        },
+        "surname": {
+          "en": "Dayanna",
+          "es": "Dayanna"
+        },
+        "nickname": {
+          "en": "Last name TBD",
+          "es": "Last name TBD"
+        }
+      },
+      "gender": "female",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.087886Z",
+      "updatedAt": "2026-04-19T18:02:02.087888Z",
+      "note": "Olga's daughter, different father",
+      "associated": false
+    },
+    "P043": {
+      "id": "P043",
+      "names": {
+        "given": {
+          "en": "Antonio",
+          "es": "Antonio"
+        },
+        "surname": {
+          "en": "Martinez",
+          "es": "Martinez"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.087912Z",
+      "updatedAt": "2026-04-19T18:02:02.087914Z",
+      "associated": false
+    },
+    "P044": {
+      "id": "P044",
+      "names": {
+        "given": {
+          "en": "Daniel",
+          "es": "Daniel"
+        },
+        "surname": {
+          "en": "Ramirez",
+          "es": "Ramirez"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.087929Z",
+      "updatedAt": "2026-04-19T18:02:02.087931Z",
+      "associated": false
+    },
+    "P045": {
+      "id": "P045",
+      "names": {
+        "given": {
+          "en": "Michael",
+          "es": "Michael"
+        },
+        "surname": {
+          "en": "Welton",
+          "es": "Welton"
+        }
+      },
+      "gender": "male",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "zitt-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.087943Z",
+      "updatedAt": "2026-04-19T18:02:02.087945Z"
+    },
+    "P046": {
+      "id": "P046",
+      "names": {
+        "given": {
+          "en": "Melenia",
+          "es": "Melenia"
+        },
+        "surname": {
+          "en": "Ramirez",
+          "es": "Ramirez"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.087971Z",
+      "updatedAt": "2026-04-19T18:02:02.087973Z",
+      "associated": false
+    },
+    "P047": {
+      "id": "P047",
+      "names": {
+        "given": {
+          "en": "Alejandro",
+          "es": "Alejandro"
+        },
+        "surname": {
+          "en": "Ramirez",
+          "es": "Ramirez"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.087984Z",
+      "updatedAt": "2026-04-19T18:02:02.087986Z",
+      "associated": false
+    },
+    "P048": {
+      "id": "P048",
+      "names": {
+        "given": {
+          "en": "Mya",
+          "es": "Mya"
+        },
+        "surname": {
+          "en": "Ramirez",
+          "es": "Ramirez"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.087997Z",
+      "updatedAt": "2026-04-19T18:02:02.087998Z",
+      "associated": false
+    },
+    "P049": {
+      "id": "P049",
+      "names": {
+        "given": {
+          "en": "Alexandria",
+          "es": "Alexandria"
+        },
+        "surname": {
+          "en": "Ramirez",
+          "es": "Ramirez"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.088009Z",
+      "updatedAt": "2026-04-19T18:02:02.088011Z",
+      "associated": false
+    },
+    "P050": {
+      "id": "P050",
+      "names": {
+        "given": {
+          "en": "Jamila",
+          "es": "Jamila"
+        },
+        "surname": {
+          "en": "Ramirez",
+          "es": "Ramirez"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.088018Z",
+      "updatedAt": "2026-04-19T18:02:02.088019Z",
+      "note": "Mother unknown",
+      "associated": false
+    },
+    "P051": {
+      "id": "P051",
+      "names": {
+        "given": {
+          "en": "John",
+          "es": "John"
+        },
+        "surname": {
+          "en": "Lebet",
+          "es": "Lebet"
+        }
+      },
+      "gender": "male",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "zitt-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.088024Z",
+      "updatedAt": "2026-04-19T18:02:02.088025Z",
+      "note": "Deanna's son",
+      "associated": false
+    },
+    "P052": {
+      "id": "P052",
+      "names": {
+        "given": {
+          "en": "Kevin",
+          "es": "Kevin"
+        },
+        "surname": {
+          "en": "Lebet",
+          "es": "Lebet"
+        }
+      },
+      "gender": "male",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "zitt-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.088029Z",
+      "updatedAt": "2026-04-19T18:02:02.088030Z",
+      "note": "Deanna's son",
+      "associated": false
+    },
+    "P053": {
+      "id": "P053",
+      "names": {
+        "given": {
+          "en": "Matthew",
+          "es": "Matthew"
+        },
+        "surname": {
+          "en": "Lebet",
+          "es": "Lebet"
+        }
+      },
+      "gender": "male",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "zitt-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.088037Z",
+      "updatedAt": "2026-04-19T18:02:02.088037Z",
+      "note": "Deanna's son",
+      "associated": false
+    },
+    "P054": {
+      "id": "P054",
+      "names": {
+        "given": {
+          "en": "Kaitlyn",
+          "es": "Kaitlyn"
+        },
+        "surname": {
+          "en": "Kaitlyn",
+          "es": "Kaitlyn"
+        },
+        "nickname": {
+          "en": "Different father",
+          "es": "Different father"
+        }
+      },
+      "gender": "female",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "zitt-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.088043Z",
+      "updatedAt": "2026-04-19T18:02:02.088044Z",
+      "note": "Patricia's daughter, different father",
+      "associated": false
+    },
+    "P055": {
+      "id": "P055",
+      "names": {
+        "given": {
+          "en": "Stephanie",
+          "es": "Stephanie"
+        },
+        "surname": {
+          "en": "Welton",
+          "es": "Welton"
+        }
+      },
+      "gender": "female",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "zitt-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.088051Z",
+      "updatedAt": "2026-04-19T18:02:02.088052Z",
+      "note": "Patricia & Michael's daughter",
+      "associated": false
+    },
+    "P056": {
+      "id": "P056",
+      "names": {
+        "given": {
+          "en": "Brian",
+          "es": "Brian"
+        },
+        "surname": {
+          "en": "Welton",
+          "es": "Welton"
+        }
+      },
+      "gender": "male",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "zitt-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.088062Z",
+      "updatedAt": "2026-04-19T18:02:02.088064Z",
+      "note": "Patricia & Michael's son",
+      "associated": false
+    },
+    "P057": {
+      "id": "P057",
+      "names": {
+        "given": {
+          "en": "Enerita",
+          "es": "Enerita"
+        },
+        "surname": {
+          "en": "Hermida",
+          "es": "Hermida"
+        }
+      },
+      "gender": "male",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.088071Z",
+      "updatedAt": "2026-04-19T18:02:02.088073Z",
+      "note": "Delia & Felix's child",
+      "associated": false
+    },
+    "P058": {
+      "id": "P058",
+      "names": {
+        "given": {
+          "en": "Elisa",
+          "es": "Elisa"
+        },
+        "surname": {
+          "en": "Hermida",
+          "es": "Hermida"
+        }
+      },
+      "gender": "male",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.088081Z",
+      "updatedAt": "2026-04-19T18:02:02.088083Z",
+      "note": "Delia & Felix's child",
+      "associated": false
+    },
+    "P059": {
+      "id": "P059",
+      "names": {
+        "given": {
+          "en": "Oreste",
+          "es": "Oreste"
+        },
+        "surname": {
+          "en": "Hermida",
+          "es": "Hermida"
+        }
+      },
+      "gender": "male",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.088093Z",
+      "updatedAt": "2026-04-19T18:02:02.088094Z",
+      "note": "Delia & Felix's child",
+      "associated": false
+    },
+    "P060": {
+      "id": "P060",
+      "names": {
+        "given": {
+          "en": "Nilda",
+          "es": "Nilda"
+        },
+        "surname": {
+          "en": "Herrera",
+          "es": "Herrera"
+        }
+      },
+      "gender": "male",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.088100Z",
+      "updatedAt": "2026-04-19T18:02:02.088102Z",
+      "note": "Rosa & Guillermo's child",
+      "associated": false
+    },
+    "P061": {
+      "id": "P061",
+      "names": {
+        "given": {
+          "en": "Daizy",
+          "es": "Daizy"
+        },
+        "surname": {
+          "en": "Herrera",
+          "es": "Herrera"
+        }
+      },
+      "gender": "male",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.088110Z",
+      "updatedAt": "2026-04-19T18:02:02.088111Z",
+      "note": "Rosa & Guillermo's child",
+      "associated": false
+    },
+    "P062": {
+      "id": "P062",
+      "names": {
+        "given": {
+          "en": "Luis",
+          "es": "Luis"
+        },
+        "surname": {
+          "en": "Herrera",
+          "es": "Herrera"
+        }
+      },
+      "gender": "male",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.088119Z",
+      "updatedAt": "2026-04-19T18:02:02.088121Z",
+      "note": "Rosa & Guillermo's child",
+      "associated": false
+    },
+    "P063": {
+      "id": "P063",
+      "names": {
+        "given": {
+          "en": "Maria Belen",
+          "es": "Maria Belen"
+        },
+        "surname": {
+          "en": "Dalda",
+          "es": "Dalda"
+        }
+      },
+      "gender": "male",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.088129Z",
+      "updatedAt": "2026-04-19T18:02:02.088130Z",
+      "note": "Maria Luisa Dalda's child",
+      "associated": false
+    },
+    "P064": {
+      "id": "P064",
+      "names": {
+        "given": {
+          "en": "Guilfredo",
+          "es": "Guilfredo"
+        },
+        "surname": {
+          "en": "Dalda",
+          "es": "Dalda"
+        }
+      },
+      "gender": "male",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.088138Z",
+      "updatedAt": "2026-04-19T18:02:02.088142Z",
+      "note": "Maria Luisa Dalda's child",
+      "associated": false
+    },
+    "P065": {
+      "id": "P065",
+      "names": {
+        "given": {
+          "en": "Ana Herminia",
+          "es": "Ana Herminia"
+        },
+        "surname": {
+          "en": "Fundora",
+          "es": "Fundora"
+        }
+      },
+      "gender": "male",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.088155Z",
+      "updatedAt": "2026-04-19T18:02:02.088156Z",
+      "note": "Ana Luisa & Manolo's child",
+      "associated": false
+    },
+    "P066": {
+      "id": "P066",
+      "names": {
+        "given": {
+          "en": "Belkys",
+          "es": "Belkys"
+        },
+        "surname": {
+          "en": "Dalda",
+          "es": "Dalda"
+        }
+      },
+      "gender": "male",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.088164Z",
+      "updatedAt": "2026-04-19T18:02:02.088165Z",
+      "note": "Gerardo & Elisa's child",
+      "associated": false
+    },
+    "P067": {
+      "id": "P067",
+      "names": {
+        "given": {
+          "en": "Idalmis",
+          "es": "Idalmis"
+        },
+        "surname": {
+          "en": "Dalda",
+          "es": "Dalda"
+        }
+      },
+      "gender": "male",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.088169Z",
+      "updatedAt": "2026-04-19T18:02:02.088170Z",
+      "note": "Gerardo & Elisa's child",
+      "associated": false
+    },
+    "P068": {
+      "id": "P068",
+      "names": {
+        "given": {
+          "en": "Nancy",
+          "es": "Nancy"
+        },
+        "surname": {
+          "en": "Santana",
+          "es": "Santana"
+        }
+      },
+      "gender": "male",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.088175Z",
+      "updatedAt": "2026-04-19T18:02:02.088176Z",
+      "note": "Juan Santana's child",
+      "associated": false
+    },
+    "P069": {
+      "id": "P069",
+      "names": {
+        "given": {
+          "en": "Juan Santana",
+          "es": "Juan Santana"
+        },
+        "surname": {
+          "en": "Jr.",
+          "es": "Jr."
+        }
+      },
+      "gender": "male",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:02.088180Z",
+      "updatedAt": "2026-04-19T18:02:02.088181Z",
+      "note": "Juan Santana's child",
+      "associated": false
+    },
+    "P070": {
+      "id": "P070",
+      "names": {
+        "given": {
+          "en": "Miguel",
+          "es": "Miguel"
+        },
+        "surname": {
+          "en": "Dalda",
+          "es": "Dalda"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.158807Z",
+      "updatedAt": "2026-04-19T18:02:41.158830Z",
+      "note": "Zolia's father",
+      "associated": false
+    },
+    "P071": {
+      "id": "P071",
+      "names": {
+        "given": {
+          "en": "Ana",
+          "es": "Ana"
+        },
+        "surname": {
+          "en": "Martinez",
+          "es": "Martinez"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.158848Z",
+      "updatedAt": "2026-04-19T18:02:41.158849Z",
+      "note": "Zolia's mother",
+      "associated": false
+    },
+    "P072": {
+      "id": "P072",
+      "names": {
+        "given": {
+          "en": "Delia",
+          "es": "Delia"
+        },
+        "surname": {
+          "en": "Martinez",
+          "es": "Martinez"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.158859Z",
+      "updatedAt": "2026-04-19T18:02:41.158860Z",
+      "associated": false
+    },
+    "P073": {
+      "id": "P073",
+      "names": {
+        "given": {
+          "en": "Felix",
+          "es": "Felix"
+        },
+        "surname": {
+          "en": "Hermida",
+          "es": "Hermida"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.158868Z",
+      "updatedAt": "2026-04-19T18:02:41.158869Z",
+      "associated": false
+    },
+    "P074": {
+      "id": "P074",
+      "names": {
+        "given": {
+          "en": "Rosa",
+          "es": "Rosa"
+        },
+        "surname": {
+          "en": "Martinez",
+          "es": "Martinez"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.158875Z",
+      "updatedAt": "2026-04-19T18:02:41.158876Z",
+      "associated": false
+    },
+    "P075": {
+      "id": "P075",
+      "names": {
+        "given": {
+          "en": "Guillermo",
+          "es": "Guillermo"
+        },
+        "surname": {
+          "en": "Herrera",
+          "es": "Herrera"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.158883Z",
+      "updatedAt": "2026-04-19T18:02:41.158884Z",
+      "associated": false
+    },
+    "P076": {
+      "id": "P076",
+      "names": {
+        "given": {
+          "en": "Ramon",
+          "es": "Ramon"
+        },
+        "surname": {
+          "en": "Martinez",
+          "es": "Martinez"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.158890Z",
+      "updatedAt": "2026-04-19T18:02:41.158891Z",
+      "associated": false
+    },
+    "P077": {
+      "id": "P077",
+      "names": {
+        "given": {
+          "en": "Zoraida",
+          "es": "Zoraida"
+        },
+        "surname": {
+          "en": "Dalda",
+          "es": "Dalda"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.158911Z",
+      "updatedAt": "2026-04-19T18:02:41.158913Z",
+      "note": "Miguel Dalda's sister",
+      "associated": false
+    },
+    "P078": {
+      "id": "P078",
+      "names": {
+        "given": {
+          "en": "Maria Luisa",
+          "es": "Maria Luisa"
+        },
+        "surname": {
+          "en": "Dalda",
+          "es": "Dalda"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.158966Z",
+      "updatedAt": "2026-04-19T18:02:41.158967Z",
+      "note": "Miguel Dalda's sister",
+      "associated": false
+    },
+    "P079": {
+      "id": "P079",
+      "names": {
+        "given": {
+          "en": "Lucas",
+          "es": "Lucas"
+        },
+        "surname": {
+          "en": "Santana",
+          "es": "Santana"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.158976Z",
+      "updatedAt": "2026-04-19T18:02:41.158978Z",
+      "note": "Evaristo's father",
+      "associated": false
+    },
+    "P080": {
+      "id": "P080",
+      "names": {
+        "given": {
+          "en": "Maria",
+          "es": "Maria"
+        },
+        "surname": {
+          "en": "Rangel",
+          "es": "Rangel"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.158985Z",
+      "updatedAt": "2026-04-19T18:02:41.158986Z",
+      "note": "Evaristo's mother",
+      "associated": false
+    },
+    "P081": {
+      "id": "P081",
+      "names": {
+        "given": {
+          "en": "Guillermina",
+          "es": "Guillermina"
+        },
+        "surname": {
+          "en": "Santana",
+          "es": "Santana"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.158992Z",
+      "updatedAt": "2026-04-19T18:02:41.158993Z",
+      "note": "Lucas's sister",
+      "associated": false
+    },
+    "P082": {
+      "id": "P082",
+      "names": {
+        "given": {
+          "en": "Ramona",
+          "es": "Ramona"
+        },
+        "surname": {
+          "en": "Santana",
+          "es": "Santana"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159000Z",
+      "updatedAt": "2026-04-19T18:02:41.159001Z",
+      "note": "Lucas's sister",
+      "associated": false
+    },
+    "P083": {
+      "id": "P083",
+      "names": {
+        "given": {
+          "en": "Gonzalo",
+          "es": "Gonzalo"
+        },
+        "surname": {
+          "en": "Perez",
+          "es": "Perez"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159011Z",
+      "updatedAt": "2026-04-19T18:02:41.159012Z",
+      "associated": false
+    },
+    "P084": {
+      "id": "P084",
+      "names": {
+        "given": {
+          "en": "Osiris",
+          "es": "Osiris"
+        },
+        "surname": {
+          "en": "Perez",
+          "es": "Perez"
+        },
+        "nickname": {
+          "en": "née Ramos",
+          "es": "née Ramos"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159018Z",
+      "updatedAt": "2026-04-19T18:02:41.159019Z",
+      "associated": false
+    },
+    "P085": {
+      "id": "P085",
+      "names": {
+        "given": {
+          "en": "Evaristo",
+          "es": "Evaristo"
+        },
+        "surname": {
+          "en": "Santana",
+          "es": "Santana"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159025Z",
+      "updatedAt": "2026-04-19T18:02:41.159026Z",
+      "associated": false
+    },
+    "P086": {
+      "id": "P086",
+      "names": {
+        "given": {
+          "en": "Zolia",
+          "es": "Zolia"
+        },
+        "surname": {
+          "en": "Santana",
+          "es": "Santana"
+        },
+        "nickname": {
+          "en": "née Dalda",
+          "es": "née Dalda"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159036Z",
+      "updatedAt": "2026-04-19T18:02:41.159037Z",
+      "associated": false
+    },
+    "P087": {
+      "id": "P087",
+      "names": {
+        "given": {
+          "en": "Ana Luisa",
+          "es": "Ana Luisa"
+        },
+        "surname": {
+          "en": "Dalda",
+          "es": "Dalda"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159044Z",
+      "updatedAt": "2026-04-19T18:02:41.159045Z",
+      "associated": false
+    },
+    "P088": {
+      "id": "P088",
+      "names": {
+        "given": {
+          "en": "Manolo",
+          "es": "Manolo"
+        },
+        "surname": {
+          "en": "Fundora",
+          "es": "Fundora"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159056Z",
+      "updatedAt": "2026-04-19T18:02:41.159057Z",
+      "associated": false
+    },
+    "P089": {
+      "id": "P089",
+      "names": {
+        "given": {
+          "en": "Gerardo",
+          "es": "Gerardo"
+        },
+        "surname": {
+          "en": "Dalda",
+          "es": "Dalda"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159067Z",
+      "updatedAt": "2026-04-19T18:02:41.159068Z",
+      "associated": false
+    },
+    "P090": {
+      "id": "P090",
+      "names": {
+        "given": {
+          "en": "Elisa",
+          "es": "Elisa"
+        },
+        "surname": {
+          "en": "Gorrin",
+          "es": "Gorrin"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159077Z",
+      "updatedAt": "2026-04-19T18:02:41.159078Z",
+      "associated": false
+    },
+    "P091": {
+      "id": "P091",
+      "names": {
+        "given": {
+          "en": "Juan",
+          "es": "Juan"
+        },
+        "surname": {
+          "en": "Santana",
+          "es": "Santana"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159083Z",
+      "updatedAt": "2026-04-19T18:02:41.159084Z",
+      "associated": false
+    },
+    "P092": {
+      "id": "P092",
+      "names": {
+        "given": {
+          "en": "Juana",
+          "es": "Juana"
+        },
+        "surname": {
+          "en": "Santana",
+          "es": "Santana"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159090Z",
+      "updatedAt": "2026-04-19T18:02:41.159091Z",
+      "associated": false
+    },
+    "P093": {
+      "id": "P093",
+      "names": {
+        "given": {
+          "en": "Paternal",
+          "es": "Paternal"
+        },
+        "surname": {
+          "en": "Grandfather",
+          "es": "Grandfather"
+        },
+        "nickname": {
+          "en": "Zitt family",
+          "es": "Zitt family"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "zitt-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159097Z",
+      "updatedAt": "2026-04-19T18:02:41.159098Z",
+      "associated": false
+    },
+    "P094": {
+      "id": "P094",
+      "names": {
+        "given": {
+          "en": "Paternal",
+          "es": "Paternal"
+        },
+        "surname": {
+          "en": "Grandmother",
+          "es": "Grandmother"
+        },
+        "nickname": {
+          "en": "Zitt family",
+          "es": "Zitt family"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "zitt-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159105Z",
+      "updatedAt": "2026-04-19T18:02:41.159106Z",
+      "associated": false
+    },
+    "P095": {
+      "id": "P095",
+      "names": {
+        "given": {
+          "en": "Louis Joseph",
+          "es": "Louis Joseph"
+        },
+        "surname": {
+          "en": "Coppola",
+          "es": "Coppola"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "zitt-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159116Z",
+      "updatedAt": "2026-04-19T18:02:41.159117Z",
+      "associated": false
+    },
+    "P096": {
+      "id": "P096",
+      "names": {
+        "given": {
+          "en": "Anne",
+          "es": "Anne"
+        },
+        "surname": {
+          "en": "Coppola",
+          "es": "Coppola"
+        },
+        "nickname": {
+          "en": "née Neri",
+          "es": "née Neri"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "zitt-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159123Z",
+      "updatedAt": "2026-04-19T18:02:41.159124Z",
+      "associated": false
+    },
+    "P097": {
+      "id": "P097",
+      "names": {
+        "given": {
+          "en": "Olga",
+          "es": "Olga"
+        },
+        "surname": {
+          "en": "Olga",
+          "es": "Olga"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159137Z",
+      "updatedAt": "2026-04-19T18:02:41.159139Z",
+      "associated": false
+    },
+    "P098": {
+      "id": "P098",
+      "names": {
+        "given": {
+          "en": "Unknown",
+          "es": "Unknown"
+        },
+        "surname": {
+          "en": "Father",
+          "es": "Father"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159150Z",
+      "updatedAt": "2026-04-19T18:02:41.159151Z",
+      "associated": false
+    },
+    "P099": {
+      "id": "P099",
+      "names": {
+        "given": {
+          "en": "Ana Osiris",
+          "es": "Ana Osiris"
+        },
+        "surname": {
+          "en": "Martinez",
+          "es": "Martinez"
+        },
+        "nickname": {
+          "en": "née Perez",
+          "es": "née Perez"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159161Z",
+      "updatedAt": "2026-04-19T18:02:41.159163Z",
+      "associated": false
+    },
+    "P100": {
+      "id": "P100",
+      "names": {
+        "given": {
+          "en": "Antonio",
+          "es": "Antonio"
+        },
+        "surname": {
+          "en": "Martinez",
+          "es": "Martinez"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159173Z",
+      "updatedAt": "2026-04-19T18:02:41.159175Z",
+      "associated": false
+    },
+    "P101": {
+      "id": "P101",
+      "names": {
+        "given": {
+          "en": "Dennis Herbert",
+          "es": "Dennis Herbert"
+        },
+        "surname": {
+          "en": "Zitt",
+          "es": "Zitt"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "zitt-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159183Z",
+      "updatedAt": "2026-04-19T18:02:41.159184Z",
+      "birth": {
+        "date": {
+          "year": 1949,
+          "month": 4,
+          "day": 27
+        }
+      }
+    },
+    "P102": {
+      "id": "P102",
+      "names": {
+        "given": {
+          "en": "Anna Louise",
+          "es": "Anna Louise"
+        },
+        "surname": {
+          "en": "Zitt",
+          "es": "Zitt"
+        },
+        "nickname": {
+          "en": "née Coppola",
+          "es": "née Coppola"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "zitt-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159381Z",
+      "updatedAt": "2026-04-19T18:02:41.159382Z",
+      "birth": {
+        "date": {
+          "year": 1952,
+          "month": 3,
+          "day": 25
+        }
+      }
+    },
+    "P103": {
+      "id": "P103",
+      "names": {
+        "given": {
+          "en": "Joanna Marie",
+          "es": "Joanna Marie"
+        },
+        "surname": {
+          "en": "Perez",
+          "es": "Perez"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159401Z",
+      "updatedAt": "2026-04-19T18:02:41.159402Z"
+    },
+    "P104": {
+      "id": "P104",
+      "names": {
+        "given": {
+          "en": "Dayanna",
+          "es": "Dayanna"
+        },
+        "surname": {
+          "en": "Dayanna",
+          "es": "Dayanna"
+        },
+        "nickname": {
+          "en": "Last name TBD",
+          "es": "Last name TBD"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159414Z",
+      "updatedAt": "2026-04-19T18:02:41.159415Z",
+      "note": "Olga's daughter, different father",
+      "associated": false
+    },
+    "P105": {
+      "id": "P105",
+      "names": {
+        "given": {
+          "en": "Melenia",
+          "es": "Melenia"
+        },
+        "surname": {
+          "en": "Ramirez",
+          "es": "Ramirez"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159432Z",
+      "updatedAt": "2026-04-19T18:02:41.159433Z",
+      "associated": false
+    },
+    "P106": {
+      "id": "P106",
+      "names": {
+        "given": {
+          "en": "Alejandro",
+          "es": "Alejandro"
+        },
+        "surname": {
+          "en": "Ramirez",
+          "es": "Ramirez"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159440Z",
+      "updatedAt": "2026-04-19T18:02:41.159441Z",
+      "associated": false
+    },
+    "P107": {
+      "id": "P107",
+      "names": {
+        "given": {
+          "en": "Mya",
+          "es": "Mya"
+        },
+        "surname": {
+          "en": "Ramirez",
+          "es": "Ramirez"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159447Z",
+      "updatedAt": "2026-04-19T18:02:41.159448Z",
+      "associated": false
+    },
+    "P108": {
+      "id": "P108",
+      "names": {
+        "given": {
+          "en": "Alexandria",
+          "es": "Alexandria"
+        },
+        "surname": {
+          "en": "Ramirez",
+          "es": "Ramirez"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159454Z",
+      "updatedAt": "2026-04-19T18:02:41.159455Z",
+      "associated": false
+    },
+    "P109": {
+      "id": "P109",
+      "names": {
+        "given": {
+          "en": "Jamila",
+          "es": "Jamila"
+        },
+        "surname": {
+          "en": "Ramirez",
+          "es": "Ramirez"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159463Z",
+      "updatedAt": "2026-04-19T18:02:41.159464Z",
+      "note": "Mother unknown",
+      "associated": false
+    },
+    "P110": {
+      "id": "P110",
+      "names": {
+        "given": {
+          "en": "John",
+          "es": "John"
+        },
+        "surname": {
+          "en": "Lebet",
+          "es": "Lebet"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "zitt-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159471Z",
+      "updatedAt": "2026-04-19T18:02:41.159472Z",
+      "note": "Deanna's son",
+      "associated": false
+    },
+    "P111": {
+      "id": "P111",
+      "names": {
+        "given": {
+          "en": "Kevin",
+          "es": "Kevin"
+        },
+        "surname": {
+          "en": "Lebet",
+          "es": "Lebet"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "zitt-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159478Z",
+      "updatedAt": "2026-04-19T18:02:41.159478Z",
+      "note": "Deanna's son",
+      "associated": false
+    },
+    "P112": {
+      "id": "P112",
+      "names": {
+        "given": {
+          "en": "Matthew",
+          "es": "Matthew"
+        },
+        "surname": {
+          "en": "Lebet",
+          "es": "Lebet"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "zitt-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159486Z",
+      "updatedAt": "2026-04-19T18:02:41.159487Z",
+      "note": "Deanna's son",
+      "associated": false
+    },
+    "P113": {
+      "id": "P113",
+      "names": {
+        "given": {
+          "en": "Kaitlyn",
+          "es": "Kaitlyn"
+        },
+        "surname": {
+          "en": "Kaitlyn",
+          "es": "Kaitlyn"
+        },
+        "nickname": {
+          "en": "Different father",
+          "es": "Different father"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "zitt-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159497Z",
+      "updatedAt": "2026-04-19T18:02:41.159497Z",
+      "note": "Patricia's daughter, different father",
+      "associated": false
+    },
+    "P114": {
+      "id": "P114",
+      "names": {
+        "given": {
+          "en": "Stephanie",
+          "es": "Stephanie"
+        },
+        "surname": {
+          "en": "Welton",
+          "es": "Welton"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "zitt-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159504Z",
+      "updatedAt": "2026-04-19T18:02:41.159506Z",
+      "note": "Patricia & Michael's daughter",
+      "associated": false
+    },
+    "P115": {
+      "id": "P115",
+      "names": {
+        "given": {
+          "en": "Brian",
+          "es": "Brian"
+        },
+        "surname": {
+          "en": "Welton",
+          "es": "Welton"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "zitt-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159511Z",
+      "updatedAt": "2026-04-19T18:02:41.159512Z",
+      "note": "Patricia & Michael's son",
+      "associated": false
+    },
+    "P116": {
+      "id": "P116",
+      "names": {
+        "given": {
+          "en": "Enerita",
+          "es": "Enerita"
+        },
+        "surname": {
+          "en": "Hermida",
+          "es": "Hermida"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159521Z",
+      "updatedAt": "2026-04-19T18:02:41.159522Z",
+      "note": "Delia & Felix's child",
+      "associated": false
+    },
+    "P117": {
+      "id": "P117",
+      "names": {
+        "given": {
+          "en": "Elisa",
+          "es": "Elisa"
+        },
+        "surname": {
+          "en": "Hermida",
+          "es": "Hermida"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159528Z",
+      "updatedAt": "2026-04-19T18:02:41.159529Z",
+      "note": "Delia & Felix's child",
+      "associated": false
+    },
+    "P118": {
+      "id": "P118",
+      "names": {
+        "given": {
+          "en": "Oreste",
+          "es": "Oreste"
+        },
+        "surname": {
+          "en": "Hermida",
+          "es": "Hermida"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159534Z",
+      "updatedAt": "2026-04-19T18:02:41.159535Z",
+      "note": "Delia & Felix's child",
+      "associated": false
+    },
+    "P119": {
+      "id": "P119",
+      "names": {
+        "given": {
+          "en": "Nilda",
+          "es": "Nilda"
+        },
+        "surname": {
+          "en": "Herrera",
+          "es": "Herrera"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159545Z",
+      "updatedAt": "2026-04-19T18:02:41.159546Z",
+      "note": "Rosa & Guillermo's child",
+      "associated": false
+    },
+    "P120": {
+      "id": "P120",
+      "names": {
+        "given": {
+          "en": "Daizy",
+          "es": "Daizy"
+        },
+        "surname": {
+          "en": "Herrera",
+          "es": "Herrera"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159551Z",
+      "updatedAt": "2026-04-19T18:02:41.159552Z",
+      "note": "Rosa & Guillermo's child",
+      "associated": false
+    },
+    "P121": {
+      "id": "P121",
+      "names": {
+        "given": {
+          "en": "Luis",
+          "es": "Luis"
+        },
+        "surname": {
+          "en": "Herrera",
+          "es": "Herrera"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159558Z",
+      "updatedAt": "2026-04-19T18:02:41.159559Z",
+      "note": "Rosa & Guillermo's child",
+      "associated": false
+    },
+    "P122": {
+      "id": "P122",
+      "names": {
+        "given": {
+          "en": "Maria Belen",
+          "es": "Maria Belen"
+        },
+        "surname": {
+          "en": "Dalda",
+          "es": "Dalda"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159564Z",
+      "updatedAt": "2026-04-19T18:02:41.159565Z",
+      "note": "Maria Luisa Dalda's child",
+      "associated": false
+    },
+    "P123": {
+      "id": "P123",
+      "names": {
+        "given": {
+          "en": "Guilfredo",
+          "es": "Guilfredo"
+        },
+        "surname": {
+          "en": "Dalda",
+          "es": "Dalda"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159571Z",
+      "updatedAt": "2026-04-19T18:02:41.159572Z",
+      "note": "Maria Luisa Dalda's child",
+      "associated": false
+    },
+    "P124": {
+      "id": "P124",
+      "names": {
+        "given": {
+          "en": "Ana Herminia",
+          "es": "Ana Herminia"
+        },
+        "surname": {
+          "en": "Fundora",
+          "es": "Fundora"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159578Z",
+      "updatedAt": "2026-04-19T18:02:41.159579Z",
+      "note": "Ana Luisa & Manolo's child",
+      "associated": false
+    },
+    "P125": {
+      "id": "P125",
+      "names": {
+        "given": {
+          "en": "Belkys",
+          "es": "Belkys"
+        },
+        "surname": {
+          "en": "Dalda",
+          "es": "Dalda"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159587Z",
+      "updatedAt": "2026-04-19T18:02:41.159588Z",
+      "note": "Gerardo & Elisa's child",
+      "associated": false
+    },
+    "P126": {
+      "id": "P126",
+      "names": {
+        "given": {
+          "en": "Idalmis",
+          "es": "Idalmis"
+        },
+        "surname": {
+          "en": "Dalda",
+          "es": "Dalda"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159596Z",
+      "updatedAt": "2026-04-19T18:02:41.159597Z",
+      "note": "Gerardo & Elisa's child",
+      "associated": false
+    },
+    "P127": {
+      "id": "P127",
+      "names": {
+        "given": {
+          "en": "Nancy",
+          "es": "Nancy"
+        },
+        "surname": {
+          "en": "Santana",
+          "es": "Santana"
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159602Z",
+      "updatedAt": "2026-04-19T18:02:41.159603Z",
+      "note": "Juan Santana's child",
+      "associated": false
+    },
+    "P128": {
+      "id": "P128",
+      "names": {
+        "given": {
+          "en": "Juan Santana",
+          "es": "Juan Santana"
+        },
+        "surname": {
+          "en": "Jr.",
+          "es": "Jr."
+        }
+      },
+      "gender": "unknown",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-19T18:02:41.159609Z",
+      "updatedAt": "2026-04-19T18:02:41.159610Z",
+      "note": "Juan Santana's child",
+      "associated": false
     }
   },
   "families": {
@@ -346,13 +2987,28 @@
       "id": "F001",
       "type": "marriage",
       "partners": [
-        { "personId": "P001", "role": "partner1" },
-        { "personId": "P002", "role": "partner2" }
+        {
+          "personId": "P001",
+          "role": "partner1"
+        },
+        {
+          "personId": "P002",
+          "role": "partner2"
+        }
       ],
       "children": [
-        { "personId": "P003", "relationship": "biological" },
-        { "personId": "P004", "relationship": "biological" },
-        { "personId": "P005", "relationship": "biological" }
+        {
+          "personId": "P003",
+          "relationship": "biological"
+        },
+        {
+          "personId": "P004",
+          "relationship": "biological"
+        },
+        {
+          "personId": "P005",
+          "relationship": "biological"
+        }
       ],
       "createdAt": "2026-04-09T00:00:00.000Z",
       "updatedAt": "2026-04-09T00:00:00.000Z"
@@ -362,13 +3018,28 @@
       "type": "marriage",
       "dissolved": true,
       "partners": [
-        { "personId": "P008", "role": "partner1" },
-        { "personId": "P009", "role": "partner2" }
+        {
+          "personId": "P008",
+          "role": "partner1"
+        },
+        {
+          "personId": "P009",
+          "role": "partner2"
+        }
       ],
       "children": [
-        { "personId": "P006", "relationship": "biological" },
-        { "personId": "P001", "relationship": "biological" },
-        { "personId": "P007", "relationship": "biological" }
+        {
+          "personId": "P006",
+          "relationship": "biological"
+        },
+        {
+          "personId": "P001",
+          "relationship": "biological"
+        },
+        {
+          "personId": "P007",
+          "relationship": "biological"
+        }
       ],
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-10T00:00:00.000Z"
@@ -377,12 +3048,24 @@
       "id": "F003",
       "type": "marriage",
       "partners": [
-        { "personId": "P010", "role": "partner1" },
-        { "personId": "P011", "role": "partner2" }
+        {
+          "personId": "P010",
+          "role": "partner1"
+        },
+        {
+          "personId": "P011",
+          "role": "partner2"
+        }
       ],
       "children": [
-        { "personId": "P008", "relationship": "biological" },
-        { "personId": "P014", "relationship": "biological" }
+        {
+          "personId": "P008",
+          "relationship": "biological"
+        },
+        {
+          "personId": "P014",
+          "relationship": "biological"
+        }
       ],
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-10T00:00:00.000Z"
@@ -391,11 +3074,20 @@
       "id": "F004",
       "type": "marriage",
       "partners": [
-        { "personId": "P012", "role": "partner1" },
-        { "personId": "P013", "role": "partner2" }
+        {
+          "personId": "P012",
+          "role": "partner1"
+        },
+        {
+          "personId": "P013",
+          "role": "partner2"
+        }
       ],
       "children": [
-        { "personId": "P009", "relationship": "biological" }
+        {
+          "personId": "P009",
+          "relationship": "biological"
+        }
       ],
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-10T00:00:00.000Z"
@@ -404,12 +3096,24 @@
       "id": "F005",
       "type": "marriage",
       "partners": [
-        { "personId": "P020", "role": "partner1" },
-        { "personId": "P014", "role": "partner2" }
+        {
+          "personId": "P020",
+          "role": "partner1"
+        },
+        {
+          "personId": "P014",
+          "role": "partner2"
+        }
       ],
       "children": [
-        { "personId": "P021", "relationship": "biological" },
-        { "personId": "P022", "relationship": "biological" }
+        {
+          "personId": "P021",
+          "relationship": "biological"
+        },
+        {
+          "personId": "P022",
+          "relationship": "biological"
+        }
       ],
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-10T00:00:00.000Z"
@@ -418,11 +3122,20 @@
       "id": "F006",
       "type": "marriage",
       "partners": [
-        { "personId": "P007", "role": "partner1" },
-        { "personId": "P016", "role": "partner2" }
+        {
+          "personId": "P007",
+          "role": "partner1"
+        },
+        {
+          "personId": "P016",
+          "role": "partner2"
+        }
       ],
       "children": [
-        { "personId": "P017", "relationship": "biological" }
+        {
+          "personId": "P017",
+          "relationship": "biological"
+        }
       ],
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-10T00:00:00.000Z"
@@ -431,14 +3144,32 @@
       "id": "F007",
       "type": "marriage",
       "partners": [
-        { "personId": "P018", "role": "partner1" },
-        { "personId": "P019", "role": "partner2" }
+        {
+          "personId": "P018",
+          "role": "partner1"
+        },
+        {
+          "personId": "P019",
+          "role": "partner2"
+        }
       ],
       "children": [
-        { "personId": "P023", "relationship": "biological" },
-        { "personId": "P002", "relationship": "biological" },
-        { "personId": "P024", "relationship": "biological" },
-        { "personId": "P025", "relationship": "biological" }
+        {
+          "personId": "P023",
+          "relationship": "biological"
+        },
+        {
+          "personId": "P002",
+          "relationship": "biological"
+        },
+        {
+          "personId": "P024",
+          "relationship": "biological"
+        },
+        {
+          "personId": "P025",
+          "relationship": "biological"
+        }
       ],
       "createdAt": "2026-04-10T00:00:00.000Z",
       "updatedAt": "2026-04-19T00:00:00.000Z"

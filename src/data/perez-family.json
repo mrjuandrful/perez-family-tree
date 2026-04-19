@@ -11,7 +11,7 @@
     },
     "rootPersonId": "P001",
     "createdAt": "2026-04-09T00:00:00.000Z",
-    "updatedAt": "2026-04-19T18:52:56.127495Z"
+    "updatedAt": "2026-04-19T18:56:54.976793Z"
   },
   "persons": {
     "P001": {
@@ -1896,6 +1896,124 @@
       ],
       "createdAt": "2026-04-19T18:52:56.127495Z",
       "updatedAt": "2026-04-19T18:52:56.127495Z"
+    },
+    "P084": {
+      "id": "P084",
+      "names": {
+        "given": {
+          "en": "Janet",
+          "es": "Janet"
+        },
+        "surname": {
+          "en": "Menzel",
+          "es": "Menzel"
+        },
+        "nickname": {
+          "en": "Coppola",
+          "es": "Coppola"
+        }
+      },
+      "gender": "female",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "zitt-line"
+      ],
+      "createdAt": "2026-04-19T18:56:54.976793Z",
+      "updatedAt": "2026-04-19T18:56:54.976793Z",
+      "birth": {
+        "date": {
+          "year": 1950,
+          "month": 11,
+          "day": 19
+        }
+      }
+    },
+    "P085": {
+      "id": "P085",
+      "names": {
+        "given": {
+          "en": "Louis",
+          "es": "Louis"
+        },
+        "surname": {
+          "en": "Coppola",
+          "es": "Coppola"
+        }
+      },
+      "gender": "male",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "zitt-line"
+      ],
+      "createdAt": "2026-04-19T18:56:54.976793Z",
+      "updatedAt": "2026-04-19T18:56:54.976793Z"
+    },
+    "P086": {
+      "id": "P086",
+      "names": {
+        "given": {
+          "en": "James",
+          "es": "James"
+        },
+        "surname": {
+          "en": "Menzel",
+          "es": "Menzel"
+        },
+        "suffix": "Sr."
+      },
+      "gender": "male",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "zitt-line"
+      ],
+      "createdAt": "2026-04-19T18:56:54.976793Z",
+      "updatedAt": "2026-04-19T18:56:54.976793Z"
+    },
+    "P087": {
+      "id": "P087",
+      "names": {
+        "given": {
+          "en": "Jaime",
+          "es": "Jaime"
+        },
+        "surname": {
+          "en": "Calabrese",
+          "es": "Calabrese"
+        }
+      },
+      "gender": "unknown",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "zitt-line"
+      ],
+      "createdAt": "2026-04-19T18:56:54.976793Z",
+      "updatedAt": "2026-04-19T18:56:54.976793Z"
+    },
+    "P088": {
+      "id": "P088",
+      "names": {
+        "given": {
+          "en": "James",
+          "es": "James"
+        },
+        "surname": {
+          "en": "Menzel",
+          "es": "Menzel"
+        },
+        "suffix": "Jr."
+      },
+      "gender": "male",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "zitt-line"
+      ],
+      "createdAt": "2026-04-19T18:56:54.976793Z",
+      "updatedAt": "2026-04-19T18:56:54.976793Z"
     }
   },
   "families": {
@@ -2317,12 +2435,20 @@
       ],
       "children": [
         {
+          "personId": "P084",
+          "relationship": "biological"
+        },
+        {
           "personId": "P019",
+          "relationship": "biological"
+        },
+        {
+          "personId": "P085",
           "relationship": "biological"
         }
       ],
       "createdAt": "2026-04-19T18:16:05.703805Z",
-      "updatedAt": "2026-04-19T18:16:05.703805Z"
+      "updatedAt": "2026-04-19T18:56:54.976793Z"
     },
     "F021": {
       "id": "F021",
@@ -2513,6 +2639,32 @@
       ],
       "createdAt": "2026-04-19T18:35:57.867221Z",
       "updatedAt": "2026-04-19T18:35:57.867221Z"
+    },
+    "F024": {
+      "id": "F024",
+      "type": "marriage",
+      "partners": [
+        {
+          "personId": "P086",
+          "role": "partner1"
+        },
+        {
+          "personId": "P084",
+          "role": "partner2"
+        }
+      ],
+      "children": [
+        {
+          "personId": "P087",
+          "relationship": "biological"
+        },
+        {
+          "personId": "P088",
+          "relationship": "biological"
+        }
+      ],
+      "createdAt": "2026-04-19T18:56:54.976793Z",
+      "updatedAt": "2026-04-19T18:56:54.976793Z"
     }
   },
   "media": {}

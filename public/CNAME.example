@@ -1,0 +1,13 @@
+# To use a custom domain, copy this file to CNAME (no .example extension)
+# and replace the placeholder with your actual domain.
+# Then configure your DNS provider to point to GitHub Pages.
+#
+# Example:
+#   tree.perezfamily.com
+#
+# After adding CNAME, also update vite.config.ts base to '/' instead of '/perez-family-tree/'
+# and update BrowserRouter basename to '/' in src/App.tsx
+# and update manifest.json start_url/scope to '/'
+# and update sw.js BASE to ''
+#
+# perezfamily.com

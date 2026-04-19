@@ -1,7 +1,7 @@
 import type { FamilyTreeData, Person } from '../types';
 
 export type RelationshipLabel =
-  | 'father' | 'mother' | 'partner' | 'child' | 'sibling'
+  | 'father' | 'mother' | 'partner' | 'ex_partner' | 'child' | 'sibling'
   | 'adopted_child' | 'step_child';
 
 export interface Relative {
@@ -17,13 +17,14 @@ export function getRelatives(personId: string, data: FamilyTreeData): Relative[]
   for (const fam of Object.values(data.families)) {
     const isPartner = fam.partners.some((p) => p.personId === personId);
     const isChild = fam.children.some((c) => c.personId === personId);
+    const dissolved = !!(fam as any).dissolved;
 
     if (isPartner) {
       // Other partners
       for (const p of fam.partners) {
         if (p.personId === personId) continue;
         const rel = data.persons[p.personId];
-        if (rel) relatives.push({ person: rel, relationship: 'partner' });
+        if (rel) relatives.push({ person: rel, relationship: dissolved ? 'ex_partner' : 'partner' });
       }
       // Children
       for (const c of fam.children) {

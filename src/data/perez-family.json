@@ -11,7 +11,7 @@
     },
     "rootPersonId": "P001",
     "createdAt": "2026-04-09T00:00:00.000Z",
-    "updatedAt": "2026-04-19T18:16:05.703805Z"
+    "updatedAt": "2026-04-19T18:35:57.867221Z"
   },
   "persons": {
     "P001": {
@@ -946,8 +946,8 @@
           "es": "Olga"
         },
         "surname": {
-          "en": "Stepmother",
-          "es": "Stepmother"
+          "en": "Perez",
+          "es": "Pérez"
         }
       },
       "gender": "female",
@@ -2029,10 +2029,18 @@
         {
           "personId": "P013",
           "relationship": "biological"
+        },
+        {
+          "personId": "P070",
+          "relationship": "biological"
+        },
+        {
+          "personId": "P072",
+          "relationship": "biological"
         }
       ],
       "createdAt": "2026-04-19T18:14:14.537156Z",
-      "updatedAt": "2026-04-19T18:14:14.537156Z"
+      "updatedAt": "2026-04-19T18:35:57.867221Z"
     },
     "F009": {
       "id": "F009",
@@ -2051,10 +2059,18 @@
         {
           "personId": "P012",
           "relationship": "biological"
+        },
+        {
+          "personId": "P074",
+          "relationship": "biological"
+        },
+        {
+          "personId": "P075",
+          "relationship": "biological"
         }
       ],
       "createdAt": "2026-04-19T18:14:14.537156Z",
-      "updatedAt": "2026-04-19T18:14:14.537156Z"
+      "updatedAt": "2026-04-19T18:35:57.867221Z"
     },
     "F010": {
       "id": "F010",
@@ -2381,14 +2397,28 @@
         {
           "personId": "P049",
           "relationship": "biological"
-        },
+        }
+      ],
+      "createdAt": "2026-04-19T18:16:05.703805Z",
+      "updatedAt": "2026-04-19T18:35:57.867221Z"
+    },
+    "F023": {
+      "id": "F023",
+      "type": "other",
+      "partners": [
+        {
+          "personId": "P044",
+          "role": "partner1"
+        }
+      ],
+      "children": [
         {
           "personId": "P050",
           "relationship": "biological"
         }
       ],
-      "createdAt": "2026-04-19T18:16:05.703805Z",
-      "updatedAt": "2026-04-19T18:16:05.703805Z"
+      "createdAt": "2026-04-19T18:35:57.867221Z",
+      "updatedAt": "2026-04-19T18:35:57.867221Z"
     }
   },
   "media": {}

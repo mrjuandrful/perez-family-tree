@@ -14,6 +14,7 @@ const REL_LABEL: Record<string, string> = {
   father: 'Father',
   mother: 'Mother',
   partner: 'Spouse / Partner',
+  ex_partner: 'Former Spouse',
   child: 'Child',
   sibling: 'Sibling',
   adopted_child: 'Adopted Child',
@@ -23,7 +24,8 @@ const REL_LABEL: Record<string, string> = {
 const REL_EMOJI: Record<string, string> = {
   father: '👨',
   mother: '👩',
-  partner: '💑',
+  partner: '💍',
+  ex_partner: '👥',
   child: '👶',
   sibling: '🤝',
   adopted_child: '👶',

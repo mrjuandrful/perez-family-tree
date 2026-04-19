@@ -18,15 +18,16 @@ function getOwnFamilies(personId: string, data: FamilyTreeData): Family[] {
   );
 }
 
-function getSpouses(personId: string, data: FamilyTreeData): Person[] {
+function getSpouses(personId: string, data: FamilyTreeData): { person: Person; dissolved: boolean }[] {
   const seen = new Set<string>();
-  const result: Person[] = [];
+  const result: { person: Person; dissolved: boolean }[] = [];
   for (const fam of getOwnFamilies(personId, data)) {
+    const dissolved = !!(fam as any).dissolved;
     for (const p of fam.partners) {
       if (p.personId === personId || seen.has(p.personId)) continue;
       seen.add(p.personId);
       const sp = data.persons[p.personId];
-      if (sp) result.push(sp);
+      if (sp) result.push({ person: sp, dissolved });
     }
   }
   return result;
@@ -141,7 +142,7 @@ function FocusCard({
   onSpouseNavigate,
 }: {
   person: Person;
-  spouses: Person[];
+  spouses: { person: Person; dissolved: boolean }[];
   isRoot: boolean;
   onSpouseNavigate: (id: string) => void;
 }) {
@@ -206,7 +207,7 @@ function FocusCard({
       {/* Spouses */}
       {spouses.length > 0 && (
         <div className="bg-violet-50 dark:bg-slate-800/80 border-t border-violet-100 dark:border-violet-900/40">
-          {spouses.map((sp) => {
+          {spouses.map(({ person: sp, dissolved }) => {
             const spGiven = t(sp.names.given);
             const spSurname = t(sp.names.surname);
             const spMaiden = sp.names.nickname ? t(sp.names.nickname) : null;
@@ -216,13 +217,14 @@ function FocusCard({
                 onClick={() => onSpouseNavigate(sp.id)}
                 className="w-full flex items-center gap-3 px-5 py-3.5 hover:bg-violet-100 dark:hover:bg-violet-900/30 active:bg-violet-100 dark:active:bg-violet-900/30 transition-colors text-left"
               >
-                <span className="text-xl flex-shrink-0" aria-hidden>💑</span>
+                <span className="text-xl flex-shrink-0" aria-hidden>{dissolved ? '👥' : '💍'}</span>
                 <Avatar person={sp} size="sm" />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-violet-900 dark:text-violet-200 truncate">
                     {spGiven} {spSurname}
                   </p>
-                  {spMaiden && (
+                  {dissolved && <p className="text-xs text-gray-400 dark:text-slate-500">Former spouse</p>}
+                  {spMaiden && !dissolved && (
                     <p className="text-xs text-violet-500 dark:text-violet-400">née {spMaiden}</p>
                   )}
                 </div>

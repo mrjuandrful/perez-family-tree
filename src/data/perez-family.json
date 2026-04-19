@@ -11,7 +11,7 @@
     },
     "rootPersonId": "P001",
     "createdAt": "2026-04-09T00:00:00.000Z",
-    "updatedAt": "2026-04-19T18:35:57.867221Z"
+    "updatedAt": "2026-04-19T18:52:56.127495Z"
   },
   "persons": {
     "P001": {
@@ -644,12 +644,12 @@
         "zitt-line"
       ],
       "createdAt": "2026-04-19T00:00:00.000Z",
-      "updatedAt": "2026-04-19T00:00:00.000Z",
+      "updatedAt": "2026-04-19T18:52:56.127495Z",
       "birth": {
         "date": {
           "year": 1974,
           "month": 6,
-          "day": 14
+          "day": 15
         }
       }
     },
@@ -1725,16 +1725,12 @@
       "id": "P076",
       "names": {
         "given": {
-          "en": "Paternal Grandfather",
-          "es": "Abuelo Paterno"
+          "en": "George",
+          "es": "George"
         },
         "surname": {
           "en": "Zitt",
           "es": "Zitt"
-        },
-        "nickname": {
-          "en": "Zitt family",
-          "es": "Zitt family"
         }
       },
       "gender": "male",
@@ -1743,24 +1739,23 @@
       "tags": [
         "zitt-line"
       ],
-      "note": "Dennis Herbert Zitt's father — to be researched",
       "createdAt": "2026-04-19T18:16:05.703805Z",
-      "updatedAt": "2026-04-19T18:16:05.703805Z"
+      "updatedAt": "2026-04-19T18:52:56.127495Z"
     },
     "P077": {
       "id": "P077",
       "names": {
         "given": {
-          "en": "Paternal Grandmother",
-          "es": "Abuela Paterna"
+          "en": "Ruth",
+          "es": "Ruth"
         },
         "surname": {
           "en": "Zitt",
           "es": "Zitt"
         },
         "nickname": {
-          "en": "Zitt family",
-          "es": "Zitt family"
+          "en": "Haas",
+          "es": "Haas"
         }
       },
       "gender": "female",
@@ -1769,9 +1764,8 @@
       "tags": [
         "zitt-line"
       ],
-      "note": "Dennis Herbert Zitt's mother — to be researched",
       "createdAt": "2026-04-19T18:16:05.703805Z",
-      "updatedAt": "2026-04-19T18:16:05.703805Z"
+      "updatedAt": "2026-04-19T18:52:56.127495Z"
     },
     "P078": {
       "id": "P078",
@@ -1818,6 +1812,90 @@
       ],
       "createdAt": "2026-04-19T18:16:05.703805Z",
       "updatedAt": "2026-04-19T18:16:05.703805Z"
+    },
+    "P080": {
+      "id": "P080",
+      "names": {
+        "given": {
+          "en": "Robert",
+          "es": "Robert"
+        },
+        "surname": {
+          "en": "Zitt",
+          "es": "Zitt"
+        }
+      },
+      "gender": "male",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "zitt-line"
+      ],
+      "createdAt": "2026-04-19T18:52:56.127495Z",
+      "updatedAt": "2026-04-19T18:52:56.127495Z"
+    },
+    "P081": {
+      "id": "P081",
+      "names": {
+        "given": {
+          "en": "George",
+          "es": "George"
+        },
+        "surname": {
+          "en": "Zitt",
+          "es": "Zitt"
+        }
+      },
+      "gender": "male",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "zitt-line"
+      ],
+      "createdAt": "2026-04-19T18:52:56.127495Z",
+      "updatedAt": "2026-04-19T18:52:56.127495Z"
+    },
+    "P082": {
+      "id": "P082",
+      "names": {
+        "given": {
+          "en": "Kenneth",
+          "es": "Kenneth"
+        },
+        "surname": {
+          "en": "Zitt",
+          "es": "Zitt"
+        }
+      },
+      "gender": "male",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "zitt-line"
+      ],
+      "createdAt": "2026-04-19T18:52:56.127495Z",
+      "updatedAt": "2026-04-19T18:52:56.127495Z"
+    },
+    "P083": {
+      "id": "P083",
+      "names": {
+        "given": {
+          "en": "Wayne",
+          "es": "Wayne"
+        },
+        "surname": {
+          "en": "Zitt",
+          "es": "Zitt"
+        }
+      },
+      "gender": "male",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "zitt-line"
+      ],
+      "createdAt": "2026-04-19T18:52:56.127495Z",
+      "updatedAt": "2026-04-19T18:52:56.127495Z"
     }
   },
   "families": {
@@ -2261,12 +2339,28 @@
       ],
       "children": [
         {
+          "personId": "P080",
+          "relationship": "biological"
+        },
+        {
+          "personId": "P081",
+          "relationship": "biological"
+        },
+        {
           "personId": "P018",
+          "relationship": "biological"
+        },
+        {
+          "personId": "P082",
+          "relationship": "biological"
+        },
+        {
+          "personId": "P083",
           "relationship": "biological"
         }
       ],
       "createdAt": "2026-04-19T18:16:05.703805Z",
-      "updatedAt": "2026-04-19T18:16:05.703805Z"
+      "updatedAt": "2026-04-19T18:52:56.127495Z"
     },
     "F017": {
       "id": "F017",

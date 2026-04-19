@@ -3,7 +3,7 @@ import type { FamilyTreeData, Person, Family, Media } from '../types';
 import seedData from '../data/perez-family.json';
 
 const STORAGE_KEY = 'perez-family-tree-data';
-const SEED_VERSION = 'v16'; // bump this whenever seed data changes to bust cached data
+const SEED_VERSION = 'v17'; // bump this whenever seed data changes to bust cached data
 const SEED_VERSION_KEY = 'perez-family-tree-seed-version';
 
 function loadData(): FamilyTreeData {

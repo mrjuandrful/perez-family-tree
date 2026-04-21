@@ -11,7 +11,7 @@
     },
     "rootPersonId": "P001",
     "createdAt": "2026-04-09T00:00:00.000Z",
-    "updatedAt": "2026-04-21T01:46:09.604769Z"
+    "updatedAt": "2026-04-21T01:49:54.172353Z"
   },
   "persons": {
     "P001": {
@@ -2349,6 +2349,48 @@
       ],
       "createdAt": "2026-04-21T01:46:09.604769Z",
       "updatedAt": "2026-04-21T01:46:09.604769Z"
+    },
+    "P103": {
+      "id": "P103",
+      "names": {
+        "given": {
+          "en": "Orlando",
+          "es": "Orlando"
+        },
+        "surname": {
+          "en": "Ramos",
+          "es": "Ramos"
+        }
+      },
+      "gender": "male",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-21T01:49:54.172353Z",
+      "updatedAt": "2026-04-21T01:49:54.172353Z"
+    },
+    "P104": {
+      "id": "P104",
+      "names": {
+        "given": {
+          "en": "Beba",
+          "es": "Beba"
+        },
+        "surname": {
+          "en": "Ramos",
+          "es": "Ramos"
+        }
+      },
+      "gender": "female",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-21T01:49:54.172353Z",
+      "updatedAt": "2026-04-21T01:49:54.172353Z"
     }
   },
   "families": {
@@ -3066,10 +3108,18 @@
         {
           "personId": "P011",
           "relationship": "biological"
+        },
+        {
+          "personId": "P103",
+          "relationship": "biological"
+        },
+        {
+          "personId": "P104",
+          "relationship": "biological"
         }
       ],
       "createdAt": "2026-04-21T01:46:09.604769Z",
-      "updatedAt": "2026-04-21T01:46:09.604769Z"
+      "updatedAt": "2026-04-21T01:49:54.172353Z"
     },
     "F028": {
       "id": "F028",

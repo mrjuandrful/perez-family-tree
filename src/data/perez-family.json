@@ -11,7 +11,7 @@
     },
     "rootPersonId": "P001",
     "createdAt": "2026-04-09T00:00:00.000Z",
-    "updatedAt": "2026-04-19T18:56:54.976793Z"
+    "updatedAt": "2026-04-21T01:46:09.604769Z"
   },
   "persons": {
     "P001": {
@@ -305,6 +305,10 @@
         "surname": {
           "en": "Perez",
           "es": "Pérez"
+        },
+        "nickname": {
+          "en": "Ramos",
+          "es": "Ramos"
         }
       },
       "gender": "female",
@@ -314,7 +318,7 @@
         "perez-line"
       ],
       "createdAt": "2026-04-10T00:00:00.000Z",
-      "updatedAt": "2026-04-10T00:00:00.000Z"
+      "updatedAt": "2026-04-21T01:46:09.604769Z"
     },
     "P012": {
       "id": "P012",
@@ -341,8 +345,8 @@
       "id": "P013",
       "names": {
         "given": {
-          "en": "Zoila",
-          "es": "Zoila"
+          "en": "Zoila Candida",
+          "es": "Zoila Cándida"
         },
         "surname": {
           "en": "Santana",
@@ -360,7 +364,14 @@
         "santana-line"
       ],
       "createdAt": "2026-04-10T00:00:00.000Z",
-      "updatedAt": "2026-04-10T00:00:00.000Z"
+      "updatedAt": "2026-04-21T01:46:09.604769Z",
+      "birth": {
+        "date": {
+          "year": 1937,
+          "month": 11,
+          "day": 1
+        }
+      }
     },
     "P014": {
       "id": "P014",
@@ -694,8 +705,20 @@
         "perez-line"
       ],
       "createdAt": "2026-04-19T18:02:02.087533Z",
-      "updatedAt": "2026-04-19T18:02:02.087534Z",
-      "note": "Zolia's mother"
+      "updatedAt": "2026-04-21T01:46:09.604769Z",
+      "note": "Zolia's mother",
+      "birth": {
+        "date": {
+          "year": 1921,
+          "month": 9,
+          "day": 3
+        }
+      },
+      "death": {
+        "date": {
+          "year": 1976
+        }
+      }
     },
     "P028": {
       "id": "P028",
@@ -1613,7 +1636,14 @@
         "perez-line"
       ],
       "createdAt": "2026-04-19T18:16:05.703805Z",
-      "updatedAt": "2026-04-19T18:16:05.703805Z"
+      "updatedAt": "2026-04-21T01:46:09.604769Z",
+      "birth": {
+        "date": {
+          "year": 1939,
+          "month": 12,
+          "day": 10
+        }
+      }
     },
     "P071": {
       "id": "P071",
@@ -1625,7 +1655,8 @@
         "surname": {
           "en": "Fundora",
           "es": "Fundora"
-        }
+        },
+        "suffix": "Sr."
       },
       "gender": "male",
       "living": false,
@@ -1634,7 +1665,7 @@
         "perez-line"
       ],
       "createdAt": "2026-04-19T18:16:05.703805Z",
-      "updatedAt": "2026-04-19T18:16:05.703805Z"
+      "updatedAt": "2026-04-21T01:46:09.604769Z"
     },
     "P072": {
       "id": "P072",
@@ -1655,7 +1686,14 @@
         "perez-line"
       ],
       "createdAt": "2026-04-19T18:16:05.703805Z",
-      "updatedAt": "2026-04-19T18:16:05.703805Z"
+      "updatedAt": "2026-04-21T01:46:09.604769Z",
+      "birth": {
+        "date": {
+          "year": 1938,
+          "month": 9,
+          "day": 20
+        }
+      }
     },
     "P073": {
       "id": "P073",
@@ -2014,6 +2052,303 @@
       ],
       "createdAt": "2026-04-19T18:56:54.976793Z",
       "updatedAt": "2026-04-19T18:56:54.976793Z"
+    },
+    "P089": {
+      "id": "P089",
+      "names": {
+        "given": {
+          "en": "Jose Prisco",
+          "es": "Jose Prisco"
+        },
+        "surname": {
+          "en": "Perez",
+          "es": "Perez"
+        }
+      },
+      "gender": "male",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-21T01:46:09.604769Z",
+      "updatedAt": "2026-04-21T01:46:09.604769Z"
+    },
+    "P090": {
+      "id": "P090",
+      "names": {
+        "given": {
+          "en": "Edma",
+          "es": "Edma"
+        },
+        "surname": {
+          "en": "Perez",
+          "es": "Perez"
+        }
+      },
+      "gender": "female",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-21T01:46:09.604769Z",
+      "updatedAt": "2026-04-21T01:46:09.604769Z"
+    },
+    "P091": {
+      "id": "P091",
+      "names": {
+        "given": {
+          "en": "Machico",
+          "es": "Machico"
+        },
+        "surname": {
+          "en": "Perez",
+          "es": "Perez"
+        }
+      },
+      "gender": "male",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-21T01:46:09.604769Z",
+      "updatedAt": "2026-04-21T01:46:09.604769Z"
+    },
+    "P092": {
+      "id": "P092",
+      "names": {
+        "given": {
+          "en": "Ignacia",
+          "es": "Ignacia"
+        },
+        "surname": {
+          "en": "Subirat",
+          "es": "Subirat"
+        }
+      },
+      "gender": "female",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-21T01:46:09.604769Z",
+      "updatedAt": "2026-04-21T01:46:09.604769Z"
+    },
+    "P093": {
+      "id": "P093",
+      "names": {
+        "given": {
+          "en": "Juan Evangelista",
+          "es": "Juan Evangelista"
+        },
+        "surname": {
+          "en": "Ramos",
+          "es": "Ramos"
+        },
+        "suffix": "Jr."
+      },
+      "gender": "male",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-21T01:46:09.604769Z",
+      "updatedAt": "2026-04-21T01:46:09.604769Z"
+    },
+    "P094": {
+      "id": "P094",
+      "names": {
+        "given": {
+          "en": "Ana Rosa",
+          "es": "Ana Rosa"
+        },
+        "surname": {
+          "en": "Martinez",
+          "es": "Martinez"
+        }
+      },
+      "gender": "female",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-21T01:46:09.604769Z",
+      "updatedAt": "2026-04-21T01:46:09.604769Z"
+    },
+    "P095": {
+      "id": "P095",
+      "names": {
+        "given": {
+          "en": "Juan Evangelista",
+          "es": "Juan Evangelista"
+        },
+        "surname": {
+          "en": "Ramos",
+          "es": "Ramos"
+        },
+        "suffix": "Sr."
+      },
+      "gender": "male",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-21T01:46:09.604769Z",
+      "updatedAt": "2026-04-21T01:46:09.604769Z"
+    },
+    "P096": {
+      "id": "P096",
+      "names": {
+        "given": {
+          "en": "Hermogenes",
+          "es": "Hermogenes"
+        },
+        "surname": {
+          "en": "Chacon-Macias",
+          "es": "Chacon-Macias"
+        }
+      },
+      "gender": "female",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-21T01:46:09.604769Z",
+      "updatedAt": "2026-04-21T01:46:09.604769Z"
+    },
+    "P097": {
+      "id": "P097",
+      "names": {
+        "given": {
+          "en": "Manuela",
+          "es": "Manuela"
+        },
+        "surname": {
+          "en": "Hieresulos",
+          "es": "Hieresulos"
+        }
+      },
+      "gender": "female",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-21T01:46:09.604769Z",
+      "updatedAt": "2026-04-21T01:46:09.604769Z"
+    },
+    "P098": {
+      "id": "P098",
+      "names": {
+        "given": {
+          "en": "Manolo",
+          "es": "Manolo"
+        },
+        "surname": {
+          "en": "Fundora",
+          "es": "Fundora"
+        },
+        "suffix": "Jr."
+      },
+      "gender": "male",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-21T01:46:09.604769Z",
+      "updatedAt": "2026-04-21T01:46:09.604769Z"
+    },
+    "P099": {
+      "id": "P099",
+      "names": {
+        "given": {
+          "en": "Geraldo",
+          "es": "Geraldo"
+        },
+        "surname": {
+          "en": "Soto",
+          "es": "Soto"
+        }
+      },
+      "gender": "male",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-21T01:46:09.604769Z",
+      "updatedAt": "2026-04-21T01:46:09.604769Z"
+    },
+    "P100": {
+      "id": "P100",
+      "names": {
+        "given": {
+          "en": "Belin",
+          "es": "Belin"
+        },
+        "surname": {
+          "en": "Dalda",
+          "es": "Dalda"
+        }
+      },
+      "gender": "female",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-21T01:46:09.604769Z",
+      "updatedAt": "2026-04-21T01:46:09.604769Z"
+    },
+    "P101": {
+      "id": "P101",
+      "names": {
+        "given": {
+          "en": "Raimundo",
+          "es": "Raimundo"
+        },
+        "surname": {
+          "en": "Martinez",
+          "es": "Martinez"
+        }
+      },
+      "gender": "male",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-21T01:46:09.604769Z",
+      "updatedAt": "2026-04-21T01:46:09.604769Z"
+    },
+    "P102": {
+      "id": "P102",
+      "names": {
+        "given": {
+          "en": "Zoila",
+          "es": "Zoila"
+        },
+        "surname": {
+          "en": "Mirabel",
+          "es": "Mirabel"
+        }
+      },
+      "gender": "female",
+      "living": false,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-21T01:46:09.604769Z",
+      "updatedAt": "2026-04-21T01:46:09.604769Z"
     }
   },
   "families": {
@@ -2227,16 +2562,16 @@
           "relationship": "biological"
         },
         {
-          "personId": "P070",
+          "personId": "P072",
           "relationship": "biological"
         },
         {
-          "personId": "P072",
+          "personId": "P070",
           "relationship": "biological"
         }
       ],
       "createdAt": "2026-04-19T18:14:14.537156Z",
-      "updatedAt": "2026-04-19T18:35:57.867221Z"
+      "updatedAt": "2026-04-21T01:46:09.604769Z"
     },
     "F009": {
       "id": "F009",
@@ -2367,10 +2702,14 @@
         {
           "personId": "P065",
           "relationship": "biological"
+        },
+        {
+          "personId": "P098",
+          "relationship": "biological"
         }
       ],
       "createdAt": "2026-04-19T18:16:05.703805Z",
-      "updatedAt": "2026-04-19T18:16:05.703805Z"
+      "updatedAt": "2026-04-21T01:46:09.604769Z"
     },
     "F014": {
       "id": "F014",
@@ -2665,6 +3004,176 @@
       ],
       "createdAt": "2026-04-19T18:56:54.976793Z",
       "updatedAt": "2026-04-19T18:56:54.976793Z"
+    },
+    "F025": {
+      "id": "F025",
+      "type": "marriage",
+      "partners": [
+        {
+          "personId": "P089",
+          "role": "partner1"
+        },
+        {
+          "personId": "P090",
+          "role": "partner2"
+        }
+      ],
+      "children": [
+        {
+          "personId": "P010",
+          "relationship": "biological"
+        }
+      ],
+      "createdAt": "2026-04-21T01:46:09.604769Z",
+      "updatedAt": "2026-04-21T01:46:09.604769Z"
+    },
+    "F026": {
+      "id": "F026",
+      "type": "marriage",
+      "partners": [
+        {
+          "personId": "P091",
+          "role": "partner1"
+        },
+        {
+          "personId": "P092",
+          "role": "partner2"
+        }
+      ],
+      "children": [
+        {
+          "personId": "P089",
+          "relationship": "biological"
+        }
+      ],
+      "createdAt": "2026-04-21T01:46:09.604769Z",
+      "updatedAt": "2026-04-21T01:46:09.604769Z"
+    },
+    "F027": {
+      "id": "F027",
+      "type": "marriage",
+      "partners": [
+        {
+          "personId": "P093",
+          "role": "partner1"
+        },
+        {
+          "personId": "P094",
+          "role": "partner2"
+        }
+      ],
+      "children": [
+        {
+          "personId": "P011",
+          "relationship": "biological"
+        }
+      ],
+      "createdAt": "2026-04-21T01:46:09.604769Z",
+      "updatedAt": "2026-04-21T01:46:09.604769Z"
+    },
+    "F028": {
+      "id": "F028",
+      "type": "marriage",
+      "partners": [
+        {
+          "personId": "P095",
+          "role": "partner1"
+        },
+        {
+          "personId": "P096",
+          "role": "partner2"
+        }
+      ],
+      "children": [
+        {
+          "personId": "P093",
+          "relationship": "biological"
+        }
+      ],
+      "createdAt": "2026-04-21T01:46:09.604769Z",
+      "updatedAt": "2026-04-21T01:46:09.604769Z"
+    },
+    "F029": {
+      "id": "F029",
+      "type": "other",
+      "partners": [
+        {
+          "personId": "P097",
+          "role": "partner1"
+        }
+      ],
+      "children": [
+        {
+          "personId": "P094",
+          "relationship": "biological"
+        }
+      ],
+      "createdAt": "2026-04-21T01:46:09.604769Z",
+      "updatedAt": "2026-04-21T01:46:09.604769Z"
+    },
+    "F030": {
+      "id": "F030",
+      "type": "marriage",
+      "partners": [
+        {
+          "personId": "P099",
+          "role": "partner1"
+        },
+        {
+          "personId": "P100",
+          "role": "partner2"
+        }
+      ],
+      "children": [
+        {
+          "personId": "P026",
+          "relationship": "biological"
+        },
+        {
+          "personId": "P033",
+          "relationship": "biological"
+        },
+        {
+          "personId": "P034",
+          "relationship": "biological"
+        }
+      ],
+      "createdAt": "2026-04-21T01:46:09.604769Z",
+      "updatedAt": "2026-04-21T01:46:09.604769Z"
+    },
+    "F031": {
+      "id": "F031",
+      "type": "marriage",
+      "partners": [
+        {
+          "personId": "P101",
+          "role": "partner1"
+        },
+        {
+          "personId": "P102",
+          "role": "partner2"
+        }
+      ],
+      "children": [
+        {
+          "personId": "P027",
+          "relationship": "biological"
+        },
+        {
+          "personId": "P028",
+          "relationship": "biological"
+        },
+        {
+          "personId": "P030",
+          "relationship": "biological"
+        },
+        {
+          "personId": "P032",
+          "relationship": "biological"
+        }
+      ],
+      "createdAt": "2026-04-21T01:46:09.604769Z",
+      "updatedAt": "2026-04-21T01:46:09.604769Z"
     }
   },
   "media": {}

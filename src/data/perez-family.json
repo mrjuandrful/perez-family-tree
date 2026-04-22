@@ -11,7 +11,7 @@
     },
     "rootPersonId": "P001",
     "createdAt": "2026-04-09T00:00:00.000Z",
-    "updatedAt": "2026-04-21T01:49:54.172353Z"
+    "updatedAt": "2026-04-22T03:09:22.288520Z"
   },
   "persons": {
     "P001": {
@@ -2391,6 +2391,153 @@
       ],
       "createdAt": "2026-04-21T01:49:54.172353Z",
       "updatedAt": "2026-04-21T01:49:54.172353Z"
+    },
+    "P105": {
+      "id": "P105",
+      "names": {
+        "given": {
+          "en": "Bianka",
+          "es": "Bianka"
+        },
+        "surname": {
+          "en": "Fundora",
+          "es": "Fundora"
+        }
+      },
+      "gender": "female",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-22T03:09:22.288520Z",
+      "updatedAt": "2026-04-22T03:09:22.288520Z"
+    },
+    "P106": {
+      "id": "P106",
+      "names": {
+        "given": {
+          "en": "Dianka",
+          "es": "Dianka"
+        },
+        "surname": {
+          "en": "Fundora",
+          "es": "Fundora"
+        }
+      },
+      "gender": "female",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-22T03:09:22.288520Z",
+      "updatedAt": "2026-04-22T03:09:22.288520Z"
+    },
+    "P107": {
+      "id": "P107",
+      "names": {
+        "given": {
+          "en": "Eduardo",
+          "es": "Eduardo"
+        },
+        "surname": {
+          "en": "",
+          "es": ""
+        }
+      },
+      "gender": "male",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-22T03:09:22.288520Z",
+      "updatedAt": "2026-04-22T03:09:22.288520Z"
+    },
+    "P108": {
+      "id": "P108",
+      "names": {
+        "given": {
+          "en": "Ayanni",
+          "es": "Ayanni"
+        },
+        "surname": {
+          "en": "",
+          "es": ""
+        }
+      },
+      "gender": "female",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-22T03:09:22.288520Z",
+      "updatedAt": "2026-04-22T03:09:22.288520Z"
+    },
+    "P109": {
+      "id": "P109",
+      "names": {
+        "given": {
+          "en": "Adrian",
+          "es": "Adrian"
+        },
+        "surname": {
+          "en": "",
+          "es": ""
+        }
+      },
+      "gender": "male",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-22T03:09:22.288520Z",
+      "updatedAt": "2026-04-22T03:09:22.288520Z"
+    },
+    "P110": {
+      "id": "P110",
+      "names": {
+        "given": {
+          "en": "Alianny",
+          "es": "Alianny"
+        },
+        "surname": {
+          "en": "",
+          "es": ""
+        }
+      },
+      "gender": "female",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-22T03:09:22.288520Z",
+      "updatedAt": "2026-04-22T03:09:22.288520Z"
+    },
+    "P111": {
+      "id": "P111",
+      "names": {
+        "given": {
+          "en": "Arianny",
+          "es": "Arianny"
+        },
+        "surname": {
+          "en": "",
+          "es": ""
+        }
+      },
+      "gender": "female",
+      "living": true,
+      "mediaIds": [],
+      "tags": [
+        "perez-line"
+      ],
+      "createdAt": "2026-04-22T03:09:22.288520Z",
+      "updatedAt": "2026-04-22T03:09:22.288520Z"
     }
   },
   "families": {
@@ -3224,6 +3371,76 @@
       ],
       "createdAt": "2026-04-21T01:46:09.604769Z",
       "updatedAt": "2026-04-21T01:46:09.604769Z"
+    },
+    "F032": {
+      "id": "F032",
+      "type": "other",
+      "partners": [
+        {
+          "personId": "P065",
+          "role": "partner1"
+        }
+      ],
+      "children": [
+        {
+          "personId": "P105",
+          "relationship": "biological"
+        },
+        {
+          "personId": "P106",
+          "relationship": "biological"
+        }
+      ],
+      "createdAt": "2026-04-22T03:09:22.288520Z",
+      "updatedAt": "2026-04-22T03:09:22.288520Z"
+    },
+    "F033": {
+      "id": "F033",
+      "type": "marriage",
+      "partners": [
+        {
+          "personId": "P107",
+          "role": "partner1"
+        },
+        {
+          "personId": "P105",
+          "role": "partner2"
+        }
+      ],
+      "children": [
+        {
+          "personId": "P108",
+          "relationship": "biological"
+        },
+        {
+          "personId": "P109",
+          "relationship": "biological"
+        }
+      ],
+      "createdAt": "2026-04-22T03:09:22.288520Z",
+      "updatedAt": "2026-04-22T03:09:22.288520Z"
+    },
+    "F034": {
+      "id": "F034",
+      "type": "other",
+      "partners": [
+        {
+          "personId": "P106",
+          "role": "partner1"
+        }
+      ],
+      "children": [
+        {
+          "personId": "P110",
+          "relationship": "biological"
+        },
+        {
+          "personId": "P111",
+          "relationship": "biological"
+        }
+      ],
+      "createdAt": "2026-04-22T03:09:22.288520Z",
+      "updatedAt": "2026-04-22T03:09:22.288520Z"
     }
   },
   "media": {}

@@ -11,7 +11,7 @@
     },
     "rootPersonId": "P001",
     "createdAt": "2026-04-09T00:00:00.000Z",
-    "updatedAt": "2026-04-22T03:09:22.288520Z"
+    "updatedAt": "2026-04-22T03:28:35.172164Z"
   },
   "persons": {
     "P001": {
@@ -1526,8 +1526,13 @@
         "perez-line"
       ],
       "createdAt": "2026-04-19T18:02:02.088155Z",
-      "updatedAt": "2026-04-19T18:02:02.088156Z",
-      "note": "Ana Luisa & Manolo's child"
+      "updatedAt": "2026-04-22T03:28:35.172164Z",
+      "note": "Ana Luisa & Manolo's child",
+      "birth": {
+        "date": {
+          "year": 1962
+        }
+      }
     },
     "P066": {
       "id": "P066",
@@ -1665,7 +1670,12 @@
         "perez-line"
       ],
       "createdAt": "2026-04-19T18:16:05.703805Z",
-      "updatedAt": "2026-04-21T01:46:09.604769Z"
+      "updatedAt": "2026-04-22T03:28:35.172164Z",
+      "birth": {
+        "date": {
+          "year": 1939
+        }
+      }
     },
     "P072": {
       "id": "P072",
